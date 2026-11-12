@@ -11,13 +11,13 @@ export const reasonText: Record<string, string> = {
 };
 
 export function Verdict({ d, size = 'md' }: { d: Decision; size?: 'sm' | 'md' | 'xl' }) {
-  const cls = size === 'xl' ? 'display text-6xl font-bold tracking-tight' : size === 'md' ? 'display text-lg font-semibold' : 'mono text-[11px] font-semibold tracking-wider';
+  const cls = size === 'xl' ? 'display text-5xl font-semibold tracking-tight' : size === 'md' ? 'text-base font-semibold' : 'text-[11px] font-semibold';
   const word = size === 'sm' ? d : d === 'DOUBT' ? 'Doubt' : d === 'PASS' ? 'Pass' : d === 'HOLD' ? 'Hold' : 'Fail';
   return <span className={cls} style={{ color: decisionColor[d] }}>{word}</span>;
 }
 
 export function Dot({ d }: { d: Decision }) {
-  return <span className="inline-block w-2 h-2 rounded-full" style={{ background: decisionColor[d], boxShadow: `0 0 8px ${decisionColor[d]}` }} aria-label={d} />;
+  return <span className="inline-block w-2 h-2 rounded-full" style={{ background: decisionColor[d] }} aria-label={d} />;
 }
 
 export function Panel({ title, children, className = '', aside, tone }: { title?: string; children: React.ReactNode; className?: string; aside?: React.ReactNode; tone?: 'pass' | 'fail' | 'doubt' | 'accent' }) {
@@ -25,7 +25,7 @@ export function Panel({ title, children, className = '', aside, tone }: { title?
     <section className={`panel p-4 lg:p-5 ${tone ? `glow-${tone}` : ''} ${className}`}>
       {(title || aside) && (
         <header className="flex items-baseline justify-between gap-3 mb-3">
-          {title && <h2 className="label !text-bone/80 whitespace-nowrap">{title}</h2>}
+          {title && <h2 className="text-[13px] font-semibold text-bone whitespace-nowrap">{title}</h2>}
           {aside}
         </header>
       )}
@@ -39,7 +39,7 @@ export function Btn({ children, onClick, tone = 'plain', disabled, title }: {
 }) {
   const styles: Record<string, string> = {
     plain: 'bg-raised hover:bg-line text-bone border border-line',
-    accent: 'bg-accent text-ink hover:brightness-110 font-semibold',
+    accent: 'bg-accent text-white hover:brightness-110 font-medium',
     doubt: 'bg-doubt text-ink hover:brightness-110 font-semibold',
     pass: 'bg-pass text-ink hover:brightness-110 font-semibold',
     fail: 'bg-fail text-ink hover:brightness-110 font-semibold',
@@ -47,7 +47,7 @@ export function Btn({ children, onClick, tone = 'plain', disabled, title }: {
   };
   return (
     <button title={title} disabled={disabled} onClick={onClick}
-      className={`px-3.5 py-2 rounded-lg text-[13px] font-medium transition disabled:opacity-40 disabled:cursor-not-allowed ${styles[tone]}`}>
+      className={`h-8 px-3 rounded-md text-[13px] font-medium transition disabled:opacity-40 disabled:cursor-not-allowed ${styles[tone]}`}>
       {children}
     </button>
   );
@@ -63,7 +63,7 @@ export function Stat({ value, label, tone }: { value: React.ReactNode; label: st
 }
 
 export function Voice({ children, className = '' }: { children: React.ReactNode; className?: string }) {
-  return <p className={`voice text-[20px] leading-snug text-bone ${className}`}>{children}</p>;
+  return <p className={`voice text-[17px] leading-snug text-bone ${className}`}>{children}</p>;
 }
 
 export const pct = (x: number | undefined, d = 1) => (x === undefined || Number.isNaN(x) ? '–' : `${(100 * x).toFixed(d)}%`);

@@ -27,6 +27,7 @@ import Rework from './line/Rework';
 import Materials from './line/Materials';
 import Bom from './line/Bom';
 import XRay from './line/XRay';
+import Pulse from './line/Pulse';
 
 // the main journey, in order: what an operator actually does, start to finish
 const ACTS: { id: Act; title: string; sub: string }[] = [
@@ -41,12 +42,13 @@ const ACTS: { id: Act; title: string; sub: string }[] = [
 
 // deeper views of the line and the factory around it
 const FACTORY: { id: Act; title: string }[] = [
+  { id: 'pulse', title: 'Line pulse' },
   { id: 'xray', title: 'Board X-ray' },
   { id: 'smt', title: 'Line flow' },
-  { id: 'spc', title: 'Process control' },
+  { id: 'spc', title: 'SPC' },
   { id: 'materials', title: 'Materials' },
-  { id: 'bom', title: 'Component library' },
-  { id: 'chaos', title: 'Change conditions' },
+  { id: 'bom', title: 'Components' },
+  { id: 'chaos', title: 'Conditions' },
   { id: 'trust', title: 'Guarantee' },
   { id: 'beyond', title: 'Look ahead' }
 ];
@@ -102,7 +104,7 @@ function Rail() {
     return (
       <button disabled={!enabled} onClick={() => setAct(id)} aria-current={on ? 'page' : undefined}
         className={`relative w-full text-left rounded-lg pl-3 pr-2 py-1.5 flex gap-2.5 items-center transition disabled:opacity-30 ${on ? 'bg-raised text-bone' : 'text-mist hover:text-bone hover:bg-surface'}`}>
-        {on && <span className="absolute left-0 top-1.5 bottom-1.5 w-0.5 rounded bg-accent" style={{ boxShadow: '0 0 8px var(--accent)' }} />}
+        {on && <span className="absolute left-0 top-1.5 bottom-1.5 w-0.5 rounded bg-accent" />}
         {n !== undefined && <span className={`mono text-[11px] w-4 ${on ? 'text-accent' : ''}`}>{String(n).padStart(2, '0')}</span>}
         <span className="min-w-0">
           <span className="block text-[13px] font-medium whitespace-nowrap">{title}</span>
@@ -112,12 +114,12 @@ function Rail() {
     );
   };
   return (
-    <nav className="w-full lg:w-64 shrink-0 lg:h-screen lg:sticky lg:top-0 lg:overflow-y-auto px-4 py-5 flex flex-col gap-5 border-r border-line bg-ink/60 backdrop-blur [&>*]:shrink-0" aria-label="Navigation">
+    <nav className="w-full lg:w-60 shrink-0 lg:h-screen lg:sticky lg:top-0 lg:overflow-y-auto px-3 py-4 flex flex-col gap-5 border-r border-line bg-surface [&>*]:shrink-0" aria-label="Navigation">
       <div className="flex items-center gap-3">
-        <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden><rect x="3" y="3" width="26" height="26" rx="7" fill="var(--accent)" /><circle cx="16" cy="16" r="5" fill="var(--ink)" /></svg>
+        <svg width="26" height="26" viewBox="0 0 32 32" aria-hidden><rect x="3" y="3" width="26" height="26" rx="6" fill="var(--accent)" /><circle cx="16" cy="16" r="5" fill="var(--ink)" /></svg>
         <div>
-          <div className="display text-lg font-bold leading-none">Sandeha</div>
-          <div className="label mt-1">knows when it doesn't know</div>
+          <div className="text-[15px] font-semibold leading-none">Sandeha</div>
+          <div className="text-[11px] text-mist mt-1">Inspection station</div>
         </div>
       </div>
       <div>
@@ -140,7 +142,7 @@ function Rail() {
       </div>
       <Products />
       <div className="mt-auto hidden lg:flex label items-center gap-2">
-        <span className={`w-1.5 h-1.5 rounded-full ${live ? 'bg-pass' : 'bg-fail'}`} style={{ boxShadow: live ? '0 0 8px var(--pass)' : undefined }} />
+        <span className={`w-1.5 h-1.5 rounded-full ${live ? 'bg-pass' : 'bg-fail'}`} />
         {live ? 'station online' : 'reconnecting'}
       </div>
     </nav>
@@ -236,7 +238,7 @@ function Shell() {
     choose: Choose, genesis: Genesis, interview: Interview, line: Line, chaos: Chaos, trust: Trust, beyond: Beyond,
     overview: Overview, pipeline: Pipeline, products: ProductsPage, memory: Memory, analytics: Analytics, hardware: Hardware,
     history: History, settings: Settings, approval: Approval, smt: SmtLine, quality: Quality, spc: Spc, rework: Rework,
-    materials: Materials, bom: Bom, xray: XRay
+    materials: Materials, bom: Bom, xray: XRay, pulse: Pulse
   }[act];
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">

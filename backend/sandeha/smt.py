@@ -360,3 +360,40 @@ def xray(s) -> dict:
     return {"status": "ready", "size": lay["size"], "layers": layers, "nets": lay["nets"], "edges": lay["edges"], "coverage": lay["coverage"],
             "components": pub.get("components", []), "golden": pub.get("golden"), "boards": n, "failCounts": dict(counts),
             "note": lay["note"]}
+
+
+def pulse(s, n: int = 80) -> dict:
+    """Line pulse: components x boards matrix of drift (measured), plus the atlas of every defect close-up found."""
+    bm = getattr(s, "board", None)
+    boards = [r for r in _boards(s)][-n:]
+    comps = bm.components if bm else []
+    rows = []
+    for c in comps:
+        st = c.stats
+        cells = []
+        for r in boards:
+            m = (r.board.get("m") or {}).get(c.id)
+            f = next((x for x in r.board.get("faults", []) if x["id"] == c.id), None)
+            if m is None:
+                cells.append(None)
+                continue
+            off = abs(m[0]) / max(st["offsetMax"], 1e-6)
+            dl = abs(m[1]) / max(abs(st["dLMin"]), 1e-6)
+            cells.append({"v": round(min(2.0, max(off, dl)), 3), "offset": m[0], "dL": m[1],
+                          "status": f["status"] if f else "OK", "level": f["level"] if f else None})
+        vals = [x["v"] for x in cells if x]
+        rows.append({"id": c.id, "kind": c.kind, "cells": cells, "mean": round(float(np.mean(vals)), 3) if vals else 0.0,
+                     "faults": sum(1 for x in cells if x and x["level"] == "fault")})
+    rows.sort(key=lambda r: (-r["faults"], -r["mean"]))
+    atlas: dict = {}
+    for r in reversed(s.records):
+        if r.ghost:
+            continue
+        for g in r.regions or []:
+            if not g.get("crop"):
+                continue
+            atlas.setdefault(g["label"], []).append({"crop": g["crop"], "part": r.id, "severity": g["severity"], "decision": r.decision,
+                                                     "component": (g.get("component") or {}).get("id"), "synthetic": bool(r.synthetic)})
+    atlas_out = [{"label": k, "count": len(v), "items": v[:24]} for k, v in sorted(atlas.items(), key=lambda kv: -len(kv[1]))]
+    return {"boards": [{"id": r.id, "decision": r.decision, "created": r.created, "synthetic": bool(r.synthetic)} for r in boards],
+            "components": rows, "atlas": atlas_out, "stream": [{"id": r.id, "decision": r.decision} for r in s.records[-60:] if not r.ghost]}

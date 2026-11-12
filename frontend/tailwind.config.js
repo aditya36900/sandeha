@@ -9,10 +9,10 @@ export default {
           .map(c => [c, `rgb(var(--${c}-rgb) / <alpha-value>)`])
       ),
       fontFamily: {
-        sans: ['"IBM Plex Sans"', 'system-ui', 'sans-serif'],
-        display: ['"Space Grotesk"', 'sans-serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['Inter', 'sans-serif'],
         mono: ['"JetBrains Mono"', 'monospace'],
-        voice: ['"Space Grotesk"', 'sans-serif']
+        voice: ['Inter', 'sans-serif']
       }
     }
   },

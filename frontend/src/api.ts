@@ -320,6 +320,7 @@ export const api = {
   rework: (id: string) => req<any[]>('GET', `/api/sessions/${id}/rework`),
   closeRework: (id: string, rid: string, outcome: string) => req<any>('POST', `/api/sessions/${id}/rework/${rid}`, { outcome }),
   setIpc: (id: string, klass: number) => req<{ ipcClass: number }>('POST', `/api/sessions/${id}/ipc`, { klass }),
+  pulse: (id: string, n = 80) => req<any>('GET', `/api/sessions/${id}/pulse?n=${n}`),
   xray: (id: string) => req<any>('GET', `/api/sessions/${id}/xray`),
   chips: (id: string, rid: string) => req<any>('GET', `/api/sessions/${id}/chips/${rid}`),
   approvalQueue: (id: string) => req<any[]>('GET', `/api/sessions/${id}/approval`),

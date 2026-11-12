@@ -27,7 +27,7 @@ export function PageHead({ title, sub, aside }: { title: string; sub?: string; a
   return (
     <header className="flex flex-wrap items-end justify-between gap-3 mb-5">
       <div>
-        <h1 className="text-3xl font-semibold tracking-tight">{title}</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
         {sub && <p className="text-mist mt-1 max-w-3xl">{sub}</p>}
       </div>
       {aside}
@@ -37,8 +37,8 @@ export function PageHead({ title, sub, aside }: { title: string; sub?: string; a
 
 export function Kpi({ label, value, sub, tone }: { label: string; value: React.ReactNode; sub?: React.ReactNode; tone?: string }) {
   return (
-    <div className="bg-surface rounded-2xl p-4 min-w-0">
-      <div className="text-mist text-xs uppercase tracking-wider">{label}</div>
+    <div className="panel p-3.5 min-w-0">
+      <div className="text-mist text-xs font-medium">{label}</div>
       <div className={`${String(value).length > 7 ? 'text-xl' : 'text-3xl'} font-semibold num mt-1 whitespace-nowrap`} style={tone ? { color: tone } : undefined}>{value}</div>
       {sub && <div className="text-mist text-xs mt-1">{sub}</div>}
     </div>

@@ -342,6 +342,13 @@ def profile():
             "coreset": float(_os.environ.get("SANDEHA_CORESET", "0")) or (0.1 if EDGE else 0.0)}
 
 
+@app.get("/api/sessions/{sid}/pulse")
+async def smt_pulse(sid: str, n: int = 80):
+    from . import smt
+
+    return await run_in_threadpool(smt.pulse, S(sid), n)
+
+
 @app.get("/api/sessions/{sid}/xray")
 async def smt_xray(sid: str):
     from . import smt

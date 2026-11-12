@@ -3,7 +3,7 @@ import { Alert, BackendEvent, Cloud, InspectionRecord, Policy, Question, Role, S
 
 export type Act = 'choose' | 'genesis' | 'interview' | 'line' | 'chaos' | 'trust' | 'beyond'
   | 'overview' | 'pipeline' | 'products' | 'memory' | 'analytics' | 'hardware' | 'history' | 'settings'
-  | 'approval' | 'smt' | 'quality' | 'spc' | 'rework' | 'materials' | 'bom' | 'xray';
+  | 'approval' | 'smt' | 'quality' | 'spc' | 'rework' | 'materials' | 'bom' | 'xray' | 'pulse';
 export type Theme = 'dark' | 'light';
 
 export interface Narration {
@@ -77,7 +77,7 @@ function upsert(list: InspectionRecord[], r: InspectionRecord) {
 export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // the page lives in the URL hash (#overview, #line …) so a page can be bookmarked or opened directly
   const PAGES: Act[] = ['choose', 'genesis', 'interview', 'line', 'chaos', 'trust', 'beyond', 'overview', 'pipeline', 'products',
-    'memory', 'analytics', 'hardware', 'history', 'settings', 'approval', 'smt', 'quality', 'spc', 'rework', 'materials', 'bom', 'xray'];
+    'memory', 'analytics', 'hardware', 'history', 'settings', 'approval', 'smt', 'quality', 'spc', 'rework', 'materials', 'bom', 'xray', 'pulse'];
   const fromHash = (): Act => { const h = window.location.hash.slice(1) as Act; return PAGES.includes(h) ? h : 'choose'; };
   const [act, setActState] = useState<Act>(fromHash);
   const setAct = useCallback((a: Act) => {

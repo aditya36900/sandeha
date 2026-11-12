@@ -31,6 +31,7 @@ backend/sandeha/
   smt.py            SMT line context: root causes, IPC-A-610 grading, DPMO / FPY / false calls, SPC, rework, materials
   approval.py       approval-desk dossier (case for / against, risk, what would change it) and the VLM's view
   chips.py          chip identity: read IC markings with the VLM, compare with the golden board
+  golden.py         second detector: per-pixel statistics of the aligned good boards, fused into the patch map
   regions.py        heatmap -> named, measured defect regions (+ measured odds a region is real)
   vlm.py            local vision-language model (Qwen2-VL-2B; Qwen2.5-VL-7B when it fits), loads on demand
   copilot.py        "Ask Sandeha": grounded answers from the evidence
@@ -42,7 +43,7 @@ frontend/src/
   acts/             the journey screens: Choose, Genesis (learn), Interview, Line (scan), Chaos, Trust, Beyond
   line/             electronics pages: Approval, SmtLine, Quality, Spc, Rework, Materials, Bom, XRay
   room/             control room: Overview, Pipeline, Products, Memory, Analytics, Hardware, History, Settings
-  ui/               LiveScan, Board3D (3D board + info panel), Twin3D, FaultLab, FlowBar, TopBar, BoardViews…
+  ui/               LiveScan, CameraScan (browser camera), Comparator (blink), Detectors, Board3D, Twin3D, FaultLab, FlowBar, TopBar…
   api.ts            every backend call + types       store.tsx   app state, roles, events, toasts, page routing (#hash)
 data/results/       measured numbers (JSON) and the trained component classifier (component_clf.pkl) — in git
 pitch/              pitch book PDF + its HTML source
@@ -67,6 +68,10 @@ Frontend changes appear instantly on :5173; `npm run build` refreshes what :8000
 | `SANDEHA_PERSIST` | `1` | `0` = do not save or restore product lines (tests use this) |
 | `SANDEHA_WARM_AI` | `1` | `0` = do not pre-load CLIP at start |
 | `SANDEHA_API` | `http://127.0.0.1:8000` | where the Vite dev server proxies API calls |
+| `SANDEHA_PROFILE` | `auto` | `edge` = INT8 ONNX backbone on CPU, 10% coreset memory, no VLM/CLIP (small hardware) |
+| `SANDEHA_EDGE_RES` / `SANDEHA_EDGE_THREADS` | `336` / `4` | edge backbone resolution and CPU threads |
+| `SANDEHA_GOLDEN_GAIN` | `0.02` | weight of the golden-board deviation in the fused map (0 = patch memory only) |
+| `SANDEHA_CORESET` | `0` | keep this fraction of the patch memory on any profile (e.g. 0.1) |
 
 ## 5. House rules
 

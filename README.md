@@ -61,6 +61,54 @@ cd backend; ..\.venv\Scripts\python scripts\seed_demo.py
 - **AI, all local, no cloud and no API key:** DINOv2-S (anomaly memory), CLIP ViT-B/16 (region names when no labelled examples exist), Qwen2-VL-2B-Instruct (describes defect close-ups and answers free questions), Depth Anything V2 Small (3D relief). Nothing leaves the station. Set `SANDEHA_WARM_AI=0` to skip loading them at startup.
 - **Hardware:** a CUDA GPU is used if present. Everything also runs on CPU, just slower.
 
+## Two detectors, one map
+
+Every board is judged by two independent detectors that are fused into one map before anything downstream looks at it:
+
+1. **Patch memory (DINOv2):** each of the board's ~1,000 patches against its nearest good patch from 30 boards.
+2. **Statistical golden board:** the camera is fixed, so after alignment every pixel of the 30 good boards has a mean
+   and a spread. A new board's per-pixel deviation (in spreads) is how classical AOI works; it is independent of the
+   patch memory and catches thin, exact-position changes the patches smooth over.
+
+They are fused at the patch level (`SANDEHA_GOLDEN_GAIN`, default 0.02 distance units per spread beyond 2.5), so the
+score, the heatmap, the regions, the component check and the calibration all see the same map; references are scored
+leave-one-out so the lines stay honest. The scan page shows both detectors and whether they agree, and a **blink
+comparator** wipes between the golden board, this board and the deviation layer.
+
+Measured on pcb4, 80 good + 80 defective held-out boards, full pipeline (`scripts/detector_eval.py`):
+
+| | Patch memory only | Fused (shipped) |
+|---|---|---|
+| AUROC | 0.9953 | **0.9967** |
+| Good boards wrongly rejected | 0% | 0% |
+| Defects passed | 0 of 80 | 0 of 80 |
+| Boards sent to a person | 35.0% | **26.3%** |
+
+## Camera scanning
+
+**Scan boards → Camera**: the browser's camera (laptop webcam or a phone on the same Wi-Fi) shows a live viewfinder;
+when the picture is steady for a second it captures a square 1024 px frame and scans it like any tray board (same
+product, similar framing as the good photos). Frames go only to the station on localhost.
+
+## Small hardware: the edge profile
+
+`SANDEHA_PROFILE=edge` runs the whole pipeline on CPU threads: DINOv2-S as INT8 ONNX at 336 px (`data/edge/`, from
+`scripts/export_onnx.py`), the patch memory reduced to a 10% **coreset** (greedy k-centre, PatchCore-style), and no
+language or CLIP model. The golden-board detector still runs. Measured on pcb4 (same 160 held-out boards):
+
+| | Full (GPU, fp16 @ 448 px, 70k patches) | Edge (CPU, INT8 @ 336 px, 4.4k patches) |
+|---|---|---|
+| AUROC | 0.9967 | 0.9881 |
+| Good boards wrongly rejected | 0% | 1.3% |
+| Defects passed | 0 of 80 | 1 of 80 |
+| Boards sent to a person | 26.3% | 34.4% |
+| Whole pipeline per board | ~0.5 s | ~1.3 s on 4 laptop CPU threads (measured while other jobs ran) |
+
+The backbone alone runs at 8.5 FPS at 336 px (21 FPS at 224 px); the rest of the per-board time is the component
+check, region naming and image saving, which are the next things to trim for a Raspberry Pi (not yet measured).
+
+The Hardware page shows which profile is live, its memory size and its measured latency.
+
 ## Live scan with defects pinned in 3D
 
 **Run the line** opens a tray of **unlabelled** parts straight off the line. The defect mix is drawn at random on the server, and the truth never reaches the browser until you tick *Check against dataset truth*. Scanning a part replays the real pipeline with its real timings:

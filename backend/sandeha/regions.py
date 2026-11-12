@@ -185,8 +185,10 @@ def find_regions(heat: np.ndarray, img: Image.Image, fg: np.ndarray | None, tau_
             r["alternatives"] = [{"label": t, "similarity": round(v, 3)} for t, v in alts]
         else:
             if clip is None:
+                from .backbone import EDGE
+
                 try:
-                    clip = clip_names(crops)
+                    clip = [[("unusual area", 0.0)]] * len(crops) if EDGE else clip_names(crops)
                 except Exception:
                     clip = [[("unusual area", 0.0)]] * len(crops)
             nm = clip[i]

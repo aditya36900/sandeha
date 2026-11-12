@@ -2,69 +2,71 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ---------- Lab-bench theme: graphite, hairlines, one electric accent, status colours that glow ---------- */
 :root {
-  --ink: #10142e;
-  --surface: #1a2045;
-  --raised: #232a57;
-  --line: #2f3769;
-  --bone: #ece7da;
-  --mist: #8f97c2;
-  --pass: #5cc8b4;
-  --fail: #f0655a;
-  --doubt: #f2a93b;
+  --ink: #0a0c12;        /* page */
+  --surface: #11141c;    /* panels */
+  --raised: #181c26;     /* inputs, cards inside panels */
+  --line: #252a38;       /* hairlines */
+  --bone: #e8ecf3;       /* text */
+  --mist: #7d879c;       /* secondary text */
+  --accent: #22d3ee;     /* the system's own colour (cyan) */
+  --pass: #34d399;
+  --fail: #fb5a4b;
+  --doubt: #f5b544;
   --hold: #8b9cff;
-  --ink-rgb: 16 20 46;
-  --surface-rgb: 26 32 69;
-  --raised-rgb: 35 42 87;
-  --line-rgb: 47 55 105;
-  --bone-rgb: 236 231 218;
-  --mist-rgb: 143 151 194;
-  --pass-rgb: 92 200 180;
-  --fail-rgb: 240 101 90;
-  --doubt-rgb: 242 169 59;
-  --hold-rgb: 139 156 255;
+  --ink-rgb: 10 12 18; --surface-rgb: 17 20 28; --raised-rgb: 24 28 38; --line-rgb: 37 42 56;
+  --bone-rgb: 232 236 243; --mist-rgb: 125 135 156; --accent-rgb: 34 211 238;
+  --pass-rgb: 52 211 153; --fail-rgb: 251 90 75; --doubt-rgb: 245 181 68; --hold-rgb: 139 156 255;
 }
 :root[data-theme='light'] {
-  --ink: #f3f0e8;
-  --surface: #ffffff;
-  --raised: #ebe7dc;
-  --line: #d6d0c1;
-  --bone: #17193a;
-  --mist: #5d6386;
-  --pass: #138a76;
-  --fail: #c83a2f;
-  --doubt: #b8730a;
-  --hold: #4b5bd6;
-  --ink-rgb: 243 240 232;
-  --surface-rgb: 255 255 255;
-  --raised-rgb: 235 231 220;
-  --line-rgb: 214 208 193;
-  --bone-rgb: 23 25 58;
-  --mist-rgb: 93 99 134;
-  --pass-rgb: 19 138 118;
-  --fail-rgb: 200 58 47;
-  --doubt-rgb: 184 115 10;
-  --hold-rgb: 75 91 214;
+  --ink: #f4f5f8; --surface: #ffffff; --raised: #eceef3; --line: #d5d9e3; --bone: #0f1320; --mist: #5b6478;
+  --accent: #0891b2; --pass: #0f9f72; --fail: #d6392c; --doubt: #b8730a; --hold: #4b5bd6;
+  --ink-rgb: 244 245 248; --surface-rgb: 255 255 255; --raised-rgb: 236 238 243; --line-rgb: 213 217 227;
+  --bone-rgb: 15 19 32; --mist-rgb: 91 100 120; --accent-rgb: 8 145 178;
+  --pass-rgb: 15 159 114; --fail-rgb: 214 57 44; --doubt-rgb: 184 115 10; --hold-rgb: 75 91 214;
 }
-/* text on filled buttons and chips stays dark in both themes */
-:root[data-theme='light'] .text-ink { color: #fffdf8; }
+:root[data-theme='light'] .text-ink { color: #ffffff; }
 input, select, textarea { color: var(--bone); }
 
 html, body, #root { height: 100%; }
 body {
   margin: 0;
-  background: var(--ink);
   color: var(--bone);
-  font-family: 'IBM Plex Sans Condensed', system-ui, sans-serif;
-  font-size: 15px;
-  line-height: 1.45;
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  background:
+    radial-gradient(1200px 600px at 20% -10%, rgb(var(--accent-rgb) / 0.07), transparent 60%),
+    linear-gradient(rgb(var(--line-rgb) / 0.35) 1px, transparent 1px) 0 0 / 100% 40px,
+    linear-gradient(90deg, rgb(var(--line-rgb) / 0.35) 1px, transparent 1px) 0 0 / 40px 100%,
+    var(--ink);
 }
-.num { font-variant-numeric: tabular-nums; }
-.voice { font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; letter-spacing: 0.005em; }
-:focus-visible { outline: 2px solid var(--doubt); outline-offset: 2px; border-radius: 6px; }
-::selection { background: color-mix(in srgb, var(--doubt) 40%, transparent); }
-input[type='range'] { accent-color: var(--doubt); }
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
-}
+h1, h2, h3, .display { font-family: 'Space Grotesk', 'IBM Plex Sans', sans-serif; letter-spacing: -0.01em; }
+.num, .mono { font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace; font-variant-numeric: tabular-nums; }
+.voice { font-family: 'Space Grotesk', sans-serif; font-weight: 500; letter-spacing: -0.015em; }
+.label { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mist); }
+
+/* panels: hairline, faint top light */
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.03); }
+.glow-pass { box-shadow: 0 0 0 1px rgb(var(--pass-rgb) / 0.5), 0 0 24px rgb(var(--pass-rgb) / 0.25); }
+.glow-fail { box-shadow: 0 0 0 1px rgb(var(--fail-rgb) / 0.5), 0 0 24px rgb(var(--fail-rgb) / 0.25); }
+.glow-doubt { box-shadow: 0 0 0 1px rgb(var(--doubt-rgb) / 0.5), 0 0 24px rgb(var(--doubt-rgb) / 0.25); }
+.glow-accent { box-shadow: 0 0 0 1px rgb(var(--accent-rgb) / 0.5), 0 0 20px rgb(var(--accent-rgb) / 0.2); }
+.scanlines::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(0deg, transparent 0 3px, rgb(0 0 0 / 0.12) 3px 4px); }
+.corner { position: relative; }
+.corner::before, .corner::after { content: ''; position: absolute; width: 18px; height: 18px; border-color: var(--accent); border-style: solid; }
+.corner::before { top: 8px; left: 8px; border-width: 2px 0 0 2px; }
+.corner::after { bottom: 8px; right: 8px; border-width: 0 2px 2px 0; }
+@keyframes sweep { from { top: 0 } to { top: 100% } }
+.sweep { position: absolute; left: 0; right: 0; height: 2px; background: var(--accent); box-shadow: 0 0 18px 4px rgb(var(--accent-rgb) / 0.55); animation: sweep 1.4s linear infinite; }
+@keyframes pulse-ring { 0% { transform: scale(1); opacity: .8 } 100% { transform: scale(2.2); opacity: 0 } }
+.pulse-ring::after { content: ''; position: absolute; inset: -4px; border-radius: inherit; border: 2px solid currentColor; animation: pulse-ring 1.4s ease-out infinite; }
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+::selection { background: color-mix(in srgb, var(--accent) 35%, transparent); }
+input[type='range'] { accent-color: var(--accent); }
+* { scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+details > summary { list-style: none; }
+details > summary::-webkit-details-marker { display: none; }

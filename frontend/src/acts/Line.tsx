@@ -160,7 +160,7 @@ export default function Line() {
         {view.alarm && <div className="text-doubt text-sm font-semibold">Conditions changed: auto-pass suspended</div>}
         <LiveScan sessionId={sessionId} records={records} policy={view.policy} cloud={view.cloud} patches={null}
           memories={view.patches ?? null} heat3d={heat3d && heat3d.id === shown?.id ? heat3d.heat : null} selected={shown} isUpload={isUpload}
-          onShow={rid => setSelectedRecord(rid)} onRecord={r => setExtra(x => ({ ...x, [r.id]: r }))} board={board} />
+          onShow={rid => setSelectedRecord(rid)} onRecord={r => setExtra(x => ({ ...x, [r.id]: r }))} board={board} goldenUrl={view.summary?.goldenUrl ?? null} />
 
         {board?.status === 'ready' && (
           <FaultLab sessionId={sessionId} board={board} onRecord={r => { setExtra(x => ({ ...x, [r.id]: r })); setSelectedRecord(r.id); window.scrollTo({ top: 0, behavior: 'smooth' }); }} />

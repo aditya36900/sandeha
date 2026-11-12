@@ -19,6 +19,7 @@ export default function Hardware() {
   const { role, setError, station } = useStore();
   const [t, reload] = usePoll(api.telemetry, 3000);
   const [out, reloadOut] = usePoll(() => api.outbox(40), 4000);
+  const [prof] = usePoll(api.profile, 10000);
   const act = async (fn: () => Promise<unknown>) => { try { await fn(); reload(); reloadOut(); } catch (e: any) { setError(e.message); } };
   const faults = station?.faults ?? t?.faults ?? [];
   const m = t?.measured;
@@ -26,6 +27,17 @@ export default function Hardware() {
   return (
     <div className="space-y-5">
       <PageHead title="Hardware" sub="Measured numbers come from this machine (psutil, nvidia-smi). Camera, conveyor, LED ring and network are simulated devices, clearly labelled, so faults can be rehearsed safely." />
+      {prof && (
+        <Panel title="Inspection profile" aside={<Chip tone={prof.profile === 'edge' ? 'var(--doubt)' : 'var(--accent)'}>{prof.profile}</Chip>}>
+          <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-3 text-sm">
+            <div><div className="label">backbone</div>{prof.backbone}<div className="text-xs text-mist">device {prof.device}</div></div>
+            <div><div className="label">detectors</div>{prof.detectors.join(' + ')}<div className="text-xs text-mist">golden gain {prof.goldenGain}</div></div>
+            <div><div className="label">memory</div>{Object.values(prof.memory as Record<string, any>).map((x: any) => x.patches.toLocaleString()).join(' / ') || '—'} patches{prof.coreset ? <div className="text-xs text-mist">coreset {Math.round(prof.coreset * 100)}% kept</div> : <div className="text-xs text-mist">full memory</div>}</div>
+            <div><div className="label">latency p50</div>{prof.latencyMsP50 ? `${Math.round(prof.latencyMsP50)} ms` : '—'}<div className="text-xs text-mist">VLM {prof.vlm ? 'on' : 'off'} · CLIP {prof.clip ? 'on' : 'off'}</div></div>
+          </div>
+          <p className="text-xs text-mist mt-2">Small hardware: start with <span className="mono">SANDEHA_PROFILE=edge</span> (INT8 ONNX on CPU threads, 10% coreset memory, no language model). Measured numbers for both profiles are in the README.</p>
+        </Panel>
+      )}
       {m && (
         <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-3">
           <div><Kpi label="CPU" value={`${Math.round(m.cpuPercent)}%`} sub={`${m.cpuCores} cores`} />{meter(m.cpuPercent)}</div>

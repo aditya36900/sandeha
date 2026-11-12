@@ -57,6 +57,7 @@ def snapshot(session) -> dict:
     if "imagined" in d:  # masks bit-packed
         d["imagined"] = [(x.kind, x.size_px, x.center, _to_jpeg(x.image), (np.packbits(x.mask.astype(bool)), x.mask.shape))
                          for x in d["imagined"]]
+    d.pop("golden", None)  # rebuilt from the references on load
     if d.get("loo_maps") is not None:
         d["loo_maps"] = np.asarray(d["loo_maps"]).astype(np.float16)
     if d.get("twin") is not None:  # the voxel coordinate grid is rebuilt on load

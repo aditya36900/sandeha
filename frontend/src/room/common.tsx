@@ -39,7 +39,7 @@ export function Kpi({ label, value, sub, tone }: { label: string; value: React.R
   return (
     <div className="bg-surface rounded-2xl p-4 min-w-0">
       <div className="text-mist text-xs uppercase tracking-wider">{label}</div>
-      <div className="text-3xl font-semibold num mt-1 truncate" style={tone ? { color: tone } : undefined}>{value}</div>
+      <div className={`${String(value).length > 7 ? 'text-xl' : 'text-3xl'} font-semibold num mt-1 whitespace-nowrap`} style={tone ? { color: tone } : undefined}>{value}</div>
       {sub && <div className="text-mist text-xs mt-1">{sub}</div>}
     </div>
   );

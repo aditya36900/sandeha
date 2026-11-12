@@ -67,13 +67,14 @@ const shortName = (n: string) => n.replace(/^\d+/, '');
 function Products() {
   const { views, sessionId, setSessionId, setAct } = useStore();
   // electronics only: product lines from other sources stay on disk but are not shown
-  const list = Object.values(views).filter(v => (v.summary || v.photos.length) && v.summary?.source !== 'MAD-Sim');
+  // electronics only, and no empty leftovers: a line shows once it has scanned something, or if it is the one open now
+  const list = Object.values(views).filter(v => (v.summary || v.photos.length) && v.summary?.source !== 'MAD-Sim' && (v.records.length > 0 || v.id === sessionId || v.stage === 'GENESIS'));
   const counts = list.reduce<Record<string, number>>((a, v) => { const n = shortName(v.summary?.displayName ?? v.summary?.name ?? v.id); a[n] = (a[n] ?? 0) + 1; return a; }, {});
   const dup = new Set(Object.keys(counts).filter(k => counts[k] > 1));
   if (!list.length) return null;
   return (
     <div className="hidden lg:block">
-      <div className="text-xs text-mist mb-1.5">Product lines open</div>
+      <div className="label mb-1.5">Product lines</div>
       <ul className="space-y-1">
         {/* same product opened twice: show which line is which */}
         {list.map(v => {
@@ -81,7 +82,7 @@ function Products() {
           return (
             <li key={v.id}>
               <button onClick={() => { setSessionId(v.id); if (v.stage === 'GENESIS') setAct('genesis'); }}
-                className={`w-full text-left rounded-lg px-3 py-1.5 text-sm ${v.id === sessionId ? 'bg-surface text-bone' : 'text-mist hover:text-bone'}`}>
+                className={`w-full text-left rounded-lg px-3 py-1.5 text-[13px] ${v.id === sessionId ? 'bg-raised text-bone' : 'text-mist hover:text-bone'}`}>
                 {shortName(name)}
                 <span className="text-xs text-mist"> · {v.summary?.plant ? `${v.summary.plant} · ` : ''}{v.records.length} boards{dup.has(shortName(name)) ? ` · ${v.id.split('-')[0]}` : ''}</span>
               </button>
@@ -89,70 +90,58 @@ function Products() {
           );
         })}
       </ul>
-      <button onClick={() => setAct('choose')} className="text-xs text-doubt mt-2 px-3">Open another product</button>
+      <button onClick={() => setAct('choose')} className="text-xs text-accent mt-2 px-3">+ open another board</button>
     </div>
   );
 }
 
 function Rail() {
   const { act, setAct, sessionId, live } = useStore();
+  const Item = ({ id, title, sub, n, enabled = true }: { id: Act; title: string; sub?: string; n?: number; enabled?: boolean }) => {
+    const on = act === id;
+    return (
+      <button disabled={!enabled} onClick={() => setAct(id)} aria-current={on ? 'page' : undefined}
+        className={`relative w-full text-left rounded-lg pl-3 pr-2 py-1.5 flex gap-2.5 items-center transition disabled:opacity-30 ${on ? 'bg-raised text-bone' : 'text-mist hover:text-bone hover:bg-surface'}`}>
+        {on && <span className="absolute left-0 top-1.5 bottom-1.5 w-0.5 rounded bg-accent" style={{ boxShadow: '0 0 8px var(--accent)' }} />}
+        {n !== undefined && <span className={`mono text-[11px] w-4 ${on ? 'text-accent' : ''}`}>{String(n).padStart(2, '0')}</span>}
+        <span className="min-w-0">
+          <span className="block text-[13px] font-medium whitespace-nowrap">{title}</span>
+          {sub && <span className="hidden lg:block text-[11px] text-mist leading-tight">{sub}</span>}
+        </span>
+      </button>
+    );
+  };
   return (
-    <nav className="w-full lg:w-72 shrink-0 lg:h-screen lg:sticky lg:top-0 lg:overflow-y-auto p-5 flex flex-col gap-6 [&>*]:shrink-0" aria-label="Demo flow">
+    <nav className="w-full lg:w-64 shrink-0 lg:h-screen lg:sticky lg:top-0 lg:overflow-y-auto px-4 py-5 flex flex-col gap-5 border-r border-line bg-ink/60 backdrop-blur [&>*]:shrink-0" aria-label="Navigation">
       <div className="flex items-center gap-3">
-        <svg width="34" height="34" viewBox="0 0 32 32" aria-hidden><circle cx="16" cy="16" r="12" fill="var(--doubt)" /><circle cx="16" cy="16" r="5" fill="var(--ink)" /></svg>
+        <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden><rect x="3" y="3" width="26" height="26" rx="7" fill="var(--accent)" /><circle cx="16" cy="16" r="5" fill="var(--ink)" /></svg>
         <div>
-          <div className="text-xl font-semibold">Sandeha</div>
-          <div className="text-mist text-xs">the inspector that knows when it doesn't know</div>
+          <div className="display text-lg font-bold leading-none">Sandeha</div>
+          <div className="label mt-1">knows when it doesn't know</div>
         </div>
       </div>
-      <ol className="flex lg:flex-col gap-1 overflow-x-auto lg:overflow-visible">
-        {ACTS.map((a, i) => {
-          const enabled = a.id === 'choose' || !!sessionId;
-          const on = act === a.id;
-          return (
-            <li key={a.id}>
-              <button disabled={!enabled} onClick={() => setAct(a.id)} aria-current={on ? 'step' : undefined}
-                className={`w-full text-left rounded-xl px-3 py-2.5 flex gap-3 items-start transition disabled:opacity-35 ${on ? 'bg-surface' : 'hover:bg-surface/60'}`}>
-                <span className={`num text-sm mt-0.5 w-5 ${on ? 'text-doubt' : 'text-mist'}`}>{i + 1}</span>
-                <span className="min-w-0">
-                  <span className="block text-sm font-semibold whitespace-nowrap">{a.title}</span>
-                  <span className="hidden lg:block text-xs text-mist">{a.sub}</span>
-                </span>
-              </button>
-            </li>
-          );
-        })}
-      </ol>
       <div>
-        <div className="text-xs text-mist mb-1.5 hidden lg:block">Line &amp; factory</div>
-        <ul className="flex lg:grid lg:grid-cols-2 gap-1 overflow-x-auto">
-          {FACTORY.map(r => (
-            <li key={r.id}>
-              <button disabled={!sessionId} onClick={() => setAct(r.id)} aria-current={act === r.id ? 'page' : undefined}
-                className={`w-full text-left rounded-lg px-3 py-1.5 text-sm whitespace-nowrap disabled:opacity-35 ${act === r.id ? 'bg-surface text-bone' : 'text-mist hover:text-bone hover:bg-surface/60'}`}>
-                {r.title}
-              </button>
-            </li>
-          ))}
+        <div className="label mb-1.5 hidden lg:block">Journey</div>
+        <ol className="flex lg:flex-col gap-0.5 overflow-x-auto lg:overflow-visible">
+          {ACTS.map((a, i) => <li key={a.id}><Item id={a.id} title={a.title} sub={a.sub} n={i + 1} enabled={a.id === 'choose' || !!sessionId} /></li>)}
+        </ol>
+      </div>
+      <div>
+        <div className="label mb-1.5 hidden lg:block">Line &amp; factory</div>
+        <ul className="flex lg:grid lg:grid-cols-2 gap-0.5 overflow-x-auto">
+          {FACTORY.map(r => <li key={r.id}><Item id={r.id} title={r.title} enabled={!!sessionId} /></li>)}
         </ul>
       </div>
       <div>
-        <div className="text-xs text-mist mb-1.5 hidden lg:block">Control room</div>
-        <ul className="flex lg:grid lg:grid-cols-2 gap-1 overflow-x-auto">
-          {ROOM.map(r => (
-            <li key={r.id}>
-              <button onClick={() => setAct(r.id)} aria-current={act === r.id ? 'page' : undefined}
-                className={`w-full text-left rounded-lg px-3 py-1.5 text-sm whitespace-nowrap ${act === r.id ? 'bg-surface text-bone' : 'text-mist hover:text-bone hover:bg-surface/60'}`}>
-                {r.title}
-              </button>
-            </li>
-          ))}
+        <div className="label mb-1.5 hidden lg:block">Control room</div>
+        <ul className="flex lg:grid lg:grid-cols-2 gap-0.5 overflow-x-auto">
+          {ROOM.map(r => <li key={r.id}><Item id={r.id} title={r.title} /></li>)}
         </ul>
       </div>
       <Products />
-      <div className="mt-auto hidden lg:flex text-xs text-mist items-center gap-2">
-        <span className={`w-2 h-2 rounded-full ${live ? 'bg-pass' : 'bg-fail'}`} />
-        {live ? 'Connected to the station' : 'Reconnecting to the station…'}
+      <div className="mt-auto hidden lg:flex label items-center gap-2">
+        <span className={`w-1.5 h-1.5 rounded-full ${live ? 'bg-pass' : 'bg-fail'}`} style={{ boxShadow: live ? '0 0 8px var(--pass)' : undefined }} />
+        {live ? 'station online' : 'reconnecting'}
       </div>
     </nav>
   );
@@ -253,7 +242,7 @@ function Shell() {
     <div className="min-h-screen flex flex-col lg:flex-row">
       <Toasts />
       <Rail />
-      <main className="flex-1 min-w-0 px-5 lg:px-8 flex flex-col">
+      <main className="flex-1 min-w-0 px-4 lg:px-7 flex flex-col">
         <TopBar />
         {act !== 'choose' && <FlowBar />}
         <div className="h-5" />

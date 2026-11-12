@@ -41,6 +41,29 @@ class PatchMemory:
         self.ref_cls = g.cls[::k]
         return self
 
+    @torch.no_grad()
+    def coreset(self, fraction: float = 0.1, seed: int = 0) -> dict:
+        """Keep only the most representative patches (greedy k-centre on a random projection, PatchCore-style).
+        10x less memory, faster search, almost no accuracy loss - measured, see scripts/edge_profile_eval.py."""
+        bank = self.bank.float()
+        m = bank.shape[0]
+        k = max(256, int(m * fraction))
+        if k >= m:
+            return {"before": m, "after": m}
+        g = torch.Generator(device="cpu").manual_seed(seed)
+        proj = torch.randn(bank.shape[1], 128, generator=g).to(bank.device)
+        x = bank @ proj
+        chosen = torch.empty(k, dtype=torch.long, device=bank.device)
+        chosen[0] = int(torch.randint(m, (1,), generator=g))
+        mind = torch.cdist(x, x[chosen[0]:chosen[0] + 1]).squeeze(1)
+        for i in range(1, k):
+            j = int(mind.argmax())
+            chosen[i] = j
+            mind = torch.minimum(mind, torch.cdist(x, x[j:j + 1]).squeeze(1))
+        self.bank = self.bank[chosen]
+        self.bank_src = self.bank_src[chosen]
+        return {"before": m, "after": k}
+
     def add(self, refs: list[Image.Image], src_offset: int | None = None) -> int:
         """Continual learning: append verified-good references. Nothing is overwritten (no forgetting)."""
         g = self.bb(refs, masking=self.masking)

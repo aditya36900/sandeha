@@ -30,6 +30,10 @@ from .twin import Twin, load_view
 from .visual import b64, brightness, crop_pct, overlay, save, sharpness
 
 RES = 448
+import os as _os
+
+GOLDEN_GAIN = float(_os.environ.get("SANDEHA_GOLDEN_GAIN", "0.02"))  # distance units per spread beyond normal (measured)
+CORESET = float(_os.environ.get("SANDEHA_CORESET", "0"))  # 0 = full memory; 0.1 = keep 10% (edge profile default)
 _ids = itertools.count(1)
 
 
@@ -93,6 +97,8 @@ class Record:
     regions: list | None = None  # named, measured defect regions with 3D anchors
     board: dict | None = None  # electronics: per-component verdicts (only the non-OK ones travel)
     synthetic: str | None = None  # fault-lab parts: what was planted, so they never pollute real metrics
+    signals: dict | None = None  # the two detectors: patch-memory score, golden-board deviation, fused score
+    diff_url: str | None = None  # golden-board deviation painted over this board (blink comparator)
 
     def to_dict(self, heat: bool = False) -> dict:
         """Records travel light: the 3D heat (tens of thousands of numbers) is fetched only when viewed."""
@@ -176,6 +182,7 @@ class Session:
 
             t = time.time()
             self.mem = PatchMemory(self.bb).fit(refs)
+            self._compact_memory()
             self.gref = self.bb(refs)
             self.emit("genesis.features", message=f"Learned {len(self.mem.bank):,} visual patch memories in "
                                                    f"{time.time() - t:.1f}s (no training)", patches=len(self.mem.bank))
@@ -257,7 +264,8 @@ class Session:
             return np.zeros(0)
         ims = [s.image() for s in self.known_defects]
         g, d, sc = self.mem.inspect(ims)
-        return (self._weighted_score(d, self._board_fg(ims, g)) if weighted else sc).cpu().numpy()
+        d = self._fused(d, ims)
+        return (self._weighted_score(d, self._board_fg(ims, g)) if weighted else self.mem.score(d, g.fg)).cpu().numpy()
 
     def _imagine(self) -> None:
         rng = np.random.default_rng(self.seed)
@@ -397,6 +405,7 @@ class Session:
                 for i in range(0, len(spare), 8):
                     ims = [x.image() for x in spare[i:i + 8]]
                     g, d, _ = self.mem.inspect(ims)
+                    d = self._fused(d, ims)
                     sc += self._weighted_score(d, self._board_fg(ims, g)).tolist()
                 self.loo = np.array(sc)
                 self.calibrated_on = f"{len(spare)} separate good boards (board pixels only)"
@@ -408,6 +417,31 @@ class Session:
         finally:
             self._calibrating_board = False
 
+    def _compact_memory(self) -> None:
+        from .backbone import EDGE
+
+        frac = CORESET or (0.1 if EDGE else 0.0)
+        if frac and self.mem.bank is not None:
+            info = self.mem.coreset(frac)
+            self.memory_info = {"coreset": frac, **info}
+
+    def _fused(self, dist: torch.Tensor, images: list[Image.Image], loo: list[int] | None = None) -> torch.Tensor:
+        """Add the golden-board deviation (second detector) to the patch distances, so score, heatmap, regions,
+        components and calibration all see one map. loo[i] = reference index to leave out of the statistics."""
+        gs = getattr(self, "golden", None)
+        if gs is None or GOLDEN_GAIN <= 0:
+            return dist
+        from .golden import fuse
+
+        out = dist.clone()
+        for i, im in enumerate(images):
+            try:
+                z = gs.patch_map(im, self.mem.hw, exclude=None if loo is None else loo[i])
+            except Exception:
+                continue
+            out[i:i + 1] = fuse(out[i:i + 1], z, GOLDEN_GAIN)
+        return out
+
     def _weighted_score(self, dist: torch.Tensor, fg: torch.Tensor) -> torch.Tensor:
         if self.zone_weights is None:
             return self.mem.score(dist, fg)
@@ -416,11 +450,13 @@ class Session:
 
     def _recalibrate_zones(self) -> None:
         g, dist, _ = self.mem.inspect(self.ref_images, exclude_src=list(range(len(self.ref_images))))
+        dist = self._fused(dist, self.ref_images, loo=list(range(len(self.ref_images))))
         self.loo = self._weighted_score(dist, self._board_fg(self.ref_images, g)).cpu().numpy()
         sc = []
         for i in range(0, len(self.imagined), 16):
             batch = [x.image for x in self.imagined[i:i + 16]]
             gi, di, _ = self.mem.inspect(batch)
+            di = self._fused(di, batch)
             sc += self._weighted_score(di, self._board_fg(batch, gi)).tolist()
         self.imagined_scores = np.array(sc)
         self.known_scores = self._known_scores(weighted=True)
@@ -430,6 +466,7 @@ class Session:
     def _rebuild_refs(self, refs: list[Image.Image]) -> None:
         self.ref_images = refs
         self.mem = PatchMemory(self.bb).fit(refs)
+        self._compact_memory()
         self.gref = self.bb(refs)
         g, dist, _ = self.mem.inspect(refs, exclude_src=list(range(len(refs))))
         self.loo = self._weighted_score(dist, g.fg).cpu().numpy()
@@ -501,8 +538,12 @@ class Session:
             t1 = time.perf_counter()
             g, dist, _ = self.mem.inspect([shown])
             fg_eff = self._board_fg([shown], g)  # electronics: only board pixels count
+            patch_score = float(self._weighted_score(dist, fg_eff)[0])
+            dist = self._fused(dist, [shown])
             t2 = time.perf_counter()
             score = float(self._weighted_score(dist, fg_eff)[0])
+            signals = {"patchMemory": round(patch_score, 5), "goldenDeviation": round(score - patch_score, 5), "fused": round(score, 5),
+                       "gain": GOLDEN_GAIN, "detectors": 2 if getattr(self, "golden", None) is not None and GOLDEN_GAIN > 0 else 1}
             nov = float(global_nonconformity(g.cls, self.gref.cls)[0])
             novelty_p = p_value(nov, self.global_calib)
             h = self.guard.update(nov, score)
@@ -564,6 +605,12 @@ class Session:
                          novelty_p=round(novelty_p, 4), created=_now(), ghost=ghost, hive_match=rec_hive,
                          pass_line=round(pass_line, 5), hold_reason=hold_reason, quality=quality,
                          routing=ROUTING[decision])
+            rec.signals = signals
+            if getattr(self, "golden", None) is not None:
+                try:
+                    rec.diff_url = save(self.golden.diff_image(shown), f"{self.id}/{rid}_diff.jpg")
+                except Exception:
+                    pass
             if self.twin is not None:
                 rec.twin_heat = self._project_to_twin(g, hm)
             elif self.relief:
@@ -712,6 +759,14 @@ class Session:
     def ensure_board(self, wait: bool = False) -> None:
         """Build the component map (golden board, components, per-component normal ranges) in the background."""
         bm0 = getattr(self, "board", None)
+        if bm0 is not None and getattr(self, "golden", None) is None and getattr(self, "ref_images", None):
+            try:  # golden statistics are cheap to rebuild and never saved
+                from .golden import GoldenStats
+
+                self.golden = GoldenStats.build(bm0, self.ref_images)
+                self.golden_url = save(self.golden.golden_image(), f"{self.id}/golden.jpg")
+            except Exception:
+                pass
         if bm0 is not None and self.product.source == "Upload" and len(bm0.components) < 8:
             self.board = None  # an earlier, looser rule mapped a non-board upload: drop it
             return
@@ -749,6 +804,13 @@ class Session:
                     return
                 self.board = bm
                 self.board_box3d = self._board_boxes(bm)
+                try:
+                    from .golden import GoldenStats
+
+                    self.golden = GoldenStats.build(bm, self.ref_images)
+                    self.golden_url = save(self.golden.golden_image(), f"{self.id}/golden.jpg")
+                except Exception as e:
+                    self.emit("board.error", message=f"Golden-board statistics failed: {e}")
                 with self.lock:
                     self._board_recalibrate()
                 self.emit("board.recalibrated", message="Recalibrated on the board only: the mat around it no longer counts",
@@ -1538,6 +1600,7 @@ class Session:
             "records": len(self.records), "questions": self.questions, "performance": perf,
             "budget": getattr(self, "budget", 0.10), "autopilot": getattr(self, "autopilot", True),
             "forecast": self.forecast, "hasTwin": self.twin is not None or self.relief, "relief": self.relief,
+            "goldenUrl": getattr(self, "golden_url", None), "detectors": 2 if getattr(self, "golden", None) is not None and GOLDEN_GAIN > 0 else 1,
             "uploadsLeft": (len(self.eval_pool or self.spare_good) - self._upload_cursor)
             if self.product.source == "Upload" else None,
             "learnedDefects": [d["label"] for d in self.learned_defects],

@@ -2,6 +2,9 @@ import React, { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'rea
 import { AnimatePresence, motion } from 'framer-motion';
 import { api, BoardMapT, Cloud, DefectRegion, InspectionRecord, LotPart, Policy } from '../api';
 import { ComponentCheck } from './BoardViews';
+import CameraScan from './CameraScan';
+import Comparator from './Comparator';
+import Detectors from './Detectors';
 import { Btn, Panel, Verdict, Voice, decisionColor, reasonText } from './bits';
 import { useStore } from '../store';
 import DoubtGauge from './DoubtGauge';
@@ -134,12 +137,13 @@ function Tray({ lot, scanned, reveal, busyToken, onScan, onOpen }: {
   );
 }
 
-export default function LiveScan({ sessionId, records, policy, cloud, patches, memories, heat3d, onShow, selected, isUpload, onRecord, board }: {
+export default function LiveScan({ sessionId, records, policy, cloud, patches, memories, heat3d, onShow, selected, isUpload, onRecord, board, goldenUrl }: {
   sessionId: string; records: InspectionRecord[]; policy: Policy | null; cloud: Cloud | null; patches: number | null; memories: number | null;
   heat3d: number[] | null; onShow: (rid: string) => void; selected: InspectionRecord | undefined; isUpload: boolean; onRecord?: (r: InspectionRecord) => void;
-  board?: BoardMapT | null;
+  board?: BoardMapT | null; goldenUrl?: string | null;
 }) {
   const [labels, setLabels] = useState<'faults' | 'all'>('faults');
+  const [mode, setMode] = useState<'tray' | 'camera'>('tray');
   const { notify } = useStore();
   const [lot, setLot] = useState<LotPart[]>([]);
   const [scanned, setScanned] = useState<Record<string, InspectionRecord>>({});
@@ -224,16 +228,24 @@ export default function LiveScan({ sessionId, records, policy, cloud, patches, m
   };
 
   return (
-    <Panel title="Live scan" aside={
+    <Panel title="Live scan" tone={rec && ph === 'done' ? (rec.decision === 'PASS' ? 'pass' : rec.decision === 'FAIL' ? 'fail' : 'doubt') : undefined} aside={
       <div className="flex items-center gap-2 flex-wrap justify-end">
+        <div className="flex rounded-lg border border-line overflow-hidden text-[12px]">
+          {(['tray', 'camera'] as const).map(m => <button key={m} onClick={() => setMode(m)} className={`px-3 py-1.5 ${mode === m ? 'bg-accent text-ink font-semibold' : 'text-mist hover:text-bone'}`}>{m === 'tray' ? 'Tray' : 'Camera'}</button>)}
+        </div>
         <span className="text-mist text-sm num">{remaining} unscanned on the tray</span>
         <Btn tone="doubt" disabled={!!busy || !remaining} onClick={() => { const p = next(); if (p) scan(p.token); }}>Scan next part</Btn>
         {auto ? <Btn onClick={stopAuto}>Stop</Btn> : <Btn disabled={!!busy || !remaining} onClick={runAll}>Scan the whole tray</Btn>}
         <Btn tone="ghost" disabled={!!busy} onClick={freshLot}>{isUpload ? 'Next uploaded photos' : 'New tray from the line'}</Btn>
       </div>}>
-      <p className="text-sm text-mist mb-3">Parts arrive unlabelled. Nobody, including this screen, knows which ones are defective until they are scanned.</p>
-      {lot.length ? <Tray lot={lot} scanned={scanned} reveal={reveal} busyToken={busy} onScan={t => scan(t)} onOpen={rid => { setActive(null); onShow(rid); }} />
-        : <div className="text-mist text-sm">{isUpload ? 'All uploaded photos have been scanned.' : 'Loading a tray…'}</div>}
+      {mode === 'camera' && (
+        <div className="mb-4">
+          <CameraScan sessionId={sessionId} onError={setErr} onResult={async r => { setLive(r); onShow(r.id); onRecord?.(r); setActive(null); await play(false); }} />
+        </div>
+      )}
+      {mode === 'tray' && <p className="text-sm text-mist mb-3">Parts arrive unlabelled. Nobody, including this screen, knows which ones are defective until they are scanned.</p>}
+      {mode === 'tray' && lot.length ? <Tray lot={lot} scanned={scanned} reveal={reveal} busyToken={busy} onScan={t => scan(t)} onOpen={rid => { setActive(null); onShow(rid); }} />
+        : mode === 'tray' ? <div className="text-mist text-sm">{isUpload ? 'All uploaded photos have been scanned.' : 'Loading a tray…'}</div> : null}
       {err && <div className="text-fail text-sm mt-2">{err}</div>}
 
       {rec ? (
@@ -268,6 +280,8 @@ export default function LiveScan({ sessionId, records, policy, cloud, patches, m
                 </div>
                 <Voice>{rec.explanation}</Voice>
                 {policy && rec.decision !== 'HOLD' && <DoubtGauge score={rec.score} tauPass={rec.pass_line ?? policy.tau_pass} tauFail={policy.tau_fail} decision={rec.decision as any} />}
+                <Detectors rec={rec} policy={policy} />
+                {goldenUrl && <Comparator rec={rec} goldenUrl={goldenUrl} />}
                 {!!rec.regions?.length && (
                   <div className="grid gap-2">
                     {rec.regions.map(g => (

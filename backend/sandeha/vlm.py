@@ -119,6 +119,10 @@ def _load():
 
 
 def available() -> bool:
+    from .backbone import EDGE
+
+    if EDGE:
+        return False
     try:
         from huggingface_hub import try_to_load_from_cache
 

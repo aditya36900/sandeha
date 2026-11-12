@@ -20,6 +20,7 @@ from pydantic import BaseModel
 
 from . import api_station, certificate, copilot, data, galaxy, persist, report
 from .station import STATION
+import os as _os
 from .engine import SESSIONS, Session
 from .events import bus
 from .shift import PRESETS
@@ -325,6 +326,20 @@ def smt_ipc(sid: str, body: IpcIn, x_role: str | None = Header(None)):
     S(sid).ipc_class = body.klass
     STATION.log(NAMES[r], r, "ipc.class", sid, {"class": body.klass})
     return {"ipcClass": body.klass}
+
+
+@app.get("/api/profile")
+def profile():
+    """Which hardware profile the station runs, and what it costs per board (measured on this machine)."""
+    from .backbone import DEVICE, EDGE, EDGE_RES, EDGE_THREADS, PROFILE
+
+    lat = sorted(r.latency_ms for s in SESSIONS.values() for r in s.records[-200:] if r.latency_ms)
+    mem = {s.id: {"patches": int(len(s.mem.bank)), **getattr(s, "memory_info", {})} for s in SESSIONS.values() if hasattr(s, "mem") and s.mem.bank is not None}
+    return {"profile": "edge" if EDGE else "full", "requested": PROFILE, "device": DEVICE,
+            "backbone": f"DINOv2-S INT8 ONNX @ {EDGE_RES} px, {EDGE_THREADS} CPU threads" if EDGE else "DINOv2-S fp16 @ 448 px",
+            "detectors": ["patch memory", "golden-board deviation"], "goldenGain": float(_os.environ.get("SANDEHA_GOLDEN_GAIN", "0.02")),
+            "vlm": not EDGE, "clip": not EDGE, "latencyMsP50": lat[len(lat) // 2] if lat else None, "memory": mem,
+            "coreset": float(_os.environ.get("SANDEHA_CORESET", "0")) or (0.1 if EDGE else 0.0)}
 
 
 @app.get("/api/sessions/{sid}/xray")

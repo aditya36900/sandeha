@@ -9,7 +9,13 @@ import torch
 import torch.nn.functional as F
 from PIL import Image
 
-DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+import os
+
+PROFILE = os.environ.get("SANDEHA_PROFILE", "auto").lower()  # auto | edge
+EDGE = PROFILE == "edge"
+DEVICE = "cpu" if EDGE else ("cuda" if torch.cuda.is_available() else "cpu")
+EDGE_RES = int(os.environ.get("SANDEHA_EDGE_RES", "336"))
+EDGE_THREADS = int(os.environ.get("SANDEHA_EDGE_THREADS", "4"))
 MEAN = torch.tensor([0.485, 0.456, 0.406]).view(1, 3, 1, 1)
 STD = torch.tensor([0.229, 0.224, 0.225]).view(1, 3, 1, 1)
 
@@ -40,10 +46,12 @@ class Backbone:
 
     @classmethod
     def get(cls, name: str = "facebook/dinov2-small", resolution: int = 448) -> "Backbone":
+        if EDGE:  # small hardware: INT8 ONNX on the CPU, one resolution for everything
+            resolution = EDGE_RES
         key = f"{name}@{resolution}"
         with cls._lock:
             if key not in cls._instances:
-                cls._instances[key] = cls(name, resolution)
+                cls._instances[key] = OnnxBackbone(resolution) if EDGE else cls(name, resolution)
             return cls._instances[key]
 
     def to_tensor(self, images: list[Image.Image]) -> torch.Tensor:
@@ -88,3 +96,35 @@ def foreground(f: torch.Tensor, h: int, w: int) -> torch.Tensor:
     m[frac < 0.05] = True
     m[frac > 0.97] = True
     return m.reshape(n, p)
+
+
+class OnnxBackbone:
+    """Edge profile: the same DINOv2-S patch features from the INT8 ONNX export (data/edge/), on CPU threads.
+    The export has no CLS token, so the global embedding is the normalised mean patch feature."""
+
+    def __init__(self, resolution: int = 336):
+        import onnxruntime as ort
+        from pathlib import Path
+
+        self.name, self.resolution, self.patch, self.dim = "dinov2-small-int8-onnx", resolution, 14, 384
+        root = Path(__file__).resolve().parents[2] / "data" / "edge"
+        path = root / f"dinov2s_{resolution}_int8.onnx"
+        if not path.exists():
+            raise FileNotFoundError(f"{path} missing: run backend/scripts/export_onnx.py")
+        opts = ort.SessionOptions()
+        opts.intra_op_num_threads = EDGE_THREADS
+        self.sess = ort.InferenceSession(str(path), opts, providers=["CPUExecutionProvider"])
+
+    def to_tensor(self, images):
+        return Backbone.to_tensor(self, images)
+
+    def __call__(self, images: list[Image.Image], batch: int = 4, masking: bool = True) -> PatchGrid:
+        feats = []
+        for im in images:  # the INT8 export is traced with batch 1
+            x = self.to_tensor([im]).numpy()
+            feats.append(torch.from_numpy(self.sess.run(None, {"image": x})[0]))
+        f = torch.cat(feats).float()
+        cls = F.normalize(f.mean(1), dim=-1)
+        h = w = self.resolution // self.patch
+        fg = foreground(f, h, w) if masking else torch.ones(f.shape[:2], dtype=torch.bool)
+        return PatchGrid(feats=f, cls=cls, hw=(h, w), fg=fg)

@@ -67,6 +67,8 @@ export interface InspectionRecord {
   has_twin_heat?: boolean;
   hive_match: { label: string; from: string; similarity: number } | null;
   regions?: DefectRegion[] | null;
+  signals?: { patchMemory: number; goldenDeviation: number; fused: number; gain: number; detectors: number } | null;
+  diff_url?: string | null;
   board?: BoardCheck | null;
   synthetic?: string | null;
   quality?: { sharpness: number; exposure: number; glarePct: number } | null;
@@ -165,6 +167,8 @@ export interface Summary {
   conditions: Record<string, number>;
   budget?: number;
   autopilot?: boolean;
+  goldenUrl?: string | null;
+  detectors?: number;
 }
 
 export interface Forecast {
@@ -241,6 +245,8 @@ export const api = {
     files.forEach(f => fd.append('files', f));
     return form<{ accepted: number }>(`/api/sessions/${id}/inspect-batch`, fd);
   },
+  inspect: (id: string, file: File) => { const fd = new FormData(); fd.append('file', file); return form<InspectionRecord>(`/api/sessions/${id}/inspect`, fd); },
+  profile: () => req<any>('GET', '/api/profile'),
   heat: (id: string, rid: string) => req<{ heat: number[] | null }>('GET', `/api/sessions/${id}/records/${rid}/heat`),
   queue: (id: string) => req<{ id: string; teachValue: number; why: string }[]>('GET', `/api/sessions/${id}/queue`),
   deleteSession: (id: string) => req('DELETE', `/api/sessions/${id}`),

@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sandeha — Pitch Book · INNOVASIA 2026 · PS-12</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4; margin: 0; }
+  :root {
+    --ink: #10142e; --surface: #1a2045; --raised: #232a57; --line: #d9d4c6; --bone: #ece7da;
+    --mist: #5d6386; --pass: #138a76; --fail: #c83a2f; --doubt: #c47a0a; --hold: #4b5bd6; --paper: #fbf9f4;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { font-family: 'IBM Plex Sans Condensed', system-ui, sans-serif; color: var(--ink); background: var(--paper); font-size: 10.6pt; line-height: 1.45;
+         -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .page { width: 210mm; height: 297mm; padding: 16mm 16mm 14mm; position: relative; overflow: hidden; page-break-after: always; background: var(--paper); }
+  .page:last-child { page-break-after: auto; }
+  .serif { font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; }
+  .mono { font-family: 'IBM Plex Mono', monospace; }
+  h1 { font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 34pt; line-height: 1.05; margin: 0 0 6mm; letter-spacing: -0.01em; }
+  h2 { font-size: 11pt; text-transform: uppercase; letter-spacing: .14em; color: var(--doubt); margin: 0 0 2mm; font-weight: 700; }
+  h3 { font-size: 12.5pt; margin: 5mm 0 1.5mm; }
+  p { margin: 0 0 2.6mm; }
+  .lead { font-family: 'Instrument Serif', Georgia, serif; font-size: 17pt; line-height: 1.25; margin-bottom: 5mm; }
+  .muted { color: var(--mist); }
+  .small { font-size: 8.6pt; }
+  .tiny { font-size: 7.6pt; }
+  .foot { position: absolute; left: 16mm; right: 16mm; bottom: 7mm; display: flex; justify-content: space-between; font-size: 7.6pt; color: var(--mist); border-top: 0.3mm solid var(--line); padding-top: 2mm; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4mm; }
+  .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3.5mm; }
+  .card { background: #fff; border: 0.3mm solid var(--line); border-radius: 3mm; padding: 4mm; }
+  .card.dark { background: var(--ink); color: var(--bone); border: none; }
+  .kpi .v { font-size: 22pt; font-weight: 700; line-height: 1.05; font-variant-numeric: tabular-nums; }
+  .kpi .l { font-size: 8.4pt; color: var(--mist); margin-top: 1mm; }
+  .card.dark .kpi .l, .card.dark .muted { color: #a9b0d6; }
+  table { width: 100%; border-collapse: collapse; font-size: 9pt; font-variant-numeric: tabular-nums; }
+  th { text-align: left; font-size: 7.8pt; text-transform: uppercase; letter-spacing: .06em; color: var(--mist); border-bottom: 0.4mm solid var(--ink); padding: 1.6mm 2mm; }
+  td { border-bottom: 0.25mm solid var(--line); padding: 1.8mm 2mm; vertical-align: top; }
+  .good { color: var(--pass); font-weight: 700; }
+  .bad { color: var(--fail); font-weight: 700; }
+  .warn { color: var(--doubt); font-weight: 700; }
+  .shot { width: 100%; border-radius: 2.5mm; display: block; box-shadow: 0 1mm 4mm rgba(16,20,46,.25); }
+  .cap { font-size: 8.2pt; color: var(--mist); margin-top: 1.6mm; }
+  .pill { display: inline-block; padding: .6mm 2.2mm; border-radius: 10mm; font-size: 7.8pt; font-weight: 700; letter-spacing: .04em; }
+  .p-pass { background: #d7f0ea; color: var(--pass); } .p-doubt { background: #f8e8c9; color: var(--doubt); } .p-fail { background: #f6d6d2; color: var(--fail); }
+  .flow { display: flex; gap: 2mm; align-items: stretch; margin: 3mm 0 4mm; }
+  .flow .s { flex: 1; background: #fff; border: 0.3mm solid var(--line); border-radius: 2.5mm; padding: 2.4mm; font-size: 8.4pt; }
+  .flow .s b { display: block; font-size: 9.4pt; margin-bottom: .6mm; }
+  .flow .n { font-size: 7.4pt; color: var(--doubt); font-weight: 700; }
+  .arrow { align-self: center; color: var(--mist); font-size: 11pt; }
+  .script p { font-size: 10.4pt; }
+  .cue { font-size: 8.2pt; color: var(--doubt); font-weight: 700; letter-spacing: .04em; text-transform: uppercase; margin: 3.6mm 0 1.4mm; }
+  .quote { border-left: 1.2mm solid var(--doubt); padding: 1mm 0 1mm 4mm; margin: 3mm 0; }
+  ul { margin: 0 0 2.6mm; padding-left: 5mm; } li { margin-bottom: 1.2mm; }
+  .cover { background: var(--ink); color: var(--bone); padding: 22mm 18mm; }
+  .cover .tag { font-size: 9pt; letter-spacing: .2em; text-transform: uppercase; color: #f2a93b; font-weight: 700; }
+  .cover h1 { font-size: 64pt; margin: 6mm 0 3mm; color: var(--bone); }
+  .cover .sub { font-family: 'Instrument Serif', serif; font-size: 22pt; color: #cfd3ea; line-height: 1.2; }
+  .cover .gauge { height: 5mm; border-radius: 5mm; background: linear-gradient(90deg, #5cc8b4 0 62%, #f2a93b 62% 72%, #f0655a 72% 100%); margin: 14mm 0 2.5mm; position: relative; }
+  .cover .gauge i { position: absolute; left: 66%; top: -2mm; width: 1.2mm; height: 9mm; background: var(--bone); border-radius: 1mm; }
+  .cover .gl { display: flex; justify-content: space-between; font-size: 8.6pt; color: #a9b0d6; }
+  .cover .foot { color: #8f97c2; border-color: #2f3769; }
+  .logo { width: 16mm; height: 16mm; }
+  .bignum { font-size: 40pt; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+  .hl { background: linear-gradient(transparent 60%, #f8e3b8 60%); }
+  .two-col-text { columns: 2; column-gap: 7mm; }
+  .src li { font-size: 8.2pt; margin-bottom: .8mm; word-break: break-all; }
+</style>
+</head>
+<body>
+
+<!-- 1 COVER -->
+<section class="page cover">
+  <svg class="logo" viewBox="0 0 32 32"><circle cx="16" cy="16" r="12" fill="#f2a93b"/><circle cx="16" cy="16" r="5" fill="#10142e"/></svg>
+  <div class="tag" style="margin-top:10mm">INNOVASIA 2026 · Problem statement 12 · DefectZero Edge</div>
+  <h1 class="serif">Sandeha</h1>
+  <div class="sub">The inspector that knows when it doesn't know.<br>Electronics inspection from 30 good boards — part by part, in 3D, honest about doubt.</div>
+  <div class="gauge"><i></i></div>
+  <div class="gl"><span>passes on its own</span><span>asks a person</span><span>rejects on its own</span></div>
+  <div class="grid3" style="margin-top:16mm">
+    <div><div class="bignum" style="color:#5cc8b4">0.995</div><div class="muted small">AUROC on held-out circuit boards it never saw (pcb4, 160 boards)</div></div>
+    <div><div class="bignum" style="color:#f2a93b">14.6%</div><div class="muted small">defects escaping vs 39.1% for a typical single-threshold AI, same false-reject rate (12 products)</div></div>
+    <div><div class="bignum" style="color:#ece7da">21 FPS</div><div class="muted small">on 4 laptop CPU threads (ONNX INT8, 224 px). All AI local. Nothing leaves the plant.</div></div>
+  </div>
+  <p class="small" style="margin-top:16mm;color:#a9b0d6;max-width:150mm">Sandeha (संदेह, సందేహ) means <i>doubt</i>. Every number in this book was measured by the team on public data (VisA, CC BY 4.0) — none recorded by us, none assumed.</p>
+  <div class="foot"><span>Team Sandeha · Pitch book</span><span>November 2026</span></div>
+</section>
+
+<!-- 2 PROBLEM -->
+<section class="page">
+  <h2>01 · The problem</h2>
+  <h1>It's 2 a.m. The machine has cried wolf forty times.</h1>
+  <p class="lead">An inspector is on her six-hundredth circuit board of the night. Thirty-five of the forty alarms so far were nothing. The forty-first board — the one with the burnt chip — she waves through. It ships.</p>
+  <div class="quote serif" style="font-size:15pt">This is not a failure of people. It is a failure of machines that never admit when they are unsure.</div>
+  <div class="grid2" style="margin-top:6mm">
+    <div>
+      <h3>What PS-12 demands</h3>
+      <table>
+        <tr><th>Requirement</th><th>Bar</th></tr>
+        <tr><td>Learn a new product</td><td>≤ 30 good + ≤ 5 defect images</td></tr>
+        <tr><td>Calibrated uncertainty</td><td>judged on a risk–coverage curve</td></tr>
+        <tr><td>Human review load</td><td>≤ 10% of parts</td></tr>
+        <tr><td>Domain shift</td><td>detect, adapt, no forgetting</td></tr>
+        <tr><td>Edge speed</td><td>≥ 5 FPS</td></tr>
+        <tr><td>Demo</td><td>two lightings, abstain queue, live adaptation</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3>Why today's options fail it</h3>
+      <ul>
+        <li><b>Rule-based AOI</b> must be programmed board by board; AOI vendors themselves report <b>15–30% false calls</b> on solder joints (vendor-reported, not independently verified). Operators learn to ignore alarms.</li>
+        <li><b>Typical AI</b> outputs one score and one threshold: above it reject, below it pass. It never says <i>"I don't know"</i> — so it either scraps good boards or ships bad ones.</li>
+        <li><b>New product introductions</b> have no defect data at all: by the time a model has seen enough failures, the boards have shipped.</li>
+        <li><b>Cloud AI</b> means sending production images out of the plant — a non-starter for most electronics makers.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card dark" style="margin-top:6mm">
+    <div class="serif" style="font-size:17pt">What an inspector actually needs is a machine that is <span style="color:#5cc8b4">right when it is sure</span>, and <span style="color:#f2a93b">honest when it isn't</span> — so that when it raises a hand, she believes it.</div>
+  </div>
+  <div class="foot"><span>Sandeha · The problem</span><span>2</span></div>
+</section>
+
+<!-- 3 SOLUTION -->
+<section class="page">
+  <h2>02 · Our answer</h2>
+  <h1>Doubt is the feature.</h1>
+  <p class="lead">Sandeha learns a circuit board from 30 good photos — no labels, no CAD, no training run — finds every component on it, and gives every board one of three answers, with a statistical guarantee on how often a good board is wrongly rejected.</p>
+  <div class="flow">
+    <div class="s"><span class="n">1</span><b>Learn</b>30 good boards → patch memory (DINOv2, frozen) + a golden board</div><span class="arrow">›</span>
+    <div class="s"><span class="n">2</span><b>Map</b>every component found and typed; its own normal range learned on 40 separate good boards</div><span class="arrow">›</span>
+    <div class="s"><span class="n">3</span><b>Ask</b>it interviews you about what it is unsure of before it starts</div><span class="arrow">›</span>
+    <div class="s"><span class="n">4</span><b>Scan</b>unlabelled boards, scored on board pixels only, in ~0.5 s</div><span class="arrow">›</span>
+    <div class="s"><span class="n">5</span><b>Decide</b><span class="pill p-pass">PASS</span> <span class="pill p-doubt">DOUBT</span> <span class="pill p-fail">FAIL</span></div>
+  </div>
+  <div class="grid2">
+    <div>
+      <h3>Two calibrated lines, not one threshold</h3>
+      <p><b>Fail line:</b> a split-conformal bound on good boards — a good board crosses it at most 2% of the time (α = 0.02). <b>Pass line:</b> set from real and <i>imagined</i> defects so few slip under it. Between them, the board goes to a person. A review-budget autopilot keeps that band under 10% — and it may only raise the pass line, never loosen the fail line.</p>
+      <h3>Then it says <i>why</i>, part by part</h3>
+      <p>For every rejected board: <b>which component</b> (R4, U1, J1…), <b>what happened</b> (missing, moved, rotated, burnt, wrong part, solder, damaged, contamination), <b>where on the line it likely started</b>, and <b>how to repair it</b> — shown on that board's own photo in 3D.</p>
+    </div>
+    <div>
+      <h3>Beyond the brief</h3>
+      <ul>
+        <li><b>Approval desk</b> — a sign-off dossier arguing both sides from the measurements, with cost of either choice and IPC-A-610 grade per fault.</li>
+        <li><b>Board X-ray</b> — the board exploded into copper, solder mask, silkscreen and parts, with where failures concentrate.</li>
+        <li><b>Chip identity check</b> — reads the marking on every IC to catch wrong, re-marked or burnt chips.</li>
+        <li><b>Shift guard</b> — a conformal martingale notices changed lighting or a bumped camera, stops auto-passing, adapts from 5 photos, forgets nothing.</li>
+        <li><b>Two-person rule</b> — it only learns when two different reviewers agree; known-answer checks score reviewer reliability.</li>
+        <li><b>Line context</b> — line flow, SPC per component, rework tickets, quality report (FPY, DPMO, false calls).</li>
+        <li><b>All local</b> — DINOv2, CLIP, Qwen-VL, Depth Anything run on the station.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span>Sandeha · Our answer</span><span>3</span></div>
+</section>
+
+<!-- 4 TOUR: SCAN -->
+<section class="page">
+  <h2>03 · Product tour — live scan</h2>
+  <h1 style="font-size:28pt">Unlabelled boards in. Answers, with reasons, out.</h1>
+  <div class="grid2" style="grid-template-columns: 1.05fr 1fr; align-items:start">
+    <div><img class="shot" src="img/p_scan.png"><div class="cap">A real VisA board labelled "missing" by the dataset, scanned live. Verdict FAIL (0.154 > fail line 0.144). The component check names <b>J1 connector · missing</b>: only 32% of its footprint is still part body, against 4% variation on good boards. Truth is hidden until the operator asks.</div></div>
+    <div>
+      <h3>What happens in ~0.5 seconds</h3>
+      <table>
+        <tr><th>Stage</th><th>What it does</th></tr>
+        <tr><td>Image check</td><td>refuses blurred, dark or glare-washed images (→ HOLD, not a guess)</td></tr>
+        <tr><td>Understand</td><td>1,024 DINOv2 patches; board outline aligned onto the photo</td></tr>
+        <tr><td>Compare</td><td>each patch vs its nearest of ~70,000 good-patch memories</td></tr>
+        <tr><td>Components</td><td>30 parts each checked against their own normal range</td></tr>
+        <tr><td>Locate</td><td>regions cut from the heatmap, named, pinned in 3D</td></tr>
+        <tr><td>Doubt, decide</td><td>two calibrated lines → PASS / DOUBT / FAIL</td></tr>
+      </table>
+      <h3>Precision first</h3>
+      <p>A component is called faulty only when two independent measurements agree — its own geometry/colour check <i>and</i> the patch-memory heatmap — or the evidence is overwhelming. Everything weaker is a quiet "watch" note.</p>
+      <table>
+        <tr><th>pcb4 · 60 defective + 30 good boards</th><th>Before</th><th>After</th></tr>
+        <tr><td>Fault flags on the true defect</td><td>44%</td><td class="good">62%</td></tr>
+        <tr><td>Wrong fault flags per good board</td><td>0.40</td><td class="good">0.07</td></tr>
+        <tr><td>Defective boards with a correct flag</td><td>97%</td><td>93%</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="foot"><span>Sandeha · Live scan</span><span>4</span></div>
+</section>
+
+<!-- 5 TOUR: APPROVAL -->
+<section class="page">
+  <h2>04 · Product tour — the approval desk</h2>
+  <h1 style="font-size:28pt">Everything the person at the bench needs to sign.</h1>
+  <div class="grid2" style="align-items:start">
+    <div><img class="shot" src="img/p_verdict.png"><div class="cap">The dossier: calibrated numbers, the expected cost of passing (₹2,439) vs rejecting (₹4), and a critical analysis that argues <b>both</b> sides from measurements — then says what would change the decision.</div></div>
+    <div>
+      <img class="shot" src="img/p_dossier3d.png"><div class="cap">This board in 3D: its own photo draped on a depth relief, the missing connector boxed, every part clickable for type, measurements, cause and repair.</div>
+      <img class="shot" src="img/p_components.png" style="margin-top:4mm"><div class="cap">Each fault graded against IPC-A-610 (Class 1/2/3 selectable), traced to the line station where it most likely started, with the repair action.</div>
+    </div>
+  </div>
+  <div class="foot"><span>Sandeha · Approval desk</span><span>5</span></div>
+</section>
+
+<!-- 6 TOUR: XRAY / CHIP / LINE -->
+<section class="page">
+  <h2>05 · Product tour — beyond the board</h2>
+  <h1 style="font-size:28pt">Take the board apart. Read the chips. See the whole line.</h1>
+  <div class="grid2" style="align-items:start">
+    <div><img class="shot" src="img/p_xray.png"><div class="cap"><b>Board X-ray.</b> Substrate, copper, solder mask, silkscreen, components and failure density — each layer measured from the golden-board photo, exploded in 3D. Copper read through the mask links parts into a (partial) netlist: click a part to see its impact zone.</div></div>
+    <div>
+      <img class="shot" src="img/layers.png" style="background:#10142e"><div class="cap">The layers as extracted: board outline, copper, solder mask, silkscreen ink, components.</div>
+      <h3>Chip identity check</h3>
+      <table>
+        <tr><th>Board</th><th>Marking read</th><th>Verdict</th></tr>
+        <tr><td>Golden (majority of 3 references)</td><td class="mono">TC4056A</td><td>—</td></tr>
+        <tr><td>Good boards (8 of 8)</td><td class="mono">TC4056A</td><td class="good">match</td></tr>
+        <tr><td>Burnt boards (5 of 5)</td><td class="mono">"4056E SN2N1P" / unreadable</td><td class="bad">different</td></tr>
+      </table>
+      <p class="small muted">TC4056A is the real Li-ion charger IC on this board. The local VLM reads text reliably (unlike judging defects), and the comparison is plain string similarity — so the verdict is measurable. Small sample; we say so.</p>
+    </div>
+  </div>
+  <img class="shot" src="img/p_lineflow.png" style="margin-top:4mm"><div class="cap"><b>Line flow.</b> Each fault traced to the SMT station where it most likely started (paste print, pick &amp; place, reflow) so the fix goes to the machine, not just the board. Counts here are from all development scans, including before recent fixes.</div>
+  <div class="foot"><span>Sandeha · Beyond the board</span><span>6</span></div>
+</section>
+
+<!-- 7 RESULTS -->
+<section class="page">
+  <h2>06 · Measured results</h2>
+  <h1 style="font-size:28pt">Every number measured on data we never trained on.</h1>
+  <div class="grid4">
+    <div class="card kpi"><div class="v">0.934</div><div class="l">mean AUROC, 12 VisA products × 3 seeds (672 px)</div></div>
+    <div class="card kpi"><div class="v good">14.6%</div><div class="l">escapes vs <b>39.1%</b> single threshold, same 3.9% false rejects</div></div>
+    <div class="card kpi"><div class="v">10.2%</div><div class="l">review rate at 3% defect prevalence</div></div>
+    <div class="card kpi"><div class="v">21 FPS</div><div class="l">ONNX INT8, 224 px, 4 CPU threads (8.5 FPS at 336 px)</div></div>
+  </div>
+  <h3>Board-only scoring on the charger board (pcb4, 80 good + 80 defective held-out boards)</h3>
+  <table>
+    <tr><th>Measure</th><th>Whole photo</th><th>Board only (shipped)</th></tr>
+    <tr><td>AUROC</td><td>0.986</td><td class="good">0.995</td></tr>
+    <tr><td>Good boards wrongly rejected</td><td>2.5%</td><td class="good">0%</td></tr>
+    <tr><td>Defective boards passed</td><td>0 of 80</td><td class="warn">1 of 80</td></tr>
+    <tr><td>Boards sent to a person</td><td>20.6%</td><td class="good">10.6%</td></tr>
+    <tr><td>Callouts landing off the board</td><td>23.7%</td><td class="good">2.5%</td></tr>
+  </table>
+  <div class="grid2" style="margin-top:2mm">
+    <div>
+      <h3>Callouts and components</h3>
+      <table>
+        <tr><th>Measure (VisA)</th><th>Result</th></tr>
+        <tr><td>Region callouts on the real defect (4 PCB-type products)</td><td>75%</td></tr>
+        <tr><td>Defective parts with a callout on the true defect</td><td>90%</td></tr>
+        <tr><td>Components mapped on pcb4, no labels</td><td>30</td></tr>
+        <tr><td>Component-type classifier, held-out photos</td><td>86.7%</td></tr>
+        <tr><td>Real "missing" parts diagnosed (pcb4)</td><td>87%</td></tr>
+        <tr><td>Defective boards localised, all 4 PCBs</td><td class="warn">78%</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3>Robustness</h3>
+      <table>
+        <tr><th>Measure</th><th>Result</th></tr>
+        <tr><td>Shift (camera bumped / light change) detected</td><td>within 10–15 parts</td></tr>
+        <tr><td>Adaptation from 5 photos</td><td>AUROC 0.70 → 0.92</td></tr>
+        <tr><td>Forgetting after adaptation</td><td>none (probe set unchanged)</td></tr>
+        <tr><td>Scan latency on the station</td><td>~0.4–0.7 s per board</td></tr>
+        <tr><td>Review-budget autopilot (pcb4)</td><td>review ~40% → 11%</td></tr>
+      </table>
+      <p class="tiny muted" style="margin-top:2mm">The type classifier was first scored at 95%; we found 12 of its 120 held-out photos duplicated in training, removed them, and report the honest 86.7%.</p>
+    </div>
+  </div>
+  <div class="foot"><span>Sandeha · Results</span><span>7</span></div>
+</section>
+
+<!-- 8 COMPARISON -->
+<section class="page">
+  <h2>07 · How it compares</h2>
+  <h1 style="font-size:28pt">What others give you, and what Sandeha gives you.</h1>
+  <table>
+    <tr><th style="width:24%">Capability</th><th>Rule-based AOI</th><th>Typical anomaly AI</th><th>Cloud vision model</th><th>Sandeha</th></tr>
+    <tr><td>Data to start</td><td>CAD + programming per board</td><td>hundreds of images</td><td>none, but no calibration</td><td class="good">30 good photos, no labels</td></tr>
+    <tr><td>Says "I don't know"</td><td>no</td><td>no (one threshold)</td><td>no</td><td class="good">yes — calibrated doubt band</td></tr>
+    <tr><td>Guarantee on false rejects</td><td>no</td><td>no</td><td>no</td><td class="good">yes — conformal, α = 2%</td></tr>
+    <tr><td>Explains which part, why</td><td>per programmed rule</td><td>a heatmap</td><td>free text, unverified</td><td class="good">component · fault · cause · repair · IPC grade</td></tr>
+    <tr><td>Notices changed conditions</td><td>no</td><td>no</td><td>no</td><td class="good">conformal martingale alarm</td></tr>
+    <tr><td>Adapts without forgetting</td><td>re-program</td><td>retrain</td><td>n/a</td><td class="good">5 photos, memory only grows</td></tr>
+    <tr><td>Learns from people safely</td><td>no</td><td>often blindly</td><td>no</td><td class="good">two-person rule + reviewer checks</td></tr>
+    <tr><td>Wrong / burnt chip</td><td>if programmed</td><td>sometimes</td><td>sometimes</td><td class="good">marking read and compared</td></tr>
+    <tr><td>Data leaves the plant</td><td>no</td><td>depends</td><td class="bad">yes</td><td class="good">never — all models local</td></tr>
+    <tr><td>Runs on edge</td><td>dedicated machine</td><td>usually GPU</td><td>no</td><td class="good">21 FPS on laptop CPU</td></tr>
+  </table>
+  <div class="grid2" style="margin-top:7mm">
+    <div class="card"><h3 style="margin-top:0">The number that matters</h3><p>At the <b>same</b> false-reject rate, a single-threshold model let <b class="bad">39.1%</b> of defects escape across 12 products. Sandeha let <b class="good">14.6%</b> escape — because instead of guessing on hard cases, it asks a person about ~10% of parts.</p></div>
+    <div class="card"><h3 style="margin-top:0">Why judges can trust the numbers</h3><p>Public data (VisA, CC BY 4.0), held-out test sets, three seeds, leakage removed when found, and every limitation printed on screen next to the feature it limits. Nothing in this book is a projection.</p></div>
+  </div>
+  <div class="foot"><span>Sandeha · Comparison</span><span>8</span></div>
+</section>
+
+<!-- 9 HONESTY -->
+<section class="page">
+  <h2>08 · What it can't do yet</h2>
+  <h1>We tell you the limits, because that is the whole idea.</h1>
+  <div class="grid2">
+    <div>
+      <h3>Measured limitations</h3>
+      <ul>
+        <li><b>Dry solder joints</b> are not detectable from a single top-down photo: normal solder shine varies more than a dull joint changes it. Real AOI uses angled, multi-colour ring lights; so would we.</li>
+        <li><b>Denser boards are harder.</b> The component check is strongest on the charger board (pcb4); across all four PCB products, 78% of defective boards are localised.</li>
+        <li><b>One escape in eighty</b> on pcb4 with board-only scoring — the price of halving the review load and removing false rejects.</li>
+        <li><b>Defect names from 5 examples</b> are barely better than guessing (52% vs 49%): shown as a guess.</li>
+        <li><b>The VLM is a second pair of eyes.</b> The 2B model was no better than chance at confirming defects, so it never changes a verdict; it reads chip markings and describes close-ups.</li>
+        <li><b>Connectivity is partial</b> — vias and inner layers are invisible from one photo.</li>
+        <li><b>Simulated, labelled:</b> feeder/reel data, moisture-sensitive part clocks and the reflow profile (the camera cannot see them).</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Next, in order</h3>
+      <ul>
+        <li>Angled RGB ring light → dry joints, tombstoning, lifted leads.</li>
+        <li>Tune component segmentation on dense boards (headers, transducers, through-hole).</li>
+        <li>Qwen2.5-VL-7B (4-bit, on the station) for richer descriptions; re-measure before trusting it.</li>
+        <li>Two cameras or a tilt stage → true 3D instead of a monocular relief.</li>
+        <li>Connect real SPI, pick-and-place and oven data (IPC-CFX / Hermes) to replace the simulated line context.</li>
+        <li>Raspberry Pi 5 measurement (not yet measured).</li>
+      </ul>
+      <div class="card dark" style="margin-top:6mm"><div class="serif" style="font-size:15pt">A system that hides its weak spots will eventually surprise you on the line. One that shows them lets you plan around them.</div></div>
+    </div>
+  </div>
+  <div class="foot"><span>Sandeha · Limits</span><span>9</span></div>
+</section>
+
+<!-- 10-11 PITCH SCRIPT -->
+<section class="page script">
+  <h2>09 · Pitch script (≈ 4½ minutes)</h2>
+  <h1 style="font-size:26pt">Spoken by two: one for the story, one for the demo.</h1>
+  <div class="cue">0:00 — Hook · slow · dark slide</div>
+  <p>It's 2 a.m. on an electronics line. An inspector is looking at her six-hundredth circuit board of the night. The inspection machine beside her has raised an alarm forty times this shift. Thirty-five of them were nothing.</p>
+  <p>So when the forty-first alarm goes off, she does what any tired human would do. She waves it through. That board had a burnt chip. It shipped. <i>[pause]</i></p>
+  <p>This isn't a failure of people. It's a failure of machines that never admit when they are unsure.</p>
+  <div class="cue">0:35 — The problem · slide "DefectZero Edge"</div>
+  <p>Our problem statement asks for something hard and honest: learn a new product from thirty good photos and five defects; know when you are unsure; send no more than ten percent of parts to a person; survive a change in lighting; run on the edge.</p>
+  <p>Today's options fail this in two ways. Classic inspection machines must be programmed board by board — and their own vendors report that fifteen to thirty percent of their alarms are false. Typical AI models give you one number and one threshold. Above it, reject. Below it, pass. They never say "I don't know." So they either scrap good boards, or ship bad ones.</p>
+  <div class="cue">1:15 — What we built · logo slide → demo</div>
+  <p>We built Sandeha. In Sanskrit, sandeha means doubt. <b>Doubt is the feature.</b></p>
+  <p>We show it thirty good boards. No labels, no CAD files, no training run. In about a minute it finds every component on the board — the USB connector, the IC, the resistors, the capacitors — and learns how each one normally looks.</p>
+  <p>Now boards arrive unlabelled. Not even this screen knows which are bad. Every board gets one of three answers: pass on its own, reject on its own — or the one nobody else gives you: "I'm unsure — a person decides."</p>
+  <p>And when it rejects, it doesn't just say "defect". It says which part, what happened, where on the line it likely started, and how to repair it — on this board's own photo, in 3D.</p>
+  <div class="foot"><span>Sandeha · Pitch script (1/2)</span><span>10</span></div>
+</section>
+
+<section class="page script">
+  <div class="cue" style="margin-top:0">2:15 — Why it's better · numbers slide · let them land</div>
+  <p>Across twelve products in a public industrial dataset, at the same false-reject rate as a single threshold, a typical AI let <b>thirty-nine percent</b> of defects escape. Sandeha: <b>fourteen point six</b> — while asking a person about only ten percent of parts.</p>
+  <p>On the charger board you just saw, scored on a hundred and sixty boards it had never seen: zero good boards wrongly rejected. One defect in eighty got through. About one board in ten sent to a person.</p>
+  <p><i>[Approval desk]</i> When it asks, it doesn't just hand over a problem. The inspector gets a full dossier: the case that the board is defective, the case that it's fine, the cost of each choice, and the industry acceptance grade for every fault.</p>
+  <p><i>[Board X-ray]</i> It pulls the board apart into its real layers — copper, solder mask, print, parts — and shows where failures have concentrated over the whole shift. And it reads the part number printed on each chip: on every good board it read TC4056A; every burnt board we checked read differently.</p>
+  <p>If the camera is bumped or the lights change, it notices within ten to fifteen boards, stops approving on its own, adapts from five good photos, and forgets nothing it knew. It runs at twenty-one frames per second on a laptop CPU. Every AI model runs on the station. No cloud. Nothing leaves the plant.</p>
+  <div class="cue">3:40 — Honesty · slide "What it can't do yet" · calm</div>
+  <p>We'll tell you what it can't do, because that's the whole idea. It cannot see a dry solder joint from one camera above the board — real machines use angled coloured lights for that, and so would we. Its part-level checks are strongest on the board you saw, and weaker on denser boards. Its AI advisor is a second pair of eyes, never the judge. We measured all of this ourselves, and we show it on screen.</p>
+  <div class="cue">4:05 — Close · dark slide · slow</div>
+  <p>Remember the inspector at 2 a.m.? She doesn't need a machine that's always confident. She needs one that's <b>right when it's sure</b>, and <b>honest when it isn't</b> — so that when it raises a hand, she believes it.</p>
+  <p class="serif" style="font-size:18pt;margin-top:4mm">That's Sandeha. The inspector that knows when it doesn't know. Thank you.</p>
+  <div class="card" style="margin-top:6mm">
+    <h3 style="margin-top:0">Delivery notes</h3>
+    <ul class="small">
+      <li>Two-second pauses after "It shipped.", "Doubt is the feature." and the escape numbers.</li>
+      <li>Hand-over from story-teller to demo-driver at "We built Sandeha."</li>
+      <li>Short on time? Cut the X-ray paragraph first, then the drift line. Never cut the honesty section.</li>
+      <li>Quote numbers only as worded here. Attribute "15–30% false calls" to AOI vendors' own reports.</li>
+    </ul>
+  </div>
+  <div class="foot"><span>Sandeha · Pitch script (2/2)</span><span>11</span></div>
+</section>
+
+<!-- 12 DEMO + Q&A -->
+<section class="page">
+  <h2>10 · Demo run-sheet and judge Q&amp;A</h2>
+  <div class="grid2">
+    <div>
+      <h3>Run-sheet (≈ 3 minutes inside the pitch)</h3>
+      <table class="small">
+        <tr><th>Time</th><th>Screen</th><th>Do / say</th></tr>
+        <tr><td>1:20</td><td>Choose a board</td><td>pcb4 (Li-ion charger) — already learned</td></tr>
+        <tr><td>1:30</td><td>Scan boards</td><td>"Scan the whole tray": unlabelled boards, stages with real timings</td></tr>
+        <tr><td>1:50</td><td>A FAIL</td><td>point at the component check and the 3D box on its own photo</td></tr>
+        <tr><td>2:30</td><td>Approve</td><td>open the dossier: case for / against, cost, IPC grade, root cause</td></tr>
+        <tr><td>3:00</td><td>Board X-ray</td><td>"Explode", click the most-failed part, read a chip</td></tr>
+        <tr><td>3:20</td><td>Demo mode</td><td>scenario 4 (camera bumped) if time: the alarm and adaptation</td></tr>
+      </table>
+      <h3>Before going on stage</h3>
+      <ul class="small">
+        <li>Start the station; wait for "Mapped N components" and "Recalibrated on the board only".</li>
+        <li>Scan one tray in advance so the GPU and models are warm.</li>
+        <li>Keep one known FAIL board's link ready: <span class="mono">?session=…&amp;part=…#approval</span>.</li>
+        <li>Have the honesty slide on screen during Q&amp;A.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Likely questions</h3>
+      <p><b>Isn't 30 photos too few?</b><br>For a nearest-neighbour patch memory, no: it compares every patch to what good looks like. The guarantee is on the good side (≤2% false rejects); escapes are measured, not promised.</p>
+      <p><b>What if the lighting changes?</b><br>A conformal martingale detects it within 10–15 boards; auto-pass is suspended; 5 photos adapt it; a fixed probe set proves nothing was forgotten.</p>
+      <p><b>Why trust the AI explanations?</b><br>The verdict comes from calibrated measurements. Explanations are composed from those measurements and cited; the VLM only describes and reads text.</p>
+      <p><b>How is this different from AOI?</b><br>No board programming, a calibrated "I'm unsure", per-component normal ranges learned from data, and every limit shown.</p>
+      <p><b>Is the data real?</b><br>Yes — VisA (Amazon, CC BY 4.0): real boards, real defects with pixel masks. Component photos MIT; 3D models KiCad; lighting CC0.</p>
+      <p><b>What does it cost to run?</b><br>A laptop-class CPU reaches 21 FPS at 224 px; the GPU is only needed for the larger optional models.</p>
+    </div>
+  </div>
+  <div class="foot"><span>Sandeha · Demo &amp; Q&amp;A</span><span>12</span></div>
+</section>
+
+<!-- 13 SOURCES -->
+<section class="page">
+  <h2>11 · Data, models, licences, sources</h2>
+  <div class="grid2">
+    <div>
+      <h3>Data</h3>
+      <ul class="small">
+        <li><b>VisA</b> (Amazon, AWS Open Data) — 12 products incl. 4 PCB types, real defects with pixel masks — CC BY 4.0.</li>
+        <li><b>MAD-Sim</b> (PAD, NeurIPS 2023) — posed multi-view objects for the 3D twin — CC BY-NC-SA 4.0.</li>
+        <li><b>PCB Component Classifier</b> (ParsaVictor, Hugging Face) — 1,141 photographed SMD parts after de-duplication — MIT.</li>
+      </ul>
+      <h3>Models (all run on the station)</h3>
+      <ul class="small">
+        <li>DINOv2-S/14 (Meta) — frozen patch features, patch memory.</li>
+        <li>CLIP ViT-B/16 (OpenAI) — region naming fallback.</li>
+        <li>Qwen2-VL-2B / Qwen2.5-VL-7B (Alibaba, Apache-2.0) — descriptions, chip markings.</li>
+        <li>Depth Anything V2 Small — single-photo 3D relief.</li>
+        <li>3D component models: KiCad Packages3D — CC BY-SA 4.0 with library exception. Lighting: Poly Haven, CC0.</li>
+      </ul>
+      <h3>Methods</h3>
+      <ul class="small">
+        <li>Split-conformal two-threshold policy; review-budget autopilot.</li>
+        <li>Conformal test martingale for shift; probe-set forgetting check.</li>
+        <li>Per-component robust limits (median ± 5 robust SD) on 40 separate good boards.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Standards and industry sources</h3>
+      <ul class="src">
+        <li>IPC-A-610 side overhang limits (secondary sources): pcblibraries.com/Forum/topic3111.html · smtnet.com/library/files/upload/IPC%20training.pdf · atlaspcb.com/blog/ipc-a-610-acceptance-criteria-inspection-classes-guide</li>
+        <li>IPC-7912 DPMO structure: ipc.org/TOC/IPC-7912A.pdf · pcbsync.com/ipc-7912/ · factorylogix.atlassian.net/wiki/x/4qILC</li>
+        <li>J-STD-033 floor life: anglia-live.com/pdfs/MoistureSensitivityReference.pdf · smtnet.com/library/files/upload/01-ipc-jedec-j-std-033-msd-storage.pdf</li>
+        <li>SMT defect root causes: protoexpress.com/blog/common-errors-surface-mount-technology-smt/ · pcbgogo.com (SMT defects guides)</li>
+        <li>AOI false-call rates (vendor-reported): iconnect007.com/article/51662 · siemens.com (Opcenter AOI FCR) · ifactoryapp.com (AI vision vs AOI)</li>
+      </ul>
+      <div class="card" style="margin-top:6mm">
+        <h3 style="margin-top:0">Reproduce our numbers</h3>
+        <p class="small mono">scripts/p1_eval.py · region_eval.py · board_eval.py · flag_precision.py · board_only_eval.py · train_components.py · export_onnx.py</p>
+        <p class="small muted">Results land in data/results/. Tests: 25 backend tests (pytest).</p>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>Sandeha · Sources</span><span>13</span></div>
+</section>
+
+</body>
+</html>

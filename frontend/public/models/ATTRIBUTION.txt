@@ -1,0 +1,2 @@
+Component 3D models: KiCad Packages3D (https://gitlab.com/kicad/libraries/kicad-packages3D), CC BY-SA 4.0 with the KiCad library exception (see KICAD-LICENSE.md). Converted from STEP to GLB.
+Studio lighting: studio_small_08 by Poly Haven (https://polyhaven.com), CC0.

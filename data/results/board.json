@@ -1,0 +1,475 @@
+{
+ "products": [
+  {
+   "product": "pcb4",
+   "calibration": "40 separate good boards",
+   "components": 29,
+   "kinds": {
+    "diode / LED": 6,
+    "resistor": 10,
+    "other": 7,
+    "connector": 1,
+    "capacitor": 2,
+    "IC": 1,
+    "transistor": 1,
+    "hole / pad": 1
+   },
+   "buildSeconds": 34.3,
+   "good": {
+    "boards": 25,
+    "flaggedPerBoard": 0.4,
+    "boardsWithAnyFlag": 0.28
+   },
+   "real": {
+    "boards": 95,
+    "localised": 0.968,
+    "diagnosedByType": {
+     "burnt": {
+      "n": 7,
+      "right": 4,
+      "rate": 0.571
+     },
+     "damage": {
+      "n": 19,
+      "right": 17,
+      "rate": 0.895
+     },
+     "dirt": {
+      "n": 40,
+      "right": 38,
+      "rate": 0.95
+     },
+     "extra": {
+      "n": 30,
+      "right": 26,
+      "rate": 0.867
+     },
+     "missing": {
+      "n": 31,
+      "right": 27,
+      "rate": 0.871
+     },
+     "scratch": {
+      "n": 16,
+      "right": 16,
+      "rate": 1.0
+     },
+     "wrong place": {
+      "n": 13,
+      "right": 6,
+      "rate": 0.462
+     }
+    }
+   },
+   "synthetic": {
+    "missing": {
+     "n": 12,
+     "flagged": 9,
+     "diagnosed": 6,
+     "otherFlags": 3,
+     "flaggedRate": 0.75,
+     "diagnosedRate": 0.5
+    },
+    "shifted": {
+     "n": 12,
+     "flagged": 8,
+     "diagnosed": 8,
+     "otherFlags": 11,
+     "flaggedRate": 0.667,
+     "diagnosedRate": 0.667
+    },
+    "rotated": {
+     "n": 12,
+     "flagged": 6,
+     "diagnosed": 5,
+     "otherFlags": 7,
+     "flaggedRate": 0.5,
+     "diagnosedRate": 0.417
+    },
+    "burnt": {
+     "n": 12,
+     "flagged": 7,
+     "diagnosed": 6,
+     "otherFlags": 4,
+     "flaggedRate": 0.583,
+     "diagnosedRate": 0.5
+    },
+    "solder_bridge": {
+     "n": 12,
+     "flagged": 8,
+     "diagnosed": 6,
+     "otherFlags": 6,
+     "flaggedRate": 0.667,
+     "diagnosedRate": 0.5
+    },
+    "solder_dry": {
+     "n": 12,
+     "flagged": 0,
+     "diagnosed": 0,
+     "otherFlags": 8,
+     "flaggedRate": 0.0,
+     "diagnosedRate": 0.0
+    }
+   }
+  },
+  {
+   "product": "pcb3",
+   "calibration": "40 separate good boards",
+   "components": 15,
+   "kinds": {
+    "resistor": 7,
+    "other": 5,
+    "diode / LED": 2,
+    "transistor": 1
+   },
+   "buildSeconds": 20.3,
+   "good": {
+    "boards": 25,
+    "flaggedPerBoard": 0.32,
+    "boardsWithAnyFlag": 0.28
+   },
+   "real": {
+    "boards": 95,
+    "localised": 0.653,
+    "diagnosedByType": {
+     "bent": {
+      "n": 19,
+      "right": 8,
+      "rate": 0.421
+     },
+     "melt": {
+      "n": 40,
+      "right": 8,
+      "rate": 0.2
+     },
+     "missing": {
+      "n": 19,
+      "right": 3,
+      "rate": 0.158
+     },
+     "scratch": {
+      "n": 24,
+      "right": 17,
+      "rate": 0.708
+     }
+    }
+   },
+   "synthetic": {
+    "missing": {
+     "n": 12,
+     "flagged": 10,
+     "diagnosed": 5,
+     "otherFlags": 5,
+     "flaggedRate": 0.833,
+     "diagnosedRate": 0.417
+    },
+    "shifted": {
+     "n": 12,
+     "flagged": 12,
+     "diagnosed": 8,
+     "otherFlags": 5,
+     "flaggedRate": 1.0,
+     "diagnosedRate": 0.667
+    },
+    "rotated": {
+     "n": 12,
+     "flagged": 3,
+     "diagnosed": 2,
+     "otherFlags": 4,
+     "flaggedRate": 0.25,
+     "diagnosedRate": 0.167
+    },
+    "burnt": {
+     "n": 12,
+     "flagged": 10,
+     "diagnosed": 7,
+     "otherFlags": 3,
+     "flaggedRate": 0.833,
+     "diagnosedRate": 0.583
+    },
+    "solder_bridge": {
+     "n": 12,
+     "flagged": 9,
+     "diagnosed": 9,
+     "otherFlags": 12,
+     "flaggedRate": 0.75,
+     "diagnosedRate": 0.75
+    },
+    "solder_dry": {
+     "n": 12,
+     "flagged": 2,
+     "diagnosed": 2,
+     "otherFlags": 7,
+     "flaggedRate": 0.167,
+     "diagnosedRate": 0.167
+    }
+   }
+  },
+  {
+   "product": "pcb2",
+   "calibration": "40 separate good boards",
+   "components": 41,
+   "kinds": {
+    "resistor": 14,
+    "IC": 7,
+    "hole / pad": 1,
+    "other": 5,
+    "diode / LED": 10,
+    "metal part": 2,
+    "transistor": 2
+   },
+   "buildSeconds": 42.6,
+   "good": {
+    "boards": 25,
+    "flaggedPerBoard": 0.6,
+    "boardsWithAnyFlag": 0.44
+   },
+   "real": {
+    "boards": 95,
+    "localised": 0.989,
+    "diagnosedByType": {
+     "bent": {
+      "n": 14,
+      "right": 11,
+      "rate": 0.786
+     },
+     "melt": {
+      "n": 52,
+      "right": 13,
+      "rate": 0.25
+     },
+     "missing": {
+      "n": 18,
+      "right": 8,
+      "rate": 0.444
+     },
+     "scratch": {
+      "n": 19,
+      "right": 19,
+      "rate": 1.0
+     }
+    }
+   },
+   "synthetic": {
+    "missing": {
+     "n": 12,
+     "flagged": 8,
+     "diagnosed": 1,
+     "otherFlags": 6,
+     "flaggedRate": 0.667,
+     "diagnosedRate": 0.083
+    },
+    "shifted": {
+     "n": 12,
+     "flagged": 8,
+     "diagnosed": 4,
+     "otherFlags": 12,
+     "flaggedRate": 0.667,
+     "diagnosedRate": 0.333
+    },
+    "rotated": {
+     "n": 12,
+     "flagged": 5,
+     "diagnosed": 1,
+     "otherFlags": 9,
+     "flaggedRate": 0.417,
+     "diagnosedRate": 0.083
+    },
+    "burnt": {
+     "n": 12,
+     "flagged": 12,
+     "diagnosed": 7,
+     "otherFlags": 8,
+     "flaggedRate": 1.0,
+     "diagnosedRate": 0.583
+    },
+    "solder_bridge": {
+     "n": 12,
+     "flagged": 12,
+     "diagnosed": 7,
+     "otherFlags": 15,
+     "flaggedRate": 1.0,
+     "diagnosedRate": 0.583
+    },
+    "solder_dry": {
+     "n": 12,
+     "flagged": 2,
+     "diagnosed": 2,
+     "otherFlags": 9,
+     "flaggedRate": 0.167,
+     "diagnosedRate": 0.167
+    }
+   }
+  },
+  {
+   "product": "pcb1",
+   "calibration": "40 separate good boards",
+   "components": 20,
+   "kinds": {
+    "capacitor": 6,
+    "diode / LED": 3,
+    "metal part": 2,
+    "other": 4,
+    "resistor": 4,
+    "transistor": 1
+   },
+   "buildSeconds": 32.8,
+   "good": {
+    "boards": 25,
+    "flaggedPerBoard": 3.08,
+    "boardsWithAnyFlag": 0.44
+   },
+   "real": {
+    "boards": 95,
+    "localised": 0.495,
+    "diagnosedByType": {
+     "bent": {
+      "n": 14,
+      "right": 0,
+      "rate": 0.0
+     },
+     "melt": {
+      "n": 51,
+      "right": 5,
+      "rate": 0.098
+     },
+     "missing": {
+      "n": 19,
+      "right": 3,
+      "rate": 0.158
+     },
+     "scratch": {
+      "n": 21,
+      "right": 19,
+      "rate": 0.905
+     }
+    }
+   },
+   "synthetic": {
+    "missing": {
+     "n": 12,
+     "flagged": 9,
+     "diagnosed": 2,
+     "otherFlags": 29,
+     "flaggedRate": 0.75,
+     "diagnosedRate": 0.167
+    },
+    "shifted": {
+     "n": 12,
+     "flagged": 9,
+     "diagnosed": 1,
+     "otherFlags": 33,
+     "flaggedRate": 0.75,
+     "diagnosedRate": 0.083
+    },
+    "rotated": {
+     "n": 12,
+     "flagged": 9,
+     "diagnosed": 0,
+     "otherFlags": 40,
+     "flaggedRate": 0.75,
+     "diagnosedRate": 0.0
+    },
+    "burnt": {
+     "n": 12,
+     "flagged": 12,
+     "diagnosed": 12,
+     "otherFlags": 31,
+     "flaggedRate": 1.0,
+     "diagnosedRate": 1.0
+    },
+    "solder_bridge": {
+     "n": 12,
+     "flagged": 8,
+     "diagnosed": 4,
+     "otherFlags": 52,
+     "flaggedRate": 0.667,
+     "diagnosedRate": 0.333
+    },
+    "solder_dry": {
+     "n": 12,
+     "flagged": 7,
+     "diagnosed": 4,
+     "otherFlags": 40,
+     "flaggedRate": 0.583,
+     "diagnosedRate": 0.333
+    }
+   }
+  }
+ ],
+ "summary": {
+  "localisedReal": 0.776,
+  "goodFlagsPerBoard": 1.1,
+  "goodBoardsWithAnyFlag": 0.36,
+  "realByType": {
+   "bent": {
+    "n": 47,
+    "rate": 0.404
+   },
+   "burnt": {
+    "n": 7,
+    "rate": 0.571
+   },
+   "damage": {
+    "n": 19,
+    "rate": 0.895
+   },
+   "dirt": {
+    "n": 40,
+    "rate": 0.95
+   },
+   "extra": {
+    "n": 30,
+    "rate": 0.867
+   },
+   "melt": {
+    "n": 143,
+    "rate": 0.182
+   },
+   "missing": {
+    "n": 87,
+    "rate": 0.471
+   },
+   "scratch": {
+    "n": 80,
+    "rate": 0.887
+   },
+   "wrong place": {
+    "n": 13,
+    "rate": 0.462
+   }
+  },
+  "synthetic": {
+   "missing": {
+    "n": 48,
+    "flaggedRate": 0.75,
+    "diagnosedRate": 0.292
+   },
+   "shifted": {
+    "n": 48,
+    "flaggedRate": 0.771,
+    "diagnosedRate": 0.438
+   },
+   "rotated": {
+    "n": 48,
+    "flaggedRate": 0.479,
+    "diagnosedRate": 0.167
+   },
+   "burnt": {
+    "n": 48,
+    "flaggedRate": 0.854,
+    "diagnosedRate": 0.667
+   },
+   "solder_bridge": {
+    "n": 48,
+    "flaggedRate": 0.771,
+    "diagnosedRate": 0.542
+   },
+   "solder_dry": {
+    "n": 48,
+    "flaggedRate": 0.229,
+    "diagnosedRate": 0.167
+   }
+  }
+ }
+}

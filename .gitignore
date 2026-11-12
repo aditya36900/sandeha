@@ -1,0 +1,33 @@
+# environments and builds
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+frontend/node_modules/
+frontend/dist/
+
+# SECRET: the station's certificate signing key (generated on first run, never commit)
+*.pem
+
+# large or downloadable data (restore with: python backend/scripts/download_data.py)
+data/visa/
+data/mad/
+data/raw/
+data/components/
+data/kicad3d/
+data/edge/
+# runtime state: saved product lines, scanned images, uploads, station state
+data/sessions/
+data/media/
+data/uploads/
+data/station.json
+
+# keep the measured results and the trained component classifier
+!data/results/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

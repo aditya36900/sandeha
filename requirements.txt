@@ -1,0 +1,30 @@
+# Sandeha backend (Python 3.12). Install PyTorch first for your GPU, e.g. CUDA 12.8:
+#   pip install torch==2.11.0 torchvision==0.26.0 --index-url https://download.pytorch.org/whl/cu128
+# then:  pip install -r requirements.txt
+fastapi==0.162.4
+uvicorn[standard]==0.54.0
+websockets==17.4
+python-multipart==0.0.33
+pydantic==2.14.3
+httpx==0.28.1
+transformers==5.22.2
+huggingface_hub==2.4.0
+safetensors==0.8.0
+accelerate==1.15.0
+bitsandbytes==0.50.2
+numpy==2.5.4
+scipy==1.18.1
+scikit-learn==1.9.1
+umap-learn==0.6.0
+opencv-python-headless==5.0.0.93
+pillow==13.0.0
+cryptography==50.0.2
+qrcode[pil]==8.2
+psutil==7.2.2
+onnx==1.23.2
+onnxruntime==1.31.1
+duckdb==2.0.0
+cascadio==0.1.1
+pypdf==7.0.1
+pypdfium2==5.15.2
+pytest==9.2.0

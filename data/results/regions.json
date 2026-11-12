@@ -1,0 +1,159 @@
+{
+ "products": [
+  {
+   "product": "pcb4",
+   "testDefects": 95,
+   "seconds": 5.6,
+   "calloutPrecision": 0.668,
+   "partRecall": 0.916,
+   "topCalloutCorrect": 0.789,
+   "calloutsPerPart": 1.97,
+   "namingAccuracy": 0.213,
+   "namingBaselineMajority": 0.24,
+   "namedParts": 75,
+   "libraryTypes": {
+    "missing": 2,
+    "burnt": 1,
+    "dirt": 2,
+    "damage": 2,
+    "scratch": 1
+   },
+   "buckets": {
+    "0.7-0.8": [
+     40,
+     20
+    ],
+    "0.8-0.9": [
+     31,
+     17
+    ],
+    "0.9-1.0": [
+     116,
+     88
+    ]
+   }
+  },
+  {
+   "product": "capsules",
+   "testDefects": 95,
+   "seconds": 6.3,
+   "calloutPrecision": 0.635,
+   "partRecall": 0.916,
+   "topCalloutCorrect": 0.832,
+   "calloutsPerPart": 1.44,
+   "namingAccuracy": 1.0,
+   "namingBaselineMajority": 1.0,
+   "namedParts": 79,
+   "libraryTypes": {
+    "bubble": 5,
+    "discolor": 4,
+    "scratch": 3,
+    "leak": 3,
+    "misshape": 1
+   },
+   "buckets": {
+    "0.7-0.8": [
+     20,
+     2
+    ],
+    "0.8-0.9": [
+     17,
+     4
+    ],
+    "0.9-1.0": [
+     100,
+     81
+    ]
+   }
+  },
+  {
+   "product": "cashew",
+   "testDefects": 95,
+   "seconds": 6.8,
+   "calloutPrecision": 0.881,
+   "partRecall": 0.853,
+   "topCalloutCorrect": 0.811,
+   "calloutsPerPart": 1.06,
+   "namingAccuracy": 0.26,
+   "namingBaselineMajority": 0.182,
+   "namedParts": 77,
+   "libraryTypes": {
+    "corner or edge breakage": 3,
+    "burnt": 1
+   },
+   "buckets": {
+    "0.7-0.8": [
+     3,
+     2
+    ],
+    "0.8-0.9": [
+     6,
+     4
+    ],
+    "0.9-1.0": [
+     92,
+     83
+    ]
+   }
+  },
+  {
+   "product": "pcb1",
+   "testDefects": 95,
+   "seconds": 6.9,
+   "calloutPrecision": 0.814,
+   "partRecall": 0.905,
+   "topCalloutCorrect": 0.853,
+   "calloutsPerPart": 1.24,
+   "namingAccuracy": 0.617,
+   "namingBaselineMajority": 0.531,
+   "namedParts": 81,
+   "libraryTypes": {
+    "bent": 1,
+    "melt": 3
+   },
+   "buckets": {
+    "0.7-0.8": [
+     12,
+     6
+    ],
+    "0.8-0.9": [
+     4,
+     2
+    ],
+    "0.9-1.0": [
+     102,
+     88
+    ]
+   }
+  }
+ ],
+ "odds": [
+  {
+   "lo": 0.7,
+   "hi": 0.8,
+   "n": 75,
+   "precision": 0.4
+  },
+  {
+   "lo": 0.8,
+   "hi": 0.9,
+   "n": 58,
+   "precision": 0.466
+  },
+  {
+   "lo": 0.9,
+   "hi": 1.0,
+   "n": 410,
+   "precision": 0.829
+  }
+ ],
+ "mean": {
+  "calloutPrecision": 0.75,
+  "partRecall": 0.897,
+  "topCalloutCorrect": 0.821,
+  "calloutsPerPart": 1.428,
+  "namingAccuracy": 0.522,
+  "namingBaselineMajority": 0.488
+ },
+ "rule": "candidates > 0.85 x pass line, kept if >= 0.7 x the part's hottest spot"
+}

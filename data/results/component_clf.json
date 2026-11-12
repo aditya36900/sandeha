@@ -1,0 +1,72 @@
+{
+ "dataset": "ParsaVictor/pcb-component-classifier (MIT)",
+ "train": 1141,
+ "holdout": 120,
+ "holdoutAccuracy": 0.867,
+ "perClassRecall": {
+  "IC": 1.0,
+  "capacitor": 0.889,
+  "diode / LED": 0.769,
+  "inductor": 0.579,
+  "resistor": 0.978,
+  "transistor": 1.0
+ },
+ "labels": [
+  "IC",
+  "capacitor",
+  "diode / LED",
+  "inductor",
+  "resistor",
+  "transistor"
+ ],
+ "confusion": [
+  [
+   3,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  [
+   0,
+   32,
+   1,
+   2,
+   1,
+   0
+  ],
+  [
+   0,
+   3,
+   10,
+   0,
+   0,
+   0
+  ],
+  [
+   0,
+   3,
+   0,
+   11,
+   5,
+   0
+  ],
+  [
+   0,
+   0,
+   0,
+   1,
+   44,
+   0
+  ],
+  [
+   0,
+   0,
+   0,
+   0,
+   0,
+   4
+  ]
+ ]
+}

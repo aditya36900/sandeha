@@ -1,0 +1,278 @@
+import React, { useEffect, useState } from 'react';
+import { api } from './api';
+import { Act, StoreProvider, useStore } from './store';
+import Choose from './acts/Choose';
+import Genesis from './acts/Genesis';
+import Interview from './acts/Interview';
+import Line from './acts/Line';
+import Chaos from './acts/Chaos';
+import Trust from './acts/Trust';
+import Beyond from './acts/Beyond';
+import Toasts from './ui/Toasts';
+import TopBar from './ui/TopBar';
+import Overview from './room/Overview';
+import Pipeline from './room/Pipeline';
+import ProductsPage from './room/ProductsPage';
+import Memory from './room/Memory';
+import Analytics from './room/Analytics';
+import Hardware from './room/Hardware';
+import History from './room/History';
+import Settings from './room/Settings';
+import FlowBar from './ui/FlowBar';
+import Approval from './line/Approval';
+import SmtLine from './line/SmtLine';
+import Quality from './line/Quality';
+import Spc from './line/Spc';
+import Rework from './line/Rework';
+import Materials from './line/Materials';
+import Bom from './line/Bom';
+import XRay from './line/XRay';
+
+// the main journey, in order: what an operator actually does, start to finish
+const ACTS: { id: Act; title: string; sub: string }[] = [
+  { id: 'choose', title: 'Choose a board', sub: 'public circuit boards or your own' },
+  { id: 'genesis', title: 'Learn it', sub: '30 good boards, every component' },
+  { id: 'interview', title: 'Answer questions', sub: 'before I inspect anything' },
+  { id: 'line', title: 'Scan boards', sub: 'live, part by part, in 3D' },
+  { id: 'approval', title: 'Approve', sub: 'the bench sign-off dossier' },
+  { id: 'rework', title: 'Rework', sub: 'repair tickets' },
+  { id: 'quality', title: 'Quality report', sub: 'FPY, DPMO, false calls' }
+];
+
+// deeper views of the line and the factory around it
+const FACTORY: { id: Act; title: string }[] = [
+  { id: 'xray', title: 'Board X-ray' },
+  { id: 'smt', title: 'Line flow' },
+  { id: 'spc', title: 'Process control' },
+  { id: 'materials', title: 'Materials' },
+  { id: 'bom', title: 'Component library' },
+  { id: 'chaos', title: 'Change conditions' },
+  { id: 'trust', title: 'Guarantee' },
+  { id: 'beyond', title: 'Look ahead' }
+];
+
+const ROOM: { id: Act; title: string }[] = [
+  { id: 'overview', title: 'Overview' },
+  { id: 'pipeline', title: 'Pipeline' },
+  { id: 'products', title: 'Products' },
+  { id: 'memory', title: 'Memory' },
+  { id: 'analytics', title: 'Analytics' },
+  { id: 'hardware', title: 'Hardware' },
+  { id: 'history', title: 'History' },
+  { id: 'settings', title: 'Settings' }
+];
+
+const shortName = (n: string) => n.replace(/^\d+/, '');
+
+function Products() {
+  const { views, sessionId, setSessionId, setAct } = useStore();
+  // electronics only: product lines from other sources stay on disk but are not shown
+  const list = Object.values(views).filter(v => (v.summary || v.photos.length) && v.summary?.source !== 'MAD-Sim');
+  const counts = list.reduce<Record<string, number>>((a, v) => { const n = shortName(v.summary?.displayName ?? v.summary?.name ?? v.id); a[n] = (a[n] ?? 0) + 1; return a; }, {});
+  const dup = new Set(Object.keys(counts).filter(k => counts[k] > 1));
+  if (!list.length) return null;
+  return (
+    <div className="hidden lg:block">
+      <div className="text-xs text-mist mb-1.5">Product lines open</div>
+      <ul className="space-y-1">
+        {/* same product opened twice: show which line is which */}
+        {list.map(v => {
+          const name = v.summary?.displayName ?? v.summary?.name ?? v.narration[0]?.text.replace(/^Started /, '').split(' at ')[0] ?? v.id;
+          return (
+            <li key={v.id}>
+              <button onClick={() => { setSessionId(v.id); if (v.stage === 'GENESIS') setAct('genesis'); }}
+                className={`w-full text-left rounded-lg px-3 py-1.5 text-sm ${v.id === sessionId ? 'bg-surface text-bone' : 'text-mist hover:text-bone'}`}>
+                {shortName(name)}
+                <span className="text-xs text-mist"> · {v.summary?.plant ? `${v.summary.plant} · ` : ''}{v.records.length} boards{dup.has(shortName(name)) ? ` · ${v.id.split('-')[0]}` : ''}</span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+      <button onClick={() => setAct('choose')} className="text-xs text-doubt mt-2 px-3">Open another product</button>
+    </div>
+  );
+}
+
+function Rail() {
+  const { act, setAct, sessionId, live } = useStore();
+  return (
+    <nav className="w-full lg:w-72 shrink-0 lg:h-screen lg:sticky lg:top-0 lg:overflow-y-auto p-5 flex flex-col gap-6 [&>*]:shrink-0" aria-label="Demo flow">
+      <div className="flex items-center gap-3">
+        <svg width="34" height="34" viewBox="0 0 32 32" aria-hidden><circle cx="16" cy="16" r="12" fill="var(--doubt)" /><circle cx="16" cy="16" r="5" fill="var(--ink)" /></svg>
+        <div>
+          <div className="text-xl font-semibold">Sandeha</div>
+          <div className="text-mist text-xs">the inspector that knows when it doesn't know</div>
+        </div>
+      </div>
+      <ol className="flex lg:flex-col gap-1 overflow-x-auto lg:overflow-visible">
+        {ACTS.map((a, i) => {
+          const enabled = a.id === 'choose' || !!sessionId;
+          const on = act === a.id;
+          return (
+            <li key={a.id}>
+              <button disabled={!enabled} onClick={() => setAct(a.id)} aria-current={on ? 'step' : undefined}
+                className={`w-full text-left rounded-xl px-3 py-2.5 flex gap-3 items-start transition disabled:opacity-35 ${on ? 'bg-surface' : 'hover:bg-surface/60'}`}>
+                <span className={`num text-sm mt-0.5 w-5 ${on ? 'text-doubt' : 'text-mist'}`}>{i + 1}</span>
+                <span className="min-w-0">
+                  <span className="block text-sm font-semibold whitespace-nowrap">{a.title}</span>
+                  <span className="hidden lg:block text-xs text-mist">{a.sub}</span>
+                </span>
+              </button>
+            </li>
+          );
+        })}
+      </ol>
+      <div>
+        <div className="text-xs text-mist mb-1.5 hidden lg:block">Line &amp; factory</div>
+        <ul className="flex lg:grid lg:grid-cols-2 gap-1 overflow-x-auto">
+          {FACTORY.map(r => (
+            <li key={r.id}>
+              <button disabled={!sessionId} onClick={() => setAct(r.id)} aria-current={act === r.id ? 'page' : undefined}
+                className={`w-full text-left rounded-lg px-3 py-1.5 text-sm whitespace-nowrap disabled:opacity-35 ${act === r.id ? 'bg-surface text-bone' : 'text-mist hover:text-bone hover:bg-surface/60'}`}>
+                {r.title}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <div className="text-xs text-mist mb-1.5 hidden lg:block">Control room</div>
+        <ul className="flex lg:grid lg:grid-cols-2 gap-1 overflow-x-auto">
+          {ROOM.map(r => (
+            <li key={r.id}>
+              <button onClick={() => setAct(r.id)} aria-current={act === r.id ? 'page' : undefined}
+                className={`w-full text-left rounded-lg px-3 py-1.5 text-sm whitespace-nowrap ${act === r.id ? 'bg-surface text-bone' : 'text-mist hover:text-bone hover:bg-surface/60'}`}>
+                {r.title}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <Products />
+      <div className="mt-auto hidden lg:flex text-xs text-mist items-center gap-2">
+        <span className={`w-2 h-2 rounded-full ${live ? 'bg-pass' : 'bg-fail'}`} />
+        {live ? 'Connected to the station' : 'Reconnecting to the station…'}
+      </div>
+    </nav>
+  );
+}
+
+const SPEECH_LANG: Record<string, string> = { en: 'en-IN', hi: 'hi-IN', te: 'te-IN' };
+
+function speak(text: string, lang: string) {
+  if (!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text.replace(/\[[^\]]*\]/g, ''));  // citations are for reading, not listening
+  u.lang = SPEECH_LANG[lang] ?? 'en-IN';
+  const v = window.speechSynthesis.getVoices().find(x => x.lang === u.lang) ?? window.speechSynthesis.getVoices().find(x => x.lang.startsWith(lang));
+  if (v) u.voice = v;
+  u.rate = 0.98;
+  window.speechSynthesis.speak(u);
+}
+
+function AskBar() {
+  const { sessionId, selectedRecord, view } = useStore();
+  const [q, setQ] = useState('');
+  const [lang, setLang] = useState('en');
+  const [a, setA] = useState<{ answer: string; mode: string } | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [listening, setListening] = useState(false);
+  const [aloud, setAloud] = useState(true);
+  const Rec: any = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+  if (!sessionId) return null;
+  const rid = selectedRecord ?? view?.records[view.records.length - 1]?.id ?? null;
+  const send = async (question: string) => {
+    if (!question.trim()) return;
+    setBusy(true);
+    try {
+      const res = await api.ask(sessionId, question, rid, lang);
+      setA(res);
+      if (aloud) speak(res.answer, lang);
+    } catch (err: any) {
+      setA({ answer: err.message, mode: 'error' });
+    } finally {
+      setBusy(false);
+    }
+  };
+  const ask = (e: React.FormEvent) => { e.preventDefault(); send(q); };
+  const listen = () => {
+    if (!Rec) return;
+    const r = new Rec();
+    r.lang = SPEECH_LANG[lang];
+    r.interimResults = false;
+    r.onresult = (ev: any) => { const text = ev.results[0][0].transcript; setQ(text); send(text); };
+    r.onend = () => setListening(false);
+    r.onerror = () => setListening(false);
+    setListening(true);
+    r.start();
+  };
+  return (
+    <div className="sticky bottom-0 z-20 mt-8 -mx-5 lg:-mx-8 px-5 lg:px-8 py-4 bg-ink/95 backdrop-blur border-t border-line">
+      {a && (
+        <div className="mb-3 max-w-4xl">
+          <p className="voice text-xl leading-snug">{a.answer}</p>
+          <p className="text-mist text-xs mt-1">Answered from the inspection evidence only · {a.mode}
+            <button type="button" onClick={() => speak(a.answer, lang)} className="ml-3 text-doubt">Read aloud</button></p>
+        </div>
+      )}
+      <form onSubmit={ask} className="flex gap-2 max-w-4xl">
+        <input value={q} onChange={e => setQ(e.target.value)} placeholder={rid ? `Ask about ${rid}, e.g. "why did you doubt this part?"` : 'Ask Sandeha about the line'}
+          className="flex-1 bg-surface rounded-xl px-4 py-2.5 text-bone placeholder:text-mist" aria-label="Question" />
+        <select value={lang} onChange={e => setLang(e.target.value)} className="bg-surface rounded-xl px-3" aria-label="Answer language">
+          <option value="en">English</option>
+          <option value="hi">हिन्दी</option>
+          <option value="te">తెలుగు</option>
+        </select>
+        {Rec && (
+          <button type="button" onClick={listen} disabled={busy || listening} aria-label="Ask by voice"
+            title="Ask by voice (uses your browser's speech service)"
+            className={`px-3 rounded-xl font-semibold ${listening ? 'bg-fail text-ink' : 'bg-surface text-bone'}`}>
+            {listening ? 'Listening…' : 'Speak'}
+          </button>
+        )}
+        <label className="hidden md:flex items-center gap-1.5 text-xs text-mist px-1">
+          <input type="checkbox" checked={aloud} onChange={e => setAloud(e.target.checked)} /> read answers
+        </label>
+        <button disabled={busy} className="px-4 rounded-xl bg-doubt text-ink font-semibold disabled:opacity-50">{busy ? 'Thinking…' : 'Ask'}</button>
+      </form>
+    </div>
+  );
+}
+
+function Shell() {
+  const { act, error, setError } = useStore();
+  useEffect(() => { window.scrollTo({ top: 0 }); }, [act]);
+  const Page = {
+    choose: Choose, genesis: Genesis, interview: Interview, line: Line, chaos: Chaos, trust: Trust, beyond: Beyond,
+    overview: Overview, pipeline: Pipeline, products: ProductsPage, memory: Memory, analytics: Analytics, hardware: Hardware,
+    history: History, settings: Settings, approval: Approval, smt: SmtLine, quality: Quality, spc: Spc, rework: Rework,
+    materials: Materials, bom: Bom, xray: XRay
+  }[act];
+  return (
+    <div className="min-h-screen flex flex-col lg:flex-row">
+      <Toasts />
+      <Rail />
+      <main className="flex-1 min-w-0 px-5 lg:px-8 flex flex-col">
+        <TopBar />
+        {act !== 'choose' && <FlowBar />}
+        <div className="h-5" />
+        {error && (
+          <div role="alert" className="mb-4 bg-fail/15 text-fail rounded-xl px-4 py-2 flex justify-between gap-3">
+            <span>{error}</span><button onClick={() => setError(null)} className="underline">Dismiss</button>
+          </div>
+        )}
+        <div className="flex-1"><Page /></div>
+        {act !== 'choose' && <AskBar />}
+      </main>
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <StoreProvider>
+      <Shell />
+    </StoreProvider>
+  );
+}

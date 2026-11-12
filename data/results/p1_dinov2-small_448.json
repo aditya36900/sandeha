@@ -1,0 +1,1370 @@
+[
+ {
+  "product": "candle",
+  "seed": 0,
+  "auroc": 0.9363157894736841,
+  "ours": {
+   "review_rate": 0.20512820512820512,
+   "review_good": 0.13,
+   "review_defect": 0.28421052631578947,
+   "review_rate_at_3pct": 0.13462631578947368,
+   "escape_rate": 0.10526315789473684,
+   "false_reject_rate": 0.02,
+   "auto_accuracy": 0.9225806451612903
+  },
+  "baseline_single_threshold": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.3894736842105263,
+   "false_reject_rate": 0.02,
+   "auto_accuracy": 0.8
+  },
+  "baseline_random_review_escape": 0.3157894736842105,
+  "policy": {
+   "tau_pass": 0.13665625190287828,
+   "tau_fail": 0.18351445230096577,
+   "alpha_fr": 0.02,
+   "beta": 0.05,
+   "budget": 0.1,
+   "expected_review_good": 0.03333333333333333,
+   "promised_escape": 0.0,
+   "escape_upper_90": 0.3511570491920283,
+   "n_good_calib": 30,
+   "n_defect_calib": 5,
+   "budget_limited": false
+  },
+  "aurc": 0.1955263157894737
+ },
+ {
+  "product": "candle",
+  "seed": 1,
+  "auroc": 0.9491052631578947,
+  "ours": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.21052631578947367,
+   "false_reject_rate": 0.09,
+   "auto_accuracy": 0.8512820512820513
+  },
+  "baseline_single_threshold": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.21052631578947367,
+   "false_reject_rate": 0.09,
+   "auto_accuracy": 0.8512820512820513
+  },
+  "baseline_random_review_escape": 0.21052631578947367,
+  "policy": {
+   "tau_pass": 0.15597262397259473,
+   "tau_fail": 0.15597262397259473,
+   "alpha_fr": 0.02,
+   "beta": 0.05,
+   "budget": 0.1,
+   "expected_review_good": 0.0,
+   "promised_escape": 0.0,
+   "escape_upper_90": 0.3511570491920283,
+   "n_good_calib": 30,
+   "n_defect_calib": 5,
+   "budget_limited": false
+  },
+  "aurc": 0.07092105263157895
+ },
+ {
+  "product": "candle",
+  "seed": 2,
+  "auroc": 0.9453157894736842,
+  "ours": {
+   "review_rate": 0.015384615384615385,
+   "review_good": 0.02,
+   "review_defect": 0.010526315789473684,
+   "review_rate_at_3pct": 0.01971578947368421,
+   "escape_rate": 0.3157894736842105,
+   "false_reject_rate": 0.04,
+   "auto_accuracy": 0.8229166666666666
+  },
+  "baseline_single_threshold": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.3263157894736842,
+   "false_reject_rate": 0.04,
+   "auto_accuracy": 0.8205128205128205
+  },
+  "baseline_random_review_escape": 0.3263157894736842,
+  "policy": {
+   "tau_pass": 0.16316728135049344,
+   "tau_fail": 0.17833815049231053,
+   "alpha_fr": 0.02,
+   "beta": 0.05,
+   "budget": 0.1,
+   "expected_review_good": 0.06666666666666667,
+   "promised_escape": 0.0,
+   "escape_upper_90": 0.3511570491920283,
+   "n_good_calib": 30,
+   "n_defect_calib": 5,
+   "budget_limited": false
+  },
+  "aurc": 0.14618421052631578
+ },
+ {
+  "product": "capsules",
+  "seed": 0,
+  "auroc": 0.9643859649122807,
+  "ours": {
+   "review_rate": 0.2064516129032258,
+   "review_good": 0.11666666666666667,
+   "review_defect": 0.2631578947368421,
+   "review_rate_at_3pct": 0.12106140350877193,
+   "escape_rate": 0.08421052631578947,
+   "false_reject_rate": 0.03333333333333333,
+   "auto_accuracy": 0.9186991869918699
+  },
+  "baseline_single_threshold": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.3473684210526316,
+   "false_reject_rate": 0.03333333333333333,
+   "auto_accuracy": 0.7741935483870968
+  },
+  "baseline_random_review_escape": 0.2736842105263158,
+  "policy": {
+   "tau_pass": 0.11889648288488389,
+   "tau_fail": 0.1417622306212783,
+   "alpha_fr": 0.02,
+   "beta": 0.05,
+   "budget": 0.1,
+   "expected_review_good": 0.13333333333333333,
+   "promised_escape": 0.2,
+   "escape_upper_90": 0.5647370576206218,
+   "n_good_calib": 30,
+   "n_defect_calib": 5,
+   "budget_limited": true
+  },
+  "aurc": 0.15144736842105264
+ },
+ {
+  "product": "capsules",
+  "seed": 1,
+  "auroc": 0.9727192982456141,
+  "ours": {
+   "review_rate": 0.24516129032258063,
+   "review_good": 0.05,
+   "review_defect": 0.3684210526315789,
+   "review_rate_at_3pct": 0.05955263157894737,
+   "escape_rate": 0.16842105263157894,
+   "false_reject_rate": 0.0,
+   "auto_accuracy": 0.8632478632478633
+  },
+  "baseline_single_threshold": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.5368421052631579,
+   "false_reject_rate": 0.0,
+   "auto_accuracy": 0.6709677419354839
+  },
+  "baseline_random_review_escape": 0.4105263157894737,
+  "policy": {
+   "tau_pass": 0.126796875,
+   "tau_fail": 0.1862002677306533,
+   "alpha_fr": 0.02,
+   "beta": 0.05,
+   "budget": 0.1,
+   "expected_review_good": 0.13333333333333333,
+   "promised_escape": 0.2,
+   "escape_upper_90": 0.5647370576206218,
+   "n_good_calib": 30,
+   "n_defect_calib": 5,
+   "budget_limited": true
+  },
+  "aurc": 0.30657894736842106
+ },
+ {
+  "product": "capsules",
+  "seed": 2,
+  "auroc": 0.9666666666666667,
+  "ours": {
+   "review_rate": 0.14838709677419354,
+   "review_good": 0.06666666666666667,
+   "review_defect": 0.2,
+   "review_rate_at_3pct": 0.07066666666666667,
+   "escape_rate": 0.17894736842105263,
+   "false_reject_rate": 0.0,
+   "auto_accuracy": 0.8712121212121212
+  },
+  "baseline_single_threshold": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.37894736842105264,
+   "false_reject_rate": 0.0,
+   "auto_accuracy": 0.7677419354838709
+  },
+  "baseline_random_review_escape": 0.30526315789473685,
+  "policy": {
+   "tau_pass": 0.1261592548325658,
+   "tau_fail": 0.1506498291015625,
+   "alpha_fr": 0.02,
+   "beta": 0.05,
+   "budget": 0.1,
+   "expected_review_good": 0.03333333333333333,
+   "promised_escape": 0.0,
+   "escape_upper_90": 0.3511570491920283,
+   "n_good_calib": 30,
+   "n_defect_calib": 5,
+   "budget_limited": false
+  },
+  "aurc": 0.18592105263157893
+ },
+ {
+  "product": "cashew",
+  "seed": 0,
+  "auroc": 0.9668421052631578,
+  "ours": {
+   "review_rate": 0.3448275862068966,
+   "review_good": 0.0,
+   "review_defect": 0.5263157894736842,
+   "review_rate_at_3pct": 0.015789473684210523,
+   "escape_rate": 0.23157894736842105,
+   "false_reject_rate": 0.0,
+   "auto_accuracy": 0.7684210526315789
+  },
+  "baseline_single_threshold": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.7578947368421053,
+   "false_reject_rate": 0.0,
+   "auto_accuracy": 0.503448275862069
+  },
+  "baseline_random_review_escape": 0.5157894736842106,
+  "policy": {
+   "tau_pass": 0.1383125001192093,
+   "tau_fail": 0.2438232169494033,
+   "alpha_fr": 0.02,
+   "beta": 0.05,
+   "budget": 0.1,
+   "expected_review_good": 0.13333333333333333,
+   "promised_escape": 0.4,
+   "escape_upper_90": 0.727538010050086,
+   "n_good_calib": 30,
+   "n_defect_calib": 5,
+   "budget_limited": true
+  },
+  "aurc": 0.5292105263157895
+ },
+ {
+  "product": "cashew",
+  "seed": 1,
+  "auroc": 0.947578947368421,
+  "ours": {
+   "review_rate": 0.006896551724137931,
+   "review_good": 0.0,
+   "review_defect": 0.010526315789473684,
+   "review_rate_at_3pct": 0.00031578947368421053,
+   "escape_rate": 0.29473684210526313,
+   "false_reject_rate": 0.0,
+   "auto_accuracy": 0.8055555555555556
+  },
+  "baseline_single_threshold": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.30526315789473685,
+   "false_reject_rate": 0.0,
+   "auto_accuracy": 0.8
+  },
+  "baseline_random_review_escape": 0.30526315789473685,
+  "policy": {
+   "tau_pass": 0.14554208794087173,
+   "tau_fail": 0.14815934272259473,
+   "alpha_fr": 0.02,
+   "beta": 0.05,
+   "budget": 0.1,
+   "expected_review_good": 0.03333333333333333,
+   "promised_escape": 0.0,
+   "escape_upper_90": 0.3511570491920283,
+   "n_good_calib": 30,
+   "n_defect_calib": 5,
+   "budget_limited": false
+  },
+  "aurc": 0.15026315789473685
+ },
+ {
+  "product": "cashew",
+  "seed": 2,
+  "auroc": 0.9681052631578947,
+  "ours": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.30526315789473685,
+   "false_reject_rate": 0.0,
+   "auto_accuracy": 0.8
+  },
+  "baseline_single_threshold": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.30526315789473685,
+   "false_reject_rate": 0.0,
+   "auto_accuracy": 0.8
+  },
+  "baseline_random_review_escape": 0.30526315789473685,
+  "policy": {
+   "tau_pass": 0.145864200296998,
+   "tau_fail": 0.145864200296998,
+   "alpha_fr": 0.02,
+   "beta": 0.05,
+   "budget": 0.1,
+   "expected_review_good": 0.0,
+   "promised_escape": 0.0,
+   "escape_upper_90": 0.3511570491920283,
+   "n_good_calib": 30,
+   "n_defect_calib": 5,
+   "budget_limited": false
+  },
+  "aurc": 0.1361842105263158
+ },
+ {
+  "product": "chewinggum",
+  "seed": 0,
+  "auroc": 0.9903157894736841,
+  "ours": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.05263157894736842,
+   "false_reject_rate": 0.02,
+   "auto_accuracy": 0.9586206896551724
+  },
+  "baseline_single_threshold": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.05263157894736842,
+   "false_reject_rate": 0.02,
+   "auto_accuracy": 0.9586206896551724
+  },
+  "baseline_random_review_escape": 0.05263157894736842,
+  "policy": {
+   "tau_pass": 0.157730615234375,
+   "tau_fail": 0.157730615234375,
+   "alpha_fr": 0.02,
+   "beta": 0.05,
+   "budget": 0.1,
+   "expected_review_good": 0.0,
+   "promised_escape": 0.0,
+   "escape_upper_90": 0.3511570491920283,
+   "n_good_calib": 30,
+   "n_defect_calib": 5,
+   "budget_limited": false
+  },
+  "aurc": 0.01118421052631579
+ },
+ {
+  "product": "chewinggum",
+  "seed": 1,
+  "auroc": 0.9846315789473685,
+  "ours": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.042105263157894736,
+   "false_reject_rate": 0.04,
+   "auto_accuracy": 0.9586206896551724
+  },
+  "baseline_single_threshold": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.042105263157894736,
+   "false_reject_rate": 0.04,
+   "auto_accuracy": 0.9586206896551724
+  },
+  "baseline_random_review_escape": 0.042105263157894736,
+  "policy": {
+   "tau_pass": 0.14225056069940328,
+   "tau_fail": 0.14225056069940328,
+   "alpha_fr": 0.02,
+   "beta": 0.05,
+   "budget": 0.1,
+   "expected_review_good": 0.0,
+   "promised_escape": 0.0,
+   "escape_upper_90": 0.3511570491920283,
+   "n_good_calib": 30,
+   "n_defect_calib": 5,
+   "budget_limited": false
+  },
+  "aurc": 0.015526315789473683
+ },
+ {
+  "product": "chewinggum",
+  "seed": 2,
+  "auroc": 0.9898947368421053,
+  "ours": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.12631578947368421,
+   "false_reject_rate": 0.0,
+   "auto_accuracy": 0.9172413793103448
+  },
+  "baseline_single_threshold": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.12631578947368421,
+   "false_reject_rate": 0.0,
+   "auto_accuracy": 0.9172413793103448
+  },
+  "baseline_random_review_escape": 0.12631578947368421,
+  "policy": {
+   "tau_pass": 0.2009478271484375,
+   "tau_fail": 0.2009478271484375,
+   "alpha_fr": 0.02,
+   "beta": 0.05,
+   "budget": 0.1,
+   "expected_review_good": 0.0,
+   "promised_escape": 0.0,
+   "escape_upper_90": 0.3511570491920283,
+   "n_good_calib": 30,
+   "n_defect_calib": 5,
+   "budget_limited": false
+  },
+  "aurc": 0.029210526315789475
+ },
+ {
+  "product": "fryum",
+  "seed": 0,
+  "auroc": 0.9722105263157895,
+  "ours": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.21052631578947367,
+   "false_reject_rate": 0.04,
+   "auto_accuracy": 0.8482758620689655
+  },
+  "baseline_single_threshold": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.21052631578947367,
+   "false_reject_rate": 0.04,
+   "auto_accuracy": 0.8482758620689655
+  },
+  "baseline_random_review_escape": 0.21052631578947367,
+  "policy": {
+   "tau_pass": 0.13922290825396777,
+   "tau_fail": 0.13922290825396777,
+   "alpha_fr": 0.02,
+   "beta": 0.05,
+   "budget": 0.1,
+   "expected_review_good": 0.0,
+   "promised_escape": 0.0,
+   "escape_upper_90": 0.3511570491920283,
+   "n_good_calib": 30,
+   "n_defect_calib": 5,
+   "budget_limited": false
+  },
+  "aurc": 0.06434210526315791
+ },
+ {
+  "product": "fryum",
+  "seed": 1,
+  "auroc": 0.9585263157894737,
+  "ours": {
+   "review_rate": 0.13793103448275862,
+   "review_good": 0.06,
+   "review_defect": 0.17894736842105263,
+   "review_rate_at_3pct": 0.06356842105263158,
+   "escape_rate": 0.09473684210526316,
+   "false_reject_rate": 0.04,
+   "auto_accuracy": 0.912
+  },
+  "baseline_single_threshold": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.2736842105263158,
+   "false_reject_rate": 0.04,
+   "auto_accuracy": 0.8068965517241379
+  },
+  "baseline_random_review_escape": 0.25263157894736843,
+  "policy": {
+   "tau_pass": 0.12308339653462172,
+   "tau_fail": 0.14571769233196974,
+   "alpha_fr": 0.02,
+   "beta": 0.05,
+   "budget": 0.1,
+   "expected_review_good": 0.13333333333333333,
+   "promised_escape": 0.0,
+   "escape_upper_90": 0.3511570491920283,
+   "n_good_calib": 30,
+   "n_defect_calib": 5,
+   "budget_limited": true
+  },
+  "aurc": 0.10802631578947369
+ },
+ {
+  "product": "fryum",
+  "seed": 2,
+  "auroc": 0.9614736842105264,
+  "ours": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.4,
+   "false_reject_rate": 0.0,
+   "auto_accuracy": 0.7379310344827587
+  },
+  "baseline_single_threshold": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.4,
+   "false_reject_rate": 0.0,
+   "auto_accuracy": 0.7379310344827587
+  },
+  "baseline_random_review_escape": 0.4,
+  "policy": {
+   "tau_pass": 0.16598339057415723,
+   "tau_fail": 0.16598339057415723,
+   "alpha_fr": 0.02,
+   "beta": 0.05,
+   "budget": 0.1,
+   "expected_review_good": 0.0,
+   "promised_escape": 0.0,
+   "escape_upper_90": 0.3511570491920283,
+   "n_good_calib": 30,
+   "n_defect_calib": 5,
+   "budget_limited": false
+  },
+  "aurc": 0.20157894736842105
+ },
+ {
+  "product": "macaroni1",
+  "seed": 0,
+  "auroc": 0.8513157894736842,
+  "ours": {
+   "review_rate": 0.18974358974358974,
+   "review_good": 0.1,
+   "review_defect": 0.28421052631578947,
+   "review_rate_at_3pct": 0.10552631578947369,
+   "escape_rate": 0.3263157894736842,
+   "false_reject_rate": 0.03,
+   "auto_accuracy": 0.7848101265822784
+  },
+  "baseline_single_threshold": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.6105263157894737,
+   "false_reject_rate": 0.03,
+   "auto_accuracy": 0.6871794871794872
+  },
+  "baseline_random_review_escape": 0.5263157894736842,
+  "policy": {
+   "tau_pass": 0.12921875596046448,
+   "tau_fail": 0.14884301675409078,
+   "alpha_fr": 0.02,
+   "beta": 0.05,
+   "budget": 0.1,
+   "expected_review_good": 0.13333333333333333,
+   "promised_escape": 0.4,
+   "escape_upper_90": 0.727538010050086,
+   "n_good_calib": 30,
+   "n_defect_calib": 5,
+   "budget_limited": true
+  },
+  "aurc": 0.3851315789473684
+ },
+ {
+  "product": "macaroni1",
+  "seed": 1,
+  "auroc": 0.7866842105263159,
+  "ours": {
+   "review_rate": 0.49230769230769234,
+   "review_good": 0.28,
+   "review_defect": 0.7157894736842105,
+   "review_rate_at_3pct": 0.2930736842105263,
+   "escape_rate": 0.25263157894736843,
+   "false_reject_rate": 0.0,
+   "auto_accuracy": 0.7575757575757576
+  },
+  "baseline_single_threshold": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.968421052631579,
+   "false_reject_rate": 0.0,
+   "auto_accuracy": 0.5282051282051282
+  },
+  "baseline_random_review_escape": 0.5263157894736842,
+  "policy": {
+   "tau_pass": 0.12366797268390654,
+   "tau_fail": 0.23014997476190327,
+   "alpha_fr": 0.02,
+   "beta": 0.05,
+   "budget": 0.1,
+   "expected_review_good": 0.13333333333333333,
+   "promised_escape": 0.2,
+   "escape_upper_90": 0.5647370576206218,
+   "n_good_calib": 30,
+   "n_defect_calib": 5,
+   "budget_limited": true
+  },
+  "aurc": 0.7142105263157894
+ },
+ {
+  "product": "macaroni1",
+  "seed": 2,
+  "auroc": 0.8902105263157896,
+  "ours": {
+   "review_rate": 0.15897435897435896,
+   "review_good": 0.02,
+   "review_defect": 0.30526315789473685,
+   "review_rate_at_3pct": 0.028557894736842105,
+   "escape_rate": 0.5052631578947369,
+   "false_reject_rate": 0.02,
+   "auto_accuracy": 0.6951219512195121
+  },
+  "baseline_single_threshold": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.8105263157894737,
+   "false_reject_rate": 0.02,
+   "auto_accuracy": 0.5948717948717949
+  },
+  "baseline_random_review_escape": 0.6947368421052632,
+  "policy": {
+   "tau_pass": 0.13969726860523224,
+   "tau_fail": 0.16949937309771776,
+   "alpha_fr": 0.02,
+   "beta": 0.05,
+   "budget": 0.1,
+   "expected_review_good": 0.13333333333333333,
+   "promised_escape": 0.6,
+   "escape_upper_90": 0.8573066002116804,
+   "n_good_calib": 30,
+   "n_defect_calib": 5,
+   "budget_limited": true
+  },
+  "aurc": 0.5251315789473685
+ },
+ {
+  "product": "macaroni2",
+  "seed": 0,
+  "auroc": 0.7854210526315788,
+  "ours": {
+   "review_rate": 0.21025641025641026,
+   "review_good": 0.1,
+   "review_defect": 0.3263157894736842,
+   "review_rate_at_3pct": 0.10678947368421053,
+   "escape_rate": 0.5473684210526316,
+   "false_reject_rate": 0.03,
+   "auto_accuracy": 0.6428571428571429
+  },
+  "baseline_single_threshold": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.8736842105263158,
+   "false_reject_rate": 0.03,
+   "auto_accuracy": 0.558974358974359
+  },
+  "baseline_random_review_escape": 0.7157894736842105,
+  "policy": {
+   "tau_pass": 0.131939457654953,
+   "tau_fail": 0.1549471427306533,
+   "alpha_fr": 0.02,
+   "beta": 0.05,
+   "budget": 0.1,
+   "expected_review_good": 0.13333333333333333,
+   "promised_escape": 1.0,
+   "escape_upper_90": 0.9999999999999999,
+   "n_good_calib": 30,
+   "n_defect_calib": 5,
+   "budget_limited": true
+  },
+  "aurc": 0.6369736842105264
+ },
+ {
+  "product": "macaroni2",
+  "seed": 1,
+  "auroc": 0.7848947368421053,
+  "ours": {
+   "review_rate": 0.26153846153846155,
+   "review_good": 0.17,
+   "review_defect": 0.35789473684210527,
+   "review_rate_at_3pct": 0.17563684210526317,
+   "escape_rate": 0.5052631578947369,
+   "false_reject_rate": 0.02,
+   "auto_accuracy": 0.6527777777777778
+  },
+  "baseline_single_threshold": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.8631578947368421,
+   "false_reject_rate": 0.02,
+   "auto_accuracy": 0.5692307692307692
+  },
+  "baseline_random_review_escape": 0.6631578947368421,
+  "policy": {
+   "tau_pass": 0.12900976836681366,
+   "tau_fail": 0.15870727539062499,
+   "alpha_fr": 0.02,
+   "beta": 0.05,
+   "budget": 0.1,
+   "expected_review_good": 0.13333333333333333,
+   "promised_escape": 0.4,
+   "escape_upper_90": 0.727538010050086,
+   "n_good_calib": 30,
+   "n_defect_calib": 5,
+   "budget_limited": true
+  },
+  "aurc": 0.6323684210526316
+ },
+ {
+  "product": "macaroni2",
+  "seed": 2,
+  "auroc": 0.8047894736842105,
+  "ours": {
+   "review_rate": 0.16923076923076924,
+   "review_good": 0.09,
+   "review_defect": 0.25263157894736843,
+   "review_rate_at_3pct": 0.09487894736842103,
+   "escape_rate": 0.5684210526315789,
+   "false_reject_rate": 0.01,
+   "auto_accuracy": 0.6604938271604939
+  },
+  "baseline_single_threshold": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.8210526315789474,
+   "false_reject_rate": 0.01,
+   "auto_accuracy": 0.5948717948717949
+  },
+  "baseline_random_review_escape": 0.6736842105263158,
+  "policy": {
+   "tau_pass": 0.13218945920467376,
+   "tau_fail": 0.1561679679259658,
+   "alpha_fr": 0.02,
+   "beta": 0.05,
+   "budget": 0.1,
+   "expected_review_good": 0.13333333333333333,
+   "promised_escape": 0.4,
+   "escape_upper_90": 0.727538010050086,
+   "n_good_calib": 30,
+   "n_defect_calib": 5,
+   "budget_limited": true
+  },
+  "aurc": 0.5997368421052632
+ },
+ {
+  "product": "pcb1",
+  "seed": 0,
+  "auroc": 0.8168421052631579,
+  "ours": {
+   "review_rate": 0.22564102564102564,
+   "review_good": 0.13,
+   "review_defect": 0.3263157894736842,
+   "review_rate_at_3pct": 0.1358894736842105,
+   "escape_rate": 0.2736842105263158,
+   "false_reject_rate": 0.05,
+   "auto_accuracy": 0.7947019867549668
+  },
+  "baseline_single_threshold": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.6,
+   "false_reject_rate": 0.05,
+   "auto_accuracy": 0.6820512820512821
+  },
+  "baseline_random_review_escape": 0.49473684210526314,
+  "policy": {
+   "tau_pass": 0.1509472745656967,
+   "tau_fail": 0.18864191812127828,
+   "alpha_fr": 0.02,
+   "beta": 0.05,
+   "budget": 0.1,
+   "expected_review_good": 0.13333333333333333,
+   "promised_escape": 0.4,
+   "escape_upper_90": 0.727538010050086,
+   "n_good_calib": 30,
+   "n_defect_calib": 5,
+   "budget_limited": true
+  },
+  "aurc": 0.3671052631578947
+ },
+ {
+  "product": "pcb1",
+  "seed": 1,
+  "auroc": 0.9162631578947368,
+  "ours": {
+   "review_rate": 0.5333333333333333,
+   "review_good": 0.22,
+   "review_defect": 0.8631578947368421,
+   "review_rate_at_3pct": 0.23929473684210528,
+   "escape_rate": 0.1368421052631579,
+   "false_reject_rate": 0.0,
+   "auto_accuracy": 0.8571428571428571
+  },
+  "baseline_single_threshold": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 1.0,
+   "false_reject_rate": 0.0,
+   "auto_accuracy": 0.5128205128205128
+  },
+  "baseline_random_review_escape": 0.5052631578947369,
+  "policy": {
+   "tau_pass": 0.11743945538997651,
+   "tau_fail": 0.4501426600545645,
+   "alpha_fr": 0.02,
+   "beta": 0.05,
+   "budget": 0.1,
+   "expected_review_good": 0.13333333333333333,
+   "promised_escape": 0.2,
+   "escape_upper_90": 0.5647370576206218,
+   "n_good_calib": 30,
+   "n_defect_calib": 5,
+   "budget_limited": true
+  },
+  "aurc": 0.6985526315789474
+ },
+ {
+  "product": "pcb1",
+  "seed": 2,
+  "auroc": 0.9147894736842106,
+  "ours": {
+   "review_rate": 0.15384615384615385,
+   "review_good": 0.04,
+   "review_defect": 0.2736842105263158,
+   "review_rate_at_3pct": 0.047010526315789475,
+   "escape_rate": 0.23157894736842105,
+   "false_reject_rate": 0.05,
+   "auto_accuracy": 0.8363636363636363
+  },
+  "baseline_single_threshold": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.5052631578947369,
+   "false_reject_rate": 0.05,
+   "auto_accuracy": 0.7282051282051282
+  },
+  "baseline_random_review_escape": 0.43157894736842106,
+  "policy": {
+   "tau_pass": 0.12532926865518093,
+   "tau_fail": 0.16197909287512302,
+   "alpha_fr": 0.02,
+   "beta": 0.05,
+   "budget": 0.1,
+   "expected_review_good": 0.1,
+   "promised_escape": 0.0,
+   "escape_upper_90": 0.3511570491920283,
+   "n_good_calib": 30,
+   "n_defect_calib": 5,
+   "budget_limited": false
+  },
+  "aurc": 0.25855263157894737
+ },
+ {
+  "product": "pcb2",
+  "seed": 0,
+  "auroc": 0.8430526315789474,
+  "ours": {
+   "review_rate": 0.1282051282051282,
+   "review_good": 0.07,
+   "review_defect": 0.18947368421052632,
+   "review_rate_at_3pct": 0.0735842105263158,
+   "escape_rate": 0.28421052631578947,
+   "false_reject_rate": 0.06,
+   "auto_accuracy": 0.8058823529411765
+  },
+  "baseline_single_threshold": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.47368421052631576,
+   "false_reject_rate": 0.06,
+   "auto_accuracy": 0.7384615384615385
+  },
+  "baseline_random_review_escape": 0.4,
+  "policy": {
+   "tau_pass": 0.11994531393051147,
+   "tau_fail": 0.14210405273437499,
+   "alpha_fr": 0.02,
+   "beta": 0.05,
+   "budget": 0.1,
+   "expected_review_good": 0.13333333333333333,
+   "promised_escape": 0.2,
+   "escape_upper_90": 0.5647370576206218,
+   "n_good_calib": 30,
+   "n_defect_calib": 5,
+   "budget_limited": true
+  },
+  "aurc": 0.29578947368421055
+ },
+ {
+  "product": "pcb2",
+  "seed": 1,
+  "auroc": 0.8688947368421053,
+  "ours": {
+   "review_rate": 0.4666666666666667,
+   "review_good": 0.18,
+   "review_defect": 0.7684210526315789,
+   "review_rate_at_3pct": 0.19765263157894736,
+   "escape_rate": 0.23157894736842105,
+   "false_reject_rate": 0.0,
+   "auto_accuracy": 0.7884615384615384
+  },
+  "baseline_single_threshold": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 1.0,
+   "false_reject_rate": 0.0,
+   "auto_accuracy": 0.5128205128205128
+  },
+  "baseline_random_review_escape": 0.5684210526315789,
+  "policy": {
+   "tau_pass": 0.11725195467472076,
+   "tau_fail": 0.308136279296875,
+   "alpha_fr": 0.02,
+   "beta": 0.05,
+   "budget": 0.1,
+   "expected_review_good": 0.13333333333333333,
+   "promised_escape": 0.4,
+   "escape_upper_90": 0.727538010050086,
+   "n_good_calib": 30,
+   "n_defect_calib": 5,
+   "budget_limited": true
+  },
+  "aurc": 0.7030263157894737
+ },
+ {
+  "product": "pcb2",
+  "seed": 2,
+  "auroc": 0.8782105263157894,
+  "ours": {
+   "review_rate": 0.4256410256410256,
+   "review_good": 0.19,
+   "review_defect": 0.6736842105263158,
+   "review_rate_at_3pct": 0.20451052631578948,
+   "escape_rate": 0.17894736842105263,
+   "false_reject_rate": 0.01,
+   "auto_accuracy": 0.8392857142857143
+  },
+  "baseline_single_threshold": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.8526315789473684,
+   "false_reject_rate": 0.01,
+   "auto_accuracy": 0.5794871794871795
+  },
+  "baseline_random_review_escape": 0.5368421052631579,
+  "policy": {
+   "tau_pass": 0.10690624922513961,
+   "tau_fail": 0.21618373154699802,
+   "alpha_fr": 0.02,
+   "beta": 0.05,
+   "budget": 0.1,
+   "expected_review_good": 0.13333333333333333,
+   "promised_escape": 0.2,
+   "escape_upper_90": 0.5647370576206218,
+   "n_good_calib": 30,
+   "n_defect_calib": 5,
+   "budget_limited": true
+  },
+  "aurc": 0.5821052631578948
+ },
+ {
+  "product": "pcb3",
+  "seed": 0,
+  "auroc": 0.9076602397081813,
+  "ours": {
+   "review_rate": 0.20408163265306123,
+   "review_good": 0.1485148514851485,
+   "review_defect": 0.2631578947368421,
+   "review_rate_at_3pct": 0.1519541427826993,
+   "escape_rate": 0.16842105263157894,
+   "false_reject_rate": 0.019801980198019802,
+   "auto_accuracy": 0.8846153846153846
+  },
+  "baseline_single_threshold": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.43157894736842106,
+   "false_reject_rate": 0.019801980198019802,
+   "auto_accuracy": 0.7806122448979592
+  },
+  "baseline_random_review_escape": 0.37894736842105264,
+  "policy": {
+   "tau_pass": 0.1369902390241623,
+   "tau_fail": 0.15880494736731052,
+   "alpha_fr": 0.02,
+   "beta": 0.05,
+   "budget": 0.1,
+   "expected_review_good": 0.13333333333333333,
+   "promised_escape": 0.2,
+   "escape_upper_90": 0.5647370576206218,
+   "n_good_calib": 30,
+   "n_defect_calib": 5,
+   "budget_limited": true
+  },
+  "aurc": 0.24697368421052635
+ },
+ {
+  "product": "pcb3",
+  "seed": 1,
+  "auroc": 0.9156852527357998,
+  "ours": {
+   "review_rate": 0.1377551020408163,
+   "review_good": 0.07920792079207921,
+   "review_defect": 0.2,
+   "review_rate_at_3pct": 0.08283168316831684,
+   "escape_rate": 0.25263157894736843,
+   "false_reject_rate": 0.009900990099009901,
+   "auto_accuracy": 0.8520710059171598
+  },
+  "baseline_single_threshold": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.45263157894736844,
+   "false_reject_rate": 0.009900990099009901,
+   "auto_accuracy": 0.7755102040816326
+  },
+  "baseline_random_review_escape": 0.4105263157894737,
+  "policy": {
+   "tau_pass": 0.14114453732967377,
+   "tau_fail": 0.16427423530071975,
+   "alpha_fr": 0.02,
+   "beta": 0.05,
+   "budget": 0.1,
+   "expected_review_good": 0.13333333333333333,
+   "promised_escape": 0.4,
+   "escape_upper_90": 0.727538010050086,
+   "n_good_calib": 30,
+   "n_defect_calib": 5,
+   "budget_limited": true
+  },
+  "aurc": 0.25776315789473686
+ },
+ {
+  "product": "pcb3",
+  "seed": 2,
+  "auroc": 0.9048983845752997,
+  "ours": {
+   "review_rate": 0.16326530612244897,
+   "review_good": 0.0297029702970297,
+   "review_defect": 0.30526315789473685,
+   "review_rate_at_3pct": 0.03796977592496091,
+   "escape_rate": 0.4842105263157895,
+   "false_reject_rate": 0.0,
+   "auto_accuracy": 0.7195121951219512
+  },
+  "baseline_single_threshold": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.7894736842105263,
+   "false_reject_rate": 0.0,
+   "auto_accuracy": 0.6173469387755102
+  },
+  "baseline_random_review_escape": 0.6947368421052632,
+  "policy": {
+   "tau_pass": 0.1569178974106908,
+   "tau_fail": 0.19616219834387302,
+   "alpha_fr": 0.02,
+   "beta": 0.05,
+   "budget": 0.1,
+   "expected_review_good": 0.03333333333333333,
+   "promised_escape": 0.0,
+   "escape_upper_90": 0.3511570491920283,
+   "n_good_calib": 30,
+   "n_defect_calib": 5,
+   "budget_limited": false
+  },
+  "aurc": 0.5132894736842105
+ },
+ {
+  "product": "pcb4",
+  "seed": 0,
+  "auroc": 0.9874413757165189,
+  "ours": {
+   "review_rate": 0.10204081632653061,
+   "review_good": 0.0297029702970297,
+   "review_defect": 0.17894736842105263,
+   "review_rate_at_3pct": 0.03418030224075039,
+   "escape_rate": 0.09473684210526316,
+   "false_reject_rate": 0.019801980198019802,
+   "auto_accuracy": 0.9375
+  },
+  "baseline_single_threshold": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.2736842105263158,
+   "false_reject_rate": 0.019801980198019802,
+   "auto_accuracy": 0.8571428571428571
+  },
+  "baseline_random_review_escape": 0.2631578947368421,
+  "policy": {
+   "tau_pass": 0.1347521484375,
+   "tau_fail": 0.15533780083209275,
+   "alpha_fr": 0.02,
+   "beta": 0.05,
+   "budget": 0.1,
+   "expected_review_good": 0.03333333333333333,
+   "promised_escape": 0.0,
+   "escape_upper_90": 0.3511570491920283,
+   "n_good_calib": 30,
+   "n_defect_calib": 5,
+   "budget_limited": false
+  },
+  "aurc": 0.07131578947368421
+ },
+ {
+  "product": "pcb4",
+  "seed": 1,
+  "auroc": 0.9819176654507557,
+  "ours": {
+   "review_rate": 0.14795918367346939,
+   "review_good": 0.06930693069306931,
+   "review_defect": 0.23157894736842105,
+   "review_rate_at_3pct": 0.07417509119332986,
+   "escape_rate": 0.06315789473684211,
+   "false_reject_rate": 0.0297029702970297,
+   "auto_accuracy": 0.9461077844311377
+  },
+  "baseline_single_threshold": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.29473684210526313,
+   "false_reject_rate": 0.0297029702970297,
+   "auto_accuracy": 0.8418367346938775
+  },
+  "baseline_random_review_escape": 0.25263157894736843,
+  "policy": {
+   "tau_pass": 0.12977218667417764,
+   "tau_fail": 0.15445881265252828,
+   "alpha_fr": 0.02,
+   "beta": 0.05,
+   "budget": 0.1,
+   "expected_review_good": 0.1,
+   "promised_escape": 0.0,
+   "escape_upper_90": 0.3511570491920283,
+   "n_good_calib": 30,
+   "n_defect_calib": 5,
+   "budget_limited": false
+  },
+  "aurc": 0.08368421052631579
+ },
+ {
+  "product": "pcb4",
+  "seed": 2,
+  "auroc": 0.974205315268369,
+  "ours": {
+   "review_rate": 0.19387755102040816,
+   "review_good": 0.019801980198019802,
+   "review_defect": 0.37894736842105264,
+   "review_rate_at_3pct": 0.030576341844710787,
+   "escape_rate": 0.11578947368421053,
+   "false_reject_rate": 0.019801980198019802,
+   "auto_accuracy": 0.9177215189873418
+  },
+  "baseline_single_threshold": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.49473684210526314,
+   "false_reject_rate": 0.019801980198019802,
+   "auto_accuracy": 0.75
+  },
+  "baseline_random_review_escape": 0.3894736842105263,
+  "policy": {
+   "tau_pass": 0.13314098740518093,
+   "tau_fail": 0.16437190727740525,
+   "alpha_fr": 0.02,
+   "beta": 0.05,
+   "budget": 0.1,
+   "expected_review_good": 0.06666666666666667,
+   "promised_escape": 0.0,
+   "escape_upper_90": 0.3511570491920283,
+   "n_good_calib": 30,
+   "n_defect_calib": 5,
+   "budget_limited": false
+  },
+  "aurc": 0.22157894736842104
+ },
+ {
+  "product": "pipe_fryum",
+  "seed": 0,
+  "auroc": 0.9852631578947368,
+  "ours": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.021052631578947368,
+   "false_reject_rate": 0.14,
+   "auto_accuracy": 0.9379310344827586
+  },
+  "baseline_single_threshold": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.021052631578947368,
+   "false_reject_rate": 0.14,
+   "auto_accuracy": 0.9379310344827586
+  },
+  "baseline_random_review_escape": 0.021052631578947368,
+  "policy": {
+   "tau_pass": 0.1511381591796875,
+   "tau_fail": 0.1511381591796875,
+   "alpha_fr": 0.02,
+   "beta": 0.05,
+   "budget": 0.1,
+   "expected_review_good": 0.0,
+   "promised_escape": 0.0,
+   "escape_upper_90": 0.3511570491920283,
+   "n_good_calib": 30,
+   "n_defect_calib": 5,
+   "budget_limited": false
+  },
+  "aurc": 0.0034210526315789475
+ },
+ {
+  "product": "pipe_fryum",
+  "seed": 1,
+  "auroc": 0.9744210526315791,
+  "ours": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.08421052631578947,
+   "false_reject_rate": 0.06,
+   "auto_accuracy": 0.9241379310344827
+  },
+  "baseline_single_threshold": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.08421052631578947,
+   "false_reject_rate": 0.06,
+   "auto_accuracy": 0.9241379310344827
+  },
+  "baseline_random_review_escape": 0.08421052631578947,
+  "policy": {
+   "tau_pass": 0.16036759467571973,
+   "tau_fail": 0.16036759467571973,
+   "alpha_fr": 0.02,
+   "beta": 0.05,
+   "budget": 0.1,
+   "expected_review_good": 0.0,
+   "promised_escape": 0.0,
+   "escape_upper_90": 0.3511570491920283,
+   "n_good_calib": 30,
+   "n_defect_calib": 5,
+   "budget_limited": false
+  },
+  "aurc": 0.020789473684210524
+ },
+ {
+  "product": "pipe_fryum",
+  "seed": 2,
+  "auroc": 0.9816842105263157,
+  "ours": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.23157894736842105,
+   "false_reject_rate": 0.02,
+   "auto_accuracy": 0.8413793103448276
+  },
+  "baseline_single_threshold": {
+   "review_rate": 0.0,
+   "review_good": 0.0,
+   "review_defect": 0.0,
+   "review_rate_at_3pct": 0.0,
+   "escape_rate": 0.23157894736842105,
+   "false_reject_rate": 0.02,
+   "auto_accuracy": 0.8413793103448276
+  },
+  "baseline_random_review_escape": 0.23157894736842105,
+  "policy": {
+   "tau_pass": 0.20964011148065329,
+   "tau_fail": 0.20964011148065329,
+   "alpha_fr": 0.02,
+   "beta": 0.05,
+   "budget": 0.1,
+   "expected_review_good": 0.0,
+   "promised_escape": 0.0,
+   "escape_upper_90": 0.3511570491920283,
+   "n_good_calib": 30,
+   "n_defect_calib": 5,
+   "budget_limited": false
+  },
+  "aurc": 0.07263157894736842
+ }
+]

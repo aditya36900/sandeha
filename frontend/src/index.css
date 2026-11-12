@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ink: #10142e;
+  --surface: #1a2045;
+  --raised: #232a57;
+  --line: #2f3769;
+  --bone: #ece7da;
+  --mist: #8f97c2;
+  --pass: #5cc8b4;
+  --fail: #f0655a;
+  --doubt: #f2a93b;
+  --hold: #8b9cff;
+  --ink-rgb: 16 20 46;
+  --surface-rgb: 26 32 69;
+  --raised-rgb: 35 42 87;
+  --line-rgb: 47 55 105;
+  --bone-rgb: 236 231 218;
+  --mist-rgb: 143 151 194;
+  --pass-rgb: 92 200 180;
+  --fail-rgb: 240 101 90;
+  --doubt-rgb: 242 169 59;
+  --hold-rgb: 139 156 255;
+}
+:root[data-theme='light'] {
+  --ink: #f3f0e8;
+  --surface: #ffffff;
+  --raised: #ebe7dc;
+  --line: #d6d0c1;
+  --bone: #17193a;
+  --mist: #5d6386;
+  --pass: #138a76;
+  --fail: #c83a2f;
+  --doubt: #b8730a;
+  --hold: #4b5bd6;
+  --ink-rgb: 243 240 232;
+  --surface-rgb: 255 255 255;
+  --raised-rgb: 235 231 220;
+  --line-rgb: 214 208 193;
+  --bone-rgb: 23 25 58;
+  --mist-rgb: 93 99 134;
+  --pass-rgb: 19 138 118;
+  --fail-rgb: 200 58 47;
+  --doubt-rgb: 184 115 10;
+  --hold-rgb: 75 91 214;
+}
+/* text on filled buttons and chips stays dark in both themes */
+:root[data-theme='light'] .text-ink { color: #fffdf8; }
+input, select, textarea { color: var(--bone); }
+
+html, body, #root { height: 100%; }
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--bone);
+  font-family: 'IBM Plex Sans Condensed', system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+.num { font-variant-numeric: tabular-nums; }
+.voice { font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; letter-spacing: 0.005em; }
+:focus-visible { outline: 2px solid var(--doubt); outline-offset: 2px; border-radius: 6px; }
+::selection { background: color-mix(in srgb, var(--doubt) 40%, transparent); }
+input[type='range'] { accent-color: var(--doubt); }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}

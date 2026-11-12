@@ -1,0 +1,78 @@
+{
+ "measured": true,
+ "device": "laptop CPU, 4 threads (no GPU)",
+ "params": 22056576,
+ "sizeMBfp32": 88.2,
+ "sizeMBint8": 22.1,
+ "rows": [
+  {
+   "precision": "fp32",
+   "resolution": 224,
+   "fps": 6.06,
+   "msPerPart": 165.1
+  },
+  {
+   "precision": "fp32",
+   "resolution": 336,
+   "fps": 2.64,
+   "msPerPart": 378.2
+  },
+  {
+   "precision": "fp32",
+   "resolution": 448,
+   "fps": 1.28,
+   "msPerPart": 781.9
+  },
+  {
+   "precision": "int8-dynamic",
+   "resolution": 224,
+   "fps": 9.14,
+   "msPerPart": 109.4
+  },
+  {
+   "precision": "int8-dynamic",
+   "resolution": 336,
+   "fps": 4.76,
+   "msPerPart": 210.2
+  },
+  {
+   "precision": "int8-dynamic",
+   "resolution": 448,
+   "fps": 2.09,
+   "msPerPart": 478.9
+  },
+  {
+   "precision": "onnx-fp32",
+   "resolution": 224,
+   "fps": 12.7,
+   "msPerPart": 78.8,
+   "sizeMB": 88.4
+  },
+  {
+   "precision": "onnx-int8",
+   "resolution": 224,
+   "fps": 21.38,
+   "msPerPart": 46.8,
+   "sizeMB": 24.2
+  },
+  {
+   "precision": "onnx-fp32",
+   "resolution": 336,
+   "fps": 5.29,
+   "msPerPart": 189.0,
+   "sizeMB": 88.4
+  },
+  {
+   "precision": "onnx-int8",
+   "resolution": 336,
+   "fps": 8.54,
+   "msPerPart": 117.1,
+   "sizeMB": 24.2
+  }
+ ],
+ "note": "Measured on this laptop's CPU limited to 4 threads (PyTorch and ONNX Runtime). A Raspberry Pi 5 CPU is slower; validate on the device. ONNX INT8 patch features keep cosine similarity 0.976 at 224px, 0.974 at 336px with FP32.",
+ "onnxFeatureSimilarity": {
+  "224": 0.9762016534805298,
+  "336": 0.9737114310264587
+ }
+}

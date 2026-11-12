@@ -98,7 +98,7 @@ def main() -> None:
     models(a.big_vlm)
     if a.mad:
         print("MAD-Sim: download from the PAD project (NeurIPS 2023) and place it at data/mad/MAD-Sim/")
-    print("done. Start the station:  cd backend && python -m uvicorn sandeha.api:app --port 8000")
+    print("done. Start the station:  run.ps1  (Windows)  or  ./run.sh  (Linux / macOS)")
 
 
 if __name__ == "__main__":

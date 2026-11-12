@@ -1,0 +1,9 @@
+# Optional extras (setup installs them unless you pass -NoExtras / --no-extras).
+#   accelerate + bitsandbytes : load Qwen2.5-VL-7B in 4-bit (needs an NVIDIA GPU with ~8 GB free)
+#   cascadio                  : re-convert KiCad STEP models to GLB (already converted in frontend/public/models)
+#   pypdf + pypdfium2         : check / render the pitch PDF
+accelerate==1.15.0
+bitsandbytes==0.50.2; platform_system != "Darwin"
+cascadio==0.1.1
+pypdf==7.0.1
+pypdfium2==5.15.2

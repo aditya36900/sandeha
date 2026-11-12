@@ -11,23 +11,26 @@ Built entirely on public internet data. Nothing was recorded.
 
 ## Run it
 
-Tested on Windows 11, Python 3.12, Node 20+, an RTX 4050 (6 GB). Everything also runs on CPU, more slowly.
+**Quick start** (Windows; Linux/macOS use `./setup.sh` and `./run.sh`):
 
 ```powershell
-git clone <this repo> sandeha; cd sandeha
+git clone https://github.com/aditya36900/sandeha.git; cd sandeha
+powershell -ExecutionPolicy Bypass -File .\setup.ps1   # venv, PyTorch (CUDA or CPU), packages, datasets + models, dashboard
+.\run.ps1                                               # http://localhost:8000   (-Dev = hot reload, -Seed = demo data)
+```
+
+Needs Python 3.12 (3.10-3.13 work), Node 18+, Git, and ~15 GB of disk. An NVIDIA GPU is optional (tested on an RTX 4050, 6 GB).
+`backend/scripts/check_install.py` tells you what is missing and how to fix it. **New to the code? Read [CONTRIBUTING.md](CONTRIBUTING.md).**
+
+### Install by hand
+
+```powershell
 python -m venv .venv
-.venv\Scripts\pip install torch==2.11.0 torchvision==0.26.0 --index-url https://download.pytorch.org/whl/cu128
-.venv\Scripts\pip install -r requirements.txt
-
-# public datasets + local AI models (~3 GB VisA, ~6 GB models); nothing large is stored in git
-.venv\Scripts\python backend\scripts\download_data.py          # add --big-vlm for Qwen2.5-VL-7B (needs ~8 GB GPU)
-
-# dashboard
-cd frontend; npm install; npm run build; cd ..
-
-# start the station (serves API + dashboard on one port)
-cd backend
-..\.venv\Scripts\python -m uvicorn sandeha.api:app --port 8000
+.venv\Scripts\pip install torch==2.11.0 torchvision==0.26.0 --index-url https://download.pytorch.org/whl/cu128   # or /whl/cpu
+.venv\Scripts\pip install -r requirements.txt -r requirements-extra.txt
+.venv\Scripts\python backend\scripts\download_data.py          # add --big-vlm for Qwen2.5-VL-7B
+cd frontend; npm ci; npm run build; cd ..
+cd backend; ..\.venv\Scripts\python -m uvicorn sandeha.api:app --port 8000
 ```
 
 The repo already contains the trained component-type classifier and the measured results (`data/results/`),

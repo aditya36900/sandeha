@@ -728,6 +728,7 @@ async def sentinel_run(sid: str, n: int = 6):
 
     s = S(sid)
     out = await run_in_threadpool(lambda: [sentinel.audit(s) for _ in range(max(1, min(n, 24)))])
+    persist.save_async(s)  # the audit history survives a restart
     return {"ran": len([x for x in out if x]), "report": sentinel.report(s)}
 
 
@@ -739,6 +740,7 @@ def sentinel_reset(sid: str, x_role: str | None = Header(None)):
     s = S(sid)
     n = len(getattr(s, "audits", []))
     s.audits = []
+    persist.save_async(s)
     STATION.log(NAMES[r], r, "sentinel.reset", sid, {"cleared": n})
     return {"cleared": n}
 

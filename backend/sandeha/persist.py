@@ -118,6 +118,7 @@ def load_all() -> dict:
                 s.ref_images = [_from_jpeg(b) for b in s.ref_images]
             s._board_building = False  # a save taken mid-build must not block rebuilding
             s._calibrating_board = False
+            s._sentinel_busy = False  # a save taken mid-audit must not block the next one
             if isinstance(s.__dict__.get("_probe_imgs"), tuple):
                 s._probe_imgs = tuple([_from_jpeg(b) for b in lst] for lst in s._probe_imgs)
             if isinstance(s.__dict__.get("imagined"), list):

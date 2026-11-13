@@ -83,7 +83,8 @@ Measured on pcb4 after a reset, 24 audits (4 per type):
 
 The last two rows are the point: dry joints need angled light, and the parts here look the same turned round. The
 station says so instead of hiding it. A component finding that is overwhelming (body clearly gone or charred) can
-raise a PASS to DOUBT, never to FAIL.
+raise a PASS to DOUBT, never to FAIL. Measured cost of that rule on pcb4 (`backend/scripts/detector_eval.py`): none;
+AUROC 0.9967, 0% false rejects on good boards, 0 escapes and 26.3% review, identical to the fused detector without it.
 
 ## Themes
 

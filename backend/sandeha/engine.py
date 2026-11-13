@@ -969,6 +969,8 @@ class Session:
         def run():
             try:
                 sentinel.audit(self)
+                from . import persist
+                persist.save_async(self)
             except Exception as e:
                 self.emit("sentinel.error", message=f"Sentinel audit failed: {e}")
             finally:

@@ -16,8 +16,70 @@
 }
 
 
-/* Press (default): editorial bento. Paper surfaces, ultra-bold display type, black ink, one pop accent. */
-:root, :root[data-theme='press'] {
+
+/* Swiss (default): International Typographic Style. One grotesque, a strict grid, hairline rules,
+   square corners, black on white, colour reserved for the verdict. Precision over decoration. */
+:root, :root[data-theme='swiss'] {
+  --ink: #f2f2ef; --surface: #ffffff; --raised: #f2f2ef; --line: #d4d4cf; --bone: #0d0d0d; --mist: #6b6b66;
+  --accent: #0d0d0d; --pass: #00843d; --fail: #e30613; --doubt: #c88a00; --hold: #2a4bd7;
+  --ink-rgb: 242 242 239; --surface-rgb: 255 255 255; --raised-rgb: 242 242 239; --line-rgb: 212 212 207;
+  --bone-rgb: 13 13 13; --mist-rgb: 107 107 102; --accent-rgb: 13 13 13;
+  --pass-rgb: 0 132 61; --fail-rgb: 227 6 19; --doubt-rgb: 200 138 0; --hold-rgb: 42 75 215;
+  --radius: 0px; --font: 'Inter Tight', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-display: 'Inter Tight', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --bg: linear-gradient(90deg, rgb(13 13 13 / 0.035) 1px, transparent 1px) 0 0 / 96px 100%, var(--ink);
+}
+:root[data-theme='swiss'] *, :root:not([data-theme]) * { border-radius: 0 !important; box-shadow: none !important; }
+:root[data-theme='swiss'] body, :root:not([data-theme]) body { font-feature-settings: 'tnum', 'ss01', 'cv11'; letter-spacing: -0.003em; }
+:root[data-theme='swiss'] h1, :root:not([data-theme]) h1 { font-weight: 700; letter-spacing: -0.035em; line-height: 1.02; }
+:root[data-theme='swiss'] .voice, :root:not([data-theme]) .voice { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.03em; }
+:root[data-theme='swiss'] .display, :root:not([data-theme]) .display { font-weight: 700; letter-spacing: -0.04em; }
+/* numbered sections: every panel title carries its index, like a technical document */
+:root[data-theme='swiss'] main, :root:not([data-theme]) main { counter-reset: sec; }
+:root[data-theme='swiss'] h2, :root:not([data-theme]) h2 { font-family: var(--font); font-size: 11px !important; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--bone); }
+:root[data-theme='swiss'] .panel > header h2::before, :root:not([data-theme]) .panel > header h2::before { counter-increment: sec; content: counter(sec, decimal-leading-zero); display: inline-block; min-width: 2.4em; font-family: 'JetBrains Mono', monospace; font-weight: 500; color: var(--mist); letter-spacing: 0; }
+:root[data-theme='swiss'] .label, :root:not([data-theme]) .label { font-size: 10.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--mist); }
+/* panels: white field, hairline frame, a heavy rule on top */
+:root[data-theme='swiss'] .panel, :root:not([data-theme]) .panel { background: var(--surface); border: 1px solid var(--line); border-top: 2px solid var(--bone); }
+:root[data-theme='swiss'] .panel > header, :root:not([data-theme]) .panel > header { padding-bottom: 10px; margin-bottom: 14px; border-bottom: 1px solid var(--line); }
+:root[data-theme='swiss'] .panel .panel, :root:not([data-theme]) .panel .panel { border-top-width: 1px; border-color: var(--line); }
+:root[data-theme='swiss'] .glow-pass, :root:not([data-theme]) .glow-pass { border-top-color: var(--pass) !important; border-top-width: 4px !important; }
+:root[data-theme='swiss'] .glow-fail, :root:not([data-theme]) .glow-fail { border-top-color: var(--fail) !important; border-top-width: 4px !important; }
+:root[data-theme='swiss'] .glow-doubt, :root:not([data-theme]) .glow-doubt { border-top-color: var(--doubt) !important; border-top-width: 4px !important; }
+:root[data-theme='swiss'] .glow-accent, :root:not([data-theme]) .glow-accent { border-top-color: var(--bone) !important; border-top-width: 4px !important; }
+/* controls: rectangular, uppercase, tracked */
+:root[data-theme='swiss'] .btn, :root:not([data-theme]) .btn { text-transform: uppercase; letter-spacing: .08em; font-size: 11px !important; font-weight: 600; }
+:root[data-theme='swiss'] .bg-accent, :root:not([data-theme]) .bg-accent, :root[data-theme='swiss'] .btn.bg-accent, :root:not([data-theme]) .btn.bg-accent, :root[data-theme='swiss'] .bg-pass, :root:not([data-theme]) .bg-pass, :root[data-theme='swiss'] .bg-fail, :root:not([data-theme]) .bg-fail { color: #ffffff !important; }
+:root[data-theme='swiss'] .bg-doubt, :root:not([data-theme]) .bg-doubt { color: #0d0d0d !important; }
+:root[data-theme='swiss'] .text-accent, :root:not([data-theme]) .text-accent { color: var(--bone) !important; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+:root[data-theme='swiss'] input, :root:not([data-theme]) input, :root[data-theme='swiss'] select, :root:not([data-theme]) select, :root[data-theme='swiss'] textarea, :root:not([data-theme]) textarea { border: 1px solid var(--line); background: var(--surface); }
+:root[data-theme='swiss'] input:focus, :root:not([data-theme]) input:focus, :root[data-theme='swiss'] select:focus, :root:not([data-theme]) select:focus, :root[data-theme='swiss'] textarea:focus, :root:not([data-theme]) textarea:focus { border-color: var(--bone); outline: none; }
+/* navigation: a column of the grid, ruled off; the current item is a solid black bar */
+:root[data-theme='swiss'] nav, :root:not([data-theme]) nav { background: var(--surface); border-right: 1px solid var(--bone) !important; }
+:root[data-theme='swiss'] nav button[aria-current='page'], :root:not([data-theme]) nav button[aria-current='page'] { background: var(--bone) !important; color: #ffffff !important; }
+:root[data-theme='swiss'] nav button[aria-current='page'] .text-accent, :root:not([data-theme]) nav button[aria-current='page'] .text-accent, :root[data-theme='swiss'] nav button[aria-current='page'] .text-mist, :root:not([data-theme]) nav button[aria-current='page'] .text-mist { color: #ffffff !important; text-decoration: none; }
+:root[data-theme='swiss'] nav button[aria-current='page'] > span.absolute, :root:not([data-theme]) nav button[aria-current='page'] > span.absolute { display: none; }
+:root[data-theme='swiss'] nav .label, :root:not([data-theme]) nav .label { color: var(--bone); border-top: 1px solid var(--bone); padding-top: 8px; }
+/* tables: ruled and tabular */
+:root[data-theme='swiss'] table th, :root:not([data-theme]) table th { font-size: 10.5px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--mist); border-bottom: 1px solid var(--bone); }
+:root[data-theme='swiss'] table td, :root:not([data-theme]) table td { font-variant-numeric: tabular-nums; }
+:root[data-theme='swiss'] ::selection, :root:not([data-theme]) ::selection { background: #0d0d0d; color: #fff; }
+:root[data-theme='swiss'] :focus-visible, :root:not([data-theme]) :focus-visible { outline: 2px solid #0d0d0d; outline-offset: 1px; }
+:root[data-theme='swiss'] .sweep, :root:not([data-theme]) .sweep { height: 1px; background: var(--fail); }
+
+/* figures: set in the grotesque with fixed-width digits; identifiers stay monospaced */
+:root[data-theme='swiss'] .num, :root:not([data-theme]) .num { font-family: var(--font) !important; font-variant-numeric: tabular-nums lining-nums; font-feature-settings: 'tnum', 'lnum'; letter-spacing: -0.02em; }
+:root[data-theme='swiss'] .mono, :root:not([data-theme]) .mono { font-family: 'JetBrains Mono', ui-monospace, monospace !important; letter-spacing: 0; }
+:root[data-theme='swiss'] .panel > .text-mist.text-xs.font-medium:first-child, :root:not([data-theme]) .panel > .text-mist.text-xs.font-medium:first-child { font-size: 10.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
+:root[data-theme='swiss'] .panel .text-3xl.num, :root:not([data-theme]) .panel .text-3xl.num, :root[data-theme='swiss'] .panel .text-xl.num, :root:not([data-theme]) .panel .text-xl.num { font-weight: 600; }
+
+/* every card surface gets the same frame as a panel */
+:root[data-theme='swiss'] section.bg-surface, :root:not([data-theme]) section.bg-surface, :root[data-theme='swiss'] div.bg-surface.rounded-2xl, :root:not([data-theme]) div.bg-surface.rounded-2xl, :root[data-theme='swiss'] div.bg-surface.rounded-xl, :root:not([data-theme]) div.bg-surface.rounded-xl, :root[data-theme='swiss'] button.bg-surface.rounded-xl, :root:not([data-theme]) button.bg-surface.rounded-xl, :root[data-theme='swiss'] button.bg-surface.rounded-2xl, :root:not([data-theme]) button.bg-surface.rounded-2xl { border: 1px solid var(--line); border-top: 2px solid var(--bone); }
+:root[data-theme='swiss'] section.bg-surface > div > h2, :root:not([data-theme]) section.bg-surface > div > h2, :root[data-theme='swiss'] section.bg-surface > h2, :root:not([data-theme]) section.bg-surface > h2 { font-size: 11px !important; }
+:root[data-theme='swiss'] .border-dashed, :root:not([data-theme]) .border-dashed { border-width: 1px !important; }
+
+/* Press: editorial bento. Paper surfaces, ultra-bold display type, black ink, one pop accent. */
+:root[data-theme='press'] {
   --ink: #ecebe5; --surface: #f7f6f1; --raised: #e4e2da; --line: #1a1a1a; --bone: #121212; --mist: #5e5e58;
   --accent: #d6ff3a; --pass: #1f9d55; --fail: #ff5a1f; --doubt: #c98a00; --hold: #8a7bf0;
   --ink-rgb: 236 235 229; --surface-rgb: 247 246 241; --raised-rgb: 228 226 218; --line-rgb: 26 26 26;
@@ -26,21 +88,21 @@
   --radius: 22px; --font: 'Inter', system-ui, sans-serif; --font-display: 'Bricolage Grotesque', 'Inter', sans-serif;
   --bg: var(--ink);
 }
-:root[data-theme='press'] .text-ink, :root:not([data-theme]) .text-ink { color: #121212; }
-:root[data-theme='press'] h1, :root:not([data-theme]) h1 { font-weight: 800; letter-spacing: -0.035em; }
-:root[data-theme='press'] h2, :root:not([data-theme]) h2 { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; font-weight: 500; color: var(--mist); }
-:root[data-theme='press'] .label, :root:not([data-theme]) .label { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; font-weight: 500; }
-:root[data-theme='press'] .panel, :root:not([data-theme]) .panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
-:root[data-theme='press'] .btn, :root:not([data-theme]) .btn, :root[data-theme='press'] select, :root:not([data-theme]) select { border-radius: 999px; }
-:root[data-theme='press'] .text-accent, :root:not([data-theme]) .text-accent { color: #4c6300 !important; }
-:root[data-theme='press'] .display, :root:not([data-theme]) .display { font-weight: 800; letter-spacing: -0.03em; }
-:root[data-theme='press'] .voice, :root:not([data-theme]) .voice { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; letter-spacing: -0.02em; }
-:root[data-theme='press'] .bg-accent, :root:not([data-theme]) .bg-accent { color: #121212 !important; }
-:root[data-theme='press'] .bg-doubt, :root:not([data-theme]) .bg-doubt { color: #121212 !important; }
-:root[data-theme='press'] .glow-pass, :root:not([data-theme]) .glow-pass { border-color: var(--pass); border-width: 2px; }
-:root[data-theme='press'] .glow-fail, :root:not([data-theme]) .glow-fail { border-color: var(--fail); border-width: 2px; }
-:root[data-theme='press'] .glow-doubt, :root:not([data-theme]) .glow-doubt { border-color: var(--doubt); border-width: 2px; }
-:root[data-theme='press'] nav, :root:not([data-theme]) nav { background: var(--ink); }
+:root[data-theme='press'] .text-ink .text-ink { color: #121212; }
+:root[data-theme='press'] h1 h1 { font-weight: 800; letter-spacing: -0.035em; }
+:root[data-theme='press'] h2 h2 { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; font-weight: 500; color: var(--mist); }
+:root[data-theme='press'] .label .label { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; font-weight: 500; }
+:root[data-theme='press'] .panel .panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+:root[data-theme='press'] .btn .btn, :root[data-theme='press'] select select { border-radius: 999px; }
+:root[data-theme='press'] .text-accent .text-accent { color: #4c6300 !important; }
+:root[data-theme='press'] .display .display { font-weight: 800; letter-spacing: -0.03em; }
+:root[data-theme='press'] .voice .voice { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; letter-spacing: -0.02em; }
+:root[data-theme='press'] .bg-accent .bg-accent { color: #121212 !important; }
+:root[data-theme='press'] .bg-doubt .bg-doubt { color: #121212 !important; }
+:root[data-theme='press'] .glow-pass .glow-pass { border-color: var(--pass); border-width: 2px; }
+:root[data-theme='press'] .glow-fail .glow-fail { border-color: var(--fail); border-width: 2px; }
+:root[data-theme='press'] .glow-doubt .glow-doubt { border-color: var(--doubt); border-width: 2px; }
+:root[data-theme='press'] nav nav { background: var(--ink); }
 
 /* Lab bench: graphite, electric cyan, scan effects */
 :root[data-theme='lab'] {

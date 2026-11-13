@@ -85,7 +85,7 @@ export default function UploadScan({ sessionId, onResult, onOpen, onError }: {
                     className="relative aspect-square overflow-hidden bg-raised text-left" style={{ borderRadius: 10, border: `2px solid ${c}` }}>
                     <img src={it.url} alt={it.file.name} className="w-full h-full object-cover" style={{ opacity: it.state === 'scanning' ? 0.55 : 1 }} />
                     {it.state === 'scanning' && <span className="sweep" />}
-                    <span className="absolute left-0 right-0 bottom-0 px-1.5 py-0.5 text-[10px] mono truncate" style={{ background: it.rec ? c : 'rgb(0 0 0 / 0.6)', color: it.rec ? '#121212' : '#fff' }}>
+                    <span className="absolute left-0 right-0 bottom-0 px-1.5 py-0.5 text-[10px] mono truncate" style={{ background: it.rec ? c : 'rgb(0 0 0 / 0.6)', color: it.rec && it.rec.decision === 'DOUBT' ? '#121212' : '#fff' }}>
                       {it.rec ? it.rec.decision : it.state === 'scanning' ? 'scanning…' : it.state === 'error' ? 'failed' : it.file.name}
                     </span>
                   </button>

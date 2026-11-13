@@ -4,16 +4,17 @@ import { Alert, BackendEvent, Cloud, InspectionRecord, Policy, Question, Role, S
 export type Act = 'choose' | 'genesis' | 'interview' | 'line' | 'chaos' | 'trust' | 'beyond'
   | 'overview' | 'pipeline' | 'products' | 'memory' | 'analytics' | 'hardware' | 'history' | 'settings'
   | 'approval' | 'smt' | 'quality' | 'spc' | 'rework' | 'materials' | 'bom' | 'xray' | 'pulse' | 'sentinel' | 'fewshot';
-export type Theme = 'press' | 'lab' | 'industrial' | 'midnight' | 'paper';
+export type Theme = 'swiss' | 'press' | 'lab' | 'industrial' | 'midnight' | 'paper';
 export const THEMES: { id: Theme; title: string; hint: string }[] = [
+  { id: 'swiss', title: 'Swiss', hint: 'strict grid, hairlines, black on white' },
   { id: 'press', title: 'Press', hint: 'editorial bento: paper, bold type, lime pop' },
   { id: 'lab', title: 'Lab bench', hint: 'graphite, cyan, scan effects' },
   { id: 'industrial', title: 'Industrial', hint: 'neutral dark, quiet blue' },
   { id: 'midnight', title: 'Midnight', hint: 'navy and amber' },
   { id: 'paper', title: 'Paper', hint: 'plain light' },
 ];
-const THEME_IDS: Theme[] = ['press', 'lab', 'industrial', 'midnight', 'paper'];
-const normTheme = (t: string | null): Theme => (t === 'dark' ? 'lab' : t === 'light' ? 'paper' : THEME_IDS.includes(t as Theme) ? (t as Theme) : 'press');
+const THEME_IDS: Theme[] = ['swiss', 'press', 'lab', 'industrial', 'midnight', 'paper'];
+const normTheme = (t: string | null): Theme => (t === 'dark' ? 'lab' : t === 'light' ? 'paper' : THEME_IDS.includes(t as Theme) ? (t as Theme) : 'swiss');
 
 export interface Narration {
   t: number;
@@ -114,11 +115,11 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [theme, setThemeState] = useState<Theme>(() => {
     const q = new URLSearchParams(window.location.search).get('theme');
     if (q) return normTheme(q);
-    try { return normTheme(localStorage.getItem('sandeha.theme')); } catch { return 'press'; }
+    try { return normTheme(localStorage.getItem('sandeha.theme.v2')); } catch { return 'swiss'; }
   });
   const setTheme = useCallback((t: Theme) => {
     setThemeState(t);
-    try { localStorage.setItem('sandeha.theme', t); } catch { /* private mode */ }
+    try { localStorage.setItem('sandeha.theme.v2', t); } catch { /* private mode */ }
   }, []);
   useEffect(() => { document.documentElement.dataset.theme = theme; }, [theme]);
   const [station, setStation] = useState<StationState | null>(null);

@@ -88,7 +88,7 @@ export default function FewShot() {
             <div className="flex gap-2">
               {pts.map((q, j) => (
                 <button key={q.n} onClick={() => { setPlaying(false); setI(j); }} className="flex-1 h-12 border border-line num text-lg font-semibold transition"
-                  style={{ borderRadius: 14, background: j === i ? 'var(--accent)' : j < i ? 'var(--raised)' : 'var(--surface)', color: j === i ? '#121212' : 'var(--bone)' }}>{q.n}</button>
+                  style={{ borderRadius: 14, background: j === i ? 'var(--bone)' : j < i ? 'var(--raised)' : 'var(--surface)', color: j === i ? 'var(--surface)' : 'var(--bone)' }}>{q.n}</button>
               ))}
             </div>
             <div className="flex items-center gap-3 mt-3">
@@ -115,7 +115,7 @@ export default function FewShot() {
         <Panel title="What it sees on a defective board" aside={
           <div className="flex gap-1 text-[12px]">
             {p.examples.map((x: any, k: number) => <button key={k} onClick={() => { setEx(k); setTruth(false); }} className="btn px-2.5 h-7 border border-line" style={k === ex && !truth ? { background: 'var(--bone)', color: 'var(--ink)' } : undefined}>{x.defect.split(',')[0]}</button>)}
-            <button onClick={() => setTruth(v => !v)} className="btn px-2.5 h-7 border border-line" style={truth ? { background: 'var(--accent)', color: '#121212' } : undefined}>truth</button>
+            <button onClick={() => setTruth(v => !v)} className="btn px-2.5 h-7 border border-line" style={truth ? { background: 'var(--fail)', color: '#ffffff' } : undefined}>truth</button>
           </div>}>
           <div className="relative overflow-hidden bg-raised aspect-square" style={{ borderRadius: 12 }}>
             {pts.map((q, j) => (

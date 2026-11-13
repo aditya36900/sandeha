@@ -1,0 +1,50 @@
+{
+ "products": {
+  "pcb4": {
+   "product": "pcb4",
+   "mode": "each board on its own",
+   "askedWhy": {
+    "BORDERLINE": 14,
+    "COMPONENT": 1
+   },
+   "boards": 196,
+   "good": {
+    "total": 101,
+    "passed": 95,
+    "askedPerson": 6,
+    "wronglyRejected": 0,
+    "held": 0
+   },
+   "defective": {
+    "total": 95,
+    "rejected": 86,
+    "askedPerson": 9,
+    "wronglyPassed": 0,
+    "held": 0
+   },
+   "decidedAloneAndRight": 181,
+   "wrong": 0,
+   "sentToPerson": 15,
+   "rightShare": 0.9235,
+   "wrongShare": 0.0,
+   "personShare": 0.0765,
+   "aurocStation": 0.9977,
+   "aurocPatchMemoryOnly": 0.9967,
+   "singleThreshold": {
+    "stationPreset": {
+     "wronglyPassed": 9,
+     "wronglyRejected": 1
+    },
+    "bestPossible": {
+     "wrong": 4,
+     "note": "threshold chosen with hindsight on these test boards"
+    }
+   },
+   "latencyMsP50": 870.4,
+   "references": 30,
+   "knownDefects": 5,
+   "passLine": 0.1161,
+   "failLine": 0.1436
+  }
+ }
+}

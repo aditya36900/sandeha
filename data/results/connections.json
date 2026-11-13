@@ -1,0 +1,161 @@
+{
+ "pcb4": {
+  "product": "pcb4",
+  "pads": 65,
+  "conductors": 5,
+  "links": 29,
+  "copperVisible": true,
+  "goodBoards": 60,
+  "falseAlarms": {
+   "any": 0.15,
+   "open": 0.033,
+   "short": 0.1,
+   "wire": 0.05
+  },
+  "planted": {
+   "short": {
+    "n": 40,
+    "caught": 0.875,
+    "located": 0.875
+   },
+   "open": {
+    "n": 40,
+    "caught": 0.875,
+    "located": 0.875
+   },
+   "cut": {
+    "n": 40,
+    "caught": 0.025,
+    "located": 0.0
+   }
+  },
+  "realDefects": {
+   "burnt": {
+    "flagged": 7,
+    "of": 7
+   },
+   "damage": {
+    "flagged": 16,
+    "of": 19
+   },
+   "dirt": {
+    "flagged": 35,
+    "of": 40
+   },
+   "extra": {
+    "flagged": 28,
+    "of": 30
+   },
+   "missing": {
+    "flagged": 28,
+    "of": 31
+   },
+   "scratch": {
+    "flagged": 15,
+    "of": 16
+   },
+   "wrong place": {
+    "flagged": 11,
+    "of": 13
+   }
+  }
+ },
+ "pcb1": {
+  "product": "pcb1",
+  "pads": 97,
+  "conductors": 22,
+  "links": 33,
+  "copperVisible": true,
+  "goodBoards": 60,
+  "falseAlarms": {
+   "any": 0.25,
+   "open": 0.15,
+   "short": 0.1,
+   "wire": 0.05
+  },
+  "planted": {
+   "short": {
+    "n": 0,
+    "caught": 0.0,
+    "located": 0.0
+   },
+   "open": {
+    "n": 40,
+    "caught": 0.3,
+    "located": 0.1
+   },
+   "cut": {
+    "n": 40,
+    "caught": 0.025,
+    "located": 0.0
+   }
+  },
+  "realDefects": {
+   "bent": {
+    "flagged": 9,
+    "of": 14
+   },
+   "melt": {
+    "flagged": 32,
+    "of": 51
+   },
+   "missing": {
+    "flagged": 16,
+    "of": 19
+   },
+   "scratch": {
+    "flagged": 14,
+    "of": 21
+   }
+  }
+ },
+ "pcb2": {
+  "product": "pcb2",
+  "pads": 72,
+  "conductors": 13,
+  "links": 6,
+  "copperVisible": true,
+  "goodBoards": 60,
+  "falseAlarms": {
+   "any": 0.367,
+   "open": 0.1,
+   "short": 0.167,
+   "wire": 0.15
+  },
+  "planted": {
+   "short": {
+    "n": 40,
+    "caught": 0.775,
+    "located": 0.725
+   },
+   "open": {
+    "n": 40,
+    "caught": 0.8,
+    "located": 0.775
+   },
+   "cut": {
+    "n": 40,
+    "caught": 0.375,
+    "located": 0.0
+   }
+  },
+  "realDefects": {
+   "bent": {
+    "flagged": 13,
+    "of": 14
+   },
+   "melt": {
+    "flagged": 46,
+    "of": 52
+   },
+   "missing": {
+    "flagged": 18,
+    "of": 18
+   },
+   "scratch": {
+    "flagged": 18,
+    "of": 19
+   }
+  }
+ }
+}

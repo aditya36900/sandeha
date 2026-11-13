@@ -98,6 +98,7 @@ class Record:
     board: dict | None = None  # electronics: per-component verdicts (only the non-OK ones travel)
     synthetic: str | None = None  # fault-lab parts: what was planted, so they never pollute real metrics
     signals: dict | None = None  # the two detectors: patch-memory score, golden-board deviation, fused score
+    demo: dict | None = None  # demo tray: {slot, title, expect, asExpected}
     foreign: str | None = None  # NOT_A_BOARD / NOT_THIS_BOARD: the photo is not what this line learned
     diff_url: str | None = None  # golden-board deviation painted over this board (blink comparator)
 
@@ -498,10 +499,23 @@ class Session:
         return s
 
     # ================================================================== PRODUCTION LOT (unlabelled parts)
-    def make_lot(self, n: int = 12) -> list[dict]:
+    def make_lot(self, n: int = 12, random: bool = False) -> list[dict]:
         """A tray of parts straight off the line. Nobody - not the operator, not the UI - knows which are
-        defective: the mix is drawn at random and the truth stays on the server until a part is scanned."""
+        defective: the truth stays on the server until a part is scanned. By default this is the fixed demo tray
+        (the same verified boards in the same order every time, one per situation); random=True draws a fresh mix."""
         with self.lock:
+            if not random and self.product.source == "VisA":
+                from . import demotray
+
+                fixed = demotray.tray(self.product.name)
+                if fixed:
+                    lot = {}
+                    for smp in fixed:
+                        tok = uuid.uuid4().hex[:10]
+                        lot[tok] = (smp, save(smp.image().resize((160, 160)), f"{self.id}/lot/{tok}.jpg", 80))
+                    self.lot, self.lot_fixed = lot, True
+                    return self.lot_public()
+            self.lot_fixed = False
             rng = np.random.default_rng()
             rate = float(rng.uniform(0.1, 0.4))
             lot = {}
@@ -516,7 +530,7 @@ class Session:
 
     def lot_public(self) -> list[dict]:
         lot = getattr(self, "lot", None) or {}
-        return [{"token": tok, "thumb": v[1]} for tok, v in lot.items() if isinstance(v, tuple)]
+        return [{"token": tok, "thumb": v[1], "slot": i + 1} for i, (tok, v) in enumerate(lot.items()) if isinstance(v, tuple)]
 
     def scan(self, token: str) -> Record:
         lot = getattr(self, "lot", None) or {}
@@ -526,6 +540,9 @@ class Session:
         smp = v[0]
         known = smp.label >= 0
         rec = self.inspect(smp.image(), truth=smp.label if known else None, defect_type=smp.defect_type if known else None)
+        meta = getattr(smp, "meta", None)
+        if meta and meta.get("title"):  # demo tray: what this board was put there to show, revealed only now
+            rec.demo = {"slot": meta["slot"], "title": meta["title"], "expect": meta["expect"], "asExpected": rec.decision in meta["expect"]}
         self._sentinel_maybe()
         return rec
 

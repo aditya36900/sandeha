@@ -69,6 +69,8 @@ export interface InspectionRecord {
   regions?: DefectRegion[] | null;
   signals?: { patchMemory: number; goldenDeviation: number; fused: number; gain: number; detectors: number } | null;
   diff_url?: string | null;
+  foreign?: string | null;
+  demo?: { slot: number; title: string; expect: string[]; asExpected: boolean } | null;
   board?: BoardCheck | null;
   synthetic?: string | null;
   quality?: { sharpness: number; exposure: number; glarePct: number } | null;
@@ -120,7 +122,7 @@ export interface BoardMapT {
   classifier?: { holdoutAccuracy: number; holdout: number; train: number; perClassRecall: Record<string, number>; dataset: string } | null;
 }
 
-export interface LotPart { token: string; thumb: string }
+export interface LotPart { token: string; thumb: string; slot?: number }
 
 export interface Cloud {
   positions: number[];
@@ -250,6 +252,8 @@ export const api = {
   version: () => req<{ commit: string; uiBuilt: string | null }>('GET', '/api/version'),
   vlmWarm: () => req<{ status: string }>('POST', '/api/vlm/warm'),
   fewshot: () => req<any>('GET', '/api/fewshot'),
+  benchmark: () => req<any>('GET', '/api/benchmark'),
+  wiring: () => req<any>('GET', '/api/wiring'),
   sentinel: (id: string) => req<any>('GET', `/api/sessions/${id}/sentinel`),
   sentinelReset: (id: string) => req<{ cleared: number }>('POST', `/api/sessions/${id}/sentinel/reset`),
   sentinelRun: (id: string, n = 6) => req<any>('POST', `/api/sessions/${id}/sentinel/run?n=${n}`),
@@ -332,8 +336,8 @@ export const api = {
   approvalQueue: (id: string) => req<any[]>('GET', `/api/sessions/${id}/approval`),
   dossier: (id: string, rid: string) => req<any>('GET', `/api/sessions/${id}/dossier/${rid}`),
   dossierVlm: (id: string, rid: string) => req<any>('GET', `/api/sessions/${id}/dossier/${rid}/vlm`),
-  newLot: (id: string, n = 12) => req<{ lot: LotPart[] }>('POST', `/api/sessions/${id}/lot`, { n }),
-  lot: (id: string) => req<{ lot: LotPart[] }>('GET', `/api/sessions/${id}/lot`),
+  newLot: (id: string, n = 12, random = false) => req<{ lot: LotPart[]; fixed?: boolean }>('POST', `/api/sessions/${id}/lot`, { n, random }),
+  lot: (id: string) => req<{ lot: LotPart[]; fixed?: boolean }>('GET', `/api/sessions/${id}/lot`),
   explain: (id: string, rid: string) =>
     req<{ facts: string; citations: string[]; vision: { region: string; text: string }[]; mode: string | null }>('POST', `/api/sessions/${id}/records/${rid}/explain`),
   scan: (id: string, token: string) => req<InspectionRecord>('POST', `/api/sessions/${id}/scan`, { token }),

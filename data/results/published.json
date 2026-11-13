@@ -1,0 +1,30 @@
+{
+ "source": {
+  "title": "AnomalyDINO: Boosting Patch-based Few-shot Anomaly Detection with DINOv2 (Damm et al., WACV 2025)",
+  "url": "https://arxiv.org/abs/2405.14529",
+  "read": "arXiv v3 HTML, Tables 3, 5 and 7, read on 2026-11-13. The other methods' rows in Table 3 are the values that paper reports for them (taken there from the WinCLIP paper where marked)."
+ },
+ "metric": "image-level AUROC in %, VisA dataset, mean ± standard deviation over three runs",
+ "perBoard": {
+  "method": "AnomalyDINO-S, 672 px, training-free, good photos only (Table 7)",
+  "shots": [1, 2, 4, 8, 16],
+  "pcb1": [[91.5, 2.0], [91.2, 2.7], [94.0, 2.1], [95.5, 0.5], [96.8, 0.7]],
+  "pcb2": [[84.8, 1.2], [88.1, 2.5], [91.1, 1.7], [92.6, 0.3], [93.2, 0.1]],
+  "pcb3": [[84.9, 3.3], [89.4, 3.8], [94.3, 0.4], [95.6, 0.2], [96.5, 0.3]],
+  "pcb4": [[79.9, 13.7], [87.4, 11.3], [96.2, 2.6], [98.0, 0.3], [99.0, 0.4]]
+ },
+ "allProducts": {
+  "what": "mean over all 12 VisA products (not only the four PCBs), few-shot (Table 3)",
+  "shots": [1, 2, 4, 8, 16],
+  "methods": [
+   {"name": "PaDiM", "kind": "good photos only", "values": [62.8, 67.4, 72.8, null, null]},
+   {"name": "SPADE", "kind": "good photos only", "values": [79.5, 80.7, 81.7, null, null]},
+   {"name": "PatchCore", "kind": "good photos only", "values": [79.9, 81.6, 85.3, null, null]},
+   {"name": "WinCLIP+", "kind": "good photos + text prompts", "values": [83.8, 84.6, 87.3, null, null]},
+   {"name": "APRIL-GAN", "kind": "extra layers trained on another labelled dataset", "values": [91.2, 92.2, 92.6, 93.0, 93.2]},
+   {"name": "AnomalyDINO-S (448 px)", "kind": "good photos only", "values": [85.6, 88.3, 91.3, 92.6, 93.8]},
+   {"name": "AnomalyDINO-S (672 px)", "kind": "good photos only", "values": [87.4, 89.7, 92.6, 93.8, 94.8]}
+  ],
+  "fullShot": {"AnomalyDINO-S (448 px)": 97.2, "AnomalyDINO-S (672 px)": 97.6, "what": "all training photos of each product as references (Table 5)"}
+ }
+}

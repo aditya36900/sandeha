@@ -127,6 +127,7 @@ function Tray({ lot, scanned, reveal, busyToken, onScan, onOpen }: {
             className={`relative rounded-lg overflow-hidden aspect-square border-2 transition ${busyToken === p.token ? 'border-doubt animate-pulse' : r ? 'border-transparent' : 'border-line hover:border-bone'}`}
             title={r ? `${r.id}: ${r.decision} - click to look again` : 'Unlabelled part - click to scan'}>
             <img src={p.thumb} alt="Unlabelled part" className={`w-full h-full object-cover ${r ? 'opacity-50 hover:opacity-90' : ''}`} />
+            {p.slot !== undefined && <span className="absolute top-0 left-0 mono text-[10px] px-1" style={{ background: '#0d0d0d', color: '#fff' }}>{String(p.slot).padStart(2, '0')}</span>}
             {r && <span className="absolute inset-x-0 bottom-0 text-[10px] font-semibold py-0.5 bg-ink/80" style={{ color: decisionColor[r.decision] }}>{r.decision}</span>}
             {r && reveal && r.truth !== null && (
               <span className={`absolute top-0.5 right-0.5 text-[9px] px-1 rounded ${truthBad ? 'bg-fail text-ink' : 'bg-pass text-ink'}`}>{truthBad ? 'defect' : 'good'}</span>
@@ -152,6 +153,7 @@ export default function LiveScan({ sessionId, records, policy, cloud, patches, m
   const [phase, setPhase] = useState<Phase>('done');
   const [live, setLive] = useState<InspectionRecord | null>(null);
   const [reveal, setReveal] = useState(false);
+  const [fixed, setFixed] = useState(false);
   const [auto, setAuto] = useState(false);
   const [active, setActive] = useState<string | null>(null);
   const [ai, setAi] = useState<{ rid: string; facts: string; vision: { region: string; text: string }[]; mode: string | null } | null>(null);
@@ -162,10 +164,14 @@ export default function LiveScan({ sessionId, records, policy, cloud, patches, m
 
   const freshLot = async () => {
     setErr(null);
-    try { const r = await api.newLot(sessionId, 12); setLot(r.lot); setScanned({}); } catch (e: any) { setErr(e.message); }
+    try { const r = await api.newLot(sessionId, 12); setLot(r.lot); setFixed(!!r.fixed); setScanned({}); } catch (e: any) { setErr(e.message); }
+  };
+  const randomLot = async () => {
+    setErr(null);
+    try { const r = await api.newLot(sessionId, 12, true); setLot(r.lot); setFixed(false); setScanned({}); } catch (e: any) { setErr(e.message); }
   };
   useEffect(() => {
-    api.lot(sessionId).then(r => (r.lot.length ? setLot(r.lot) : freshLot())).catch(() => freshLot());
+    api.lot(sessionId).then(r => { if (r.lot.length) { setLot(r.lot); setFixed(!!r.fixed); } else freshLot(); }).catch(() => freshLot());
     setScanned({}); setLive(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionId]);
@@ -237,7 +243,8 @@ export default function LiveScan({ sessionId, records, policy, cloud, patches, m
         <span className="text-mist text-sm num">{remaining} unscanned on the tray</span>
         <Btn tone="doubt" disabled={!!busy || !remaining} onClick={() => { const p = next(); if (p) scan(p.token); }}>Scan next part</Btn>
         {auto ? <Btn onClick={stopAuto}>Stop</Btn> : <Btn disabled={!!busy || !remaining} onClick={runAll}>Scan the whole tray</Btn>}
-        <Btn tone="ghost" disabled={!!busy} onClick={freshLot}>{isUpload ? 'Next uploaded photos' : 'New tray from the line'}</Btn>
+        <Btn tone="ghost" disabled={!!busy} onClick={freshLot}>{isUpload ? 'Next uploaded photos' : fixed ? 'Restart the demo tray' : 'Demo tray'}</Btn>
+        {!isUpload && <Btn tone="ghost" disabled={!!busy} onClick={randomLot}>Random tray</Btn>}
       </div>}>
       {mode === 'upload' && (
         <div className="mb-4">
@@ -250,10 +257,19 @@ export default function LiveScan({ sessionId, records, policy, cloud, patches, m
           <CameraScan sessionId={sessionId} onError={setErr} onResult={async r => { setLive(r); onShow(r.id); onRecord?.(r); setActive(null); await play(false); }} />
         </div>
       )}
-      {mode === 'tray' && <p className="text-sm text-mist mb-3">Parts arrive unlabelled. Nobody, including this screen, knows which ones are defective until they are scanned.</p>}
+      {mode === 'tray' && <p className="text-sm text-mist mb-3">{fixed
+        ? 'The demo tray: the same boards in the same order every time, one for each situation the station handles. What each board is stays hidden until it is scanned.'
+        : 'Parts arrive unlabelled. Nobody, including this screen, knows which ones are defective until they are scanned.'}</p>}
       {mode === 'tray' && lot.length ? <Tray lot={lot} scanned={scanned} reveal={reveal} busyToken={busy} onScan={t => scan(t)} onOpen={rid => { setActive(null); onShow(rid); }} />
         : mode === 'tray' ? <div className="text-mist text-sm">{isUpload ? 'All uploaded photos have been scanned.' : 'Loading a tray…'}</div> : null}
       {err && <div className="text-fail text-sm mt-2">{err}</div>}
+      {mode === 'tray' && rec?.demo && ph === 'done' && (
+        <div className="mt-3 px-3 py-2 border border-line flex flex-wrap items-baseline gap-x-3 gap-y-1" style={{ borderLeft: `4px solid ${rec.demo.asExpected ? 'var(--pass)' : 'var(--fail)'}` }}>
+          <span className="label">Board {String(rec.demo.slot).padStart(2, '0')} was</span>
+          <span className="font-semibold">{rec.demo.title}</span>
+          <span className="text-sm text-mist">expected {rec.demo.expect.join(' or ')} · got <b style={{ color: decisionColor[rec.decision] }}>{rec.decision}</b>{rec.demo.asExpected ? '' : ' (not as expected)'}</span>
+        </div>
+      )}
 
       {rec ? (
         <div className="grid xl:grid-cols-[minmax(0,460px)_minmax(0,1fr)] gap-6 mt-5">

@@ -395,17 +395,21 @@ async def approval_vlm(sid: str, rid: str):
 
 class LotIn(BaseModel):
     n: int = 12
+    random: bool = False
 
 
 @app.post("/api/sessions/{sid}/lot")
 async def new_lot(sid: str, body: LotIn):
     """A fresh tray of unlabelled parts from the line."""
-    return {"lot": await run_in_threadpool(S(sid).make_lot, max(1, min(body.n, 24)))}
+    s = S(sid)
+    lot = await run_in_threadpool(s.make_lot, max(1, min(body.n, 24)), body.random)
+    return {"lot": lot, "fixed": bool(getattr(s, "lot_fixed", False))}
 
 
 @app.get("/api/sessions/{sid}/lot")
 async def get_lot(sid: str):
-    return {"lot": await run_in_threadpool(S(sid).lot_public)}
+    s = S(sid)
+    return {"lot": await run_in_threadpool(s.lot_public), "fixed": bool(getattr(s, "lot_fixed", False))}
 
 
 class ScanIn(BaseModel):
@@ -760,6 +764,39 @@ def sentinel_reset(sid: str, x_role: str | None = Header(None)):
     persist.save_async(s)
     STATION.log(NAMES[r], r, "sentinel.reset", sid, {"cleared": n})
     return {"cleared": n}
+
+
+@app.get("/api/wiring")
+def wiring():
+    """Wiring map and the measured connection-check rates per board (scripts/connection_eval.py)."""
+    f = Path(__file__).resolve().parents[2] / "data" / "results" / "connections.json"
+    if not f.exists():
+        raise HTTPException(404, "Not measured yet: run python backend/scripts/connection_eval.py")
+    return json.loads(f.read_text())
+
+
+@app.get("/api/wiring/img/{name}")
+def wiring_img(name: str):
+    import re
+
+    from fastapi.responses import FileResponse
+
+    f = Path(__file__).resolve().parents[2] / "data" / "results" / "wiring" / name
+    if not re.fullmatch(r"[A-Za-z0-9_]+[.]jpg", name) or not f.exists():
+        raise HTTPException(404, "No such picture")
+    return FileResponse(f, media_type="image/jpeg")
+
+
+@app.get("/api/benchmark")
+def benchmark():
+    """The scoreboard: our counted right / wrong / asked-a-person calls on every held-out board
+    (scripts/benchmark.py), next to published results on the same dataset."""
+    root = Path(__file__).resolve().parents[2] / "data" / "results"
+    rd = lambda n: json.loads((root / n).read_text()) if (root / n).exists() else None
+    ours = rd("benchmark.json")
+    if not ours:
+        raise HTTPException(404, "Not measured yet: run python backend/scripts/benchmark.py")
+    return {"ours": ours["products"], "fewshot": (rd("fewshot.json") or {}).get("products"), "published": rd("published.json")}
 
 
 @app.get("/api/fewshot")

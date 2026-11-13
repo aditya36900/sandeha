@@ -31,7 +31,7 @@ function BringYourOwn() {
     <section className="mt-12 bg-surface rounded-2xl p-6">
       <div className="flex flex-wrap items-baseline justify-between gap-3">
         <h2 className="text-lg font-semibold">Bring your own product</h2>
-        <p className="text-mist text-sm">Use this with the parts the organisers capture. Same camera and framing for every photo works best.</p>
+        <p className="text-mist text-sm">Thirty good photos from your computer are enough; nothing is trained. Ready-made photos for four boards are in the <span className="mono">demo_kit</span> folder.</p>
       </div>
       <div className="grid md:grid-cols-2 gap-3 mt-4">
         <input value={name} onChange={e => setName(e.target.value)} placeholder="Product name, e.g. Brass hex nut"

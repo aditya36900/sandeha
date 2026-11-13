@@ -61,6 +61,34 @@ cd backend; ..\.venv\Scripts\python scripts\seed_demo.py
 - **AI, all local, no cloud and no API key:** DINOv2-S (anomaly memory), CLIP ViT-B/16 (region names when no labelled examples exist), Qwen2-VL-2B-Instruct (describes defect close-ups and answers free questions), Depth Anything V2 Small (3D relief). Nothing leaves the station. Set `SANDEHA_WARM_AI=0` to skip loading them at startup.
 - **Hardware:** a CUDA GPU is used if present. Everything also runs on CPU, just slower.
 
+## Thirty good photos, no training (measured on four boards)
+
+The page **Thirty is enough** shows what the station can see after 1, 2, 5, 10, 20 and 30 good photos: the reference
+photos filling in, the heat map of the same defective board getting cleaner, and the measured curve. No defect photo, no
+label and no training step is used. AUROC on the held-out VisA test boards, mean of 3 random draws of the photos
+(`python backend/scripts/fewshot_curve.py`, results in `data/results/fewshot.json`):
+
+| Board | 1 photo | 2 | 5 | 10 | 20 | 30 |
+|---|---|---|---|---|---|---|
+| pcb1 Ultrasonic sensor (front) | 0.778 | 0.844 | 0.869 | 0.891 | 0.909 | 0.909 |
+| pcb2 Ultrasonic sensor (back) | 0.690 | 0.728 | 0.776 | 0.843 | 0.861 | 0.879 |
+| pcb3 IR sensor module | 0.780 | 0.813 | 0.883 | 0.899 | 0.919 | 0.929 |
+| pcb4 Li-ion charger board | 0.868 | 0.938 | 0.955 | 0.959 | 0.968 | 0.973 |
+
+This is the patch-memory detector alone. The golden-board check and the per-component check are added on top of it
+(pcb4, full path: AUROC 0.9967, see below). The same code learned all four boards; nothing is tuned per board.
+
+## Live demo with photos from your computer
+
+`python backend/scripts/make_demo_kit.py` builds `demo_kit/` (not in git, about 70 MB) with real VisA photos for each of
+the four boards:
+
+- `1_good_references_30/`: drop into **Bring your own product > Good parts** to teach a board from nothing.
+- `2_known_defects_5/`: optional, tunes strictness.
+- `3_boards_to_inspect/`: 16 boards with neutral names (8 good, 8 defective, never among the references). In
+  **Scan boards**, switch the Live scan panel to **Upload**, drop them in and click one or **Scan all**.
+- `answers.csv`: the truth, for the presenter.
+
 ## Sentinel: the station audits itself (the USP)
 
 Every 5 real boards the station plants one known fault (missing, shifted, rotated, burnt, solder bridge, dry joint)

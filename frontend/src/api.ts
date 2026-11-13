@@ -249,6 +249,7 @@ export const api = {
   profile: () => req<any>('GET', '/api/profile'),
   version: () => req<{ commit: string; uiBuilt: string | null }>('GET', '/api/version'),
   vlmWarm: () => req<{ status: string }>('POST', '/api/vlm/warm'),
+  fewshot: () => req<any>('GET', '/api/fewshot'),
   sentinel: (id: string) => req<any>('GET', `/api/sessions/${id}/sentinel`),
   sentinelReset: (id: string) => req<{ cleared: number }>('POST', `/api/sessions/${id}/sentinel/reset`),
   sentinelRun: (id: string, n = 6) => req<any>('POST', `/api/sessions/${id}/sentinel/run?n=${n}`),

@@ -29,6 +29,7 @@ import Bom from './line/Bom';
 import XRay from './line/XRay';
 import Pulse from './line/Pulse';
 import Sentinel from './line/Sentinel';
+import FewShot from './line/FewShot';
 
 // the main journey, in order: what an operator actually does, start to finish
 const ACTS: { id: Act; title: string; sub: string }[] = [
@@ -43,6 +44,7 @@ const ACTS: { id: Act; title: string; sub: string }[] = [
 
 // deeper views of the line and the factory around it
 const FACTORY: { id: Act; title: string }[] = [
+  { id: 'fewshot', title: 'Thirty is enough' },
   { id: 'sentinel', title: 'Sentinel' },
   { id: 'pulse', title: 'Line pulse' },
   { id: 'xray', title: 'Board X-ray' },
@@ -247,7 +249,7 @@ function Shell() {
     choose: Choose, genesis: Genesis, interview: Interview, line: Line, chaos: Chaos, trust: Trust, beyond: Beyond,
     overview: Overview, pipeline: Pipeline, products: ProductsPage, memory: Memory, analytics: Analytics, hardware: Hardware,
     history: History, settings: Settings, approval: Approval, smt: SmtLine, quality: Quality, spc: Spc, rework: Rework,
-    materials: Materials, bom: Bom, xray: XRay, pulse: Pulse, sentinel: Sentinel
+    materials: Materials, bom: Bom, xray: XRay, pulse: Pulse, sentinel: Sentinel, fewshot: FewShot
   }[act];
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">

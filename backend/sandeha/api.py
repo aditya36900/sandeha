@@ -745,6 +745,29 @@ def sentinel_reset(sid: str, x_role: str | None = Header(None)):
     return {"cleared": n}
 
 
+@app.get("/api/fewshot")
+def fewshot():
+    """Measured accuracy against the number of good photos learned from (scripts/fewshot_curve.py)."""
+    f = Path(__file__).resolve().parents[2] / "data" / "results" / "fewshot.json"
+    if not f.exists():
+        raise HTTPException(404, "Not measured yet: run python backend/scripts/fewshot_curve.py")
+    return json.loads(f.read_text())
+
+
+@app.get("/api/fewshot/img/{name}")
+def fewshot_img(name: str):
+    import re
+
+    from fastapi.responses import FileResponse
+
+    if not re.fullmatch(r"[A-Za-z0-9_]+\.jpg", name):
+        raise HTTPException(404, "No such picture")
+    f = Path(__file__).resolve().parents[2] / "data" / "results" / "fewshot" / name
+    if not f.exists():
+        raise HTTPException(404, "No such picture")
+    return FileResponse(f, media_type="image/jpeg")
+
+
 @app.get("/api/results")
 def results():
     root = Path(__file__).resolve().parents[2] / "data" / "results"

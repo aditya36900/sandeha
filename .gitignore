@@ -31,3 +31,6 @@ data/station.json
 Thumbs.db
 .vscode/
 .idea/
+
+# live-demo photo kit (rebuild with: python backend/scripts/make_demo_kit.py)
+demo_kit/

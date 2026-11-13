@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { api, BoardMapT, Cloud, DefectRegion, InspectionRecord, LotPart, Policy } from '../api';
 import { ComponentCheck } from './BoardViews';
 import CameraScan from './CameraScan';
+import UploadScan from './UploadScan';
 import Comparator from './Comparator';
 import Detectors from './Detectors';
 import { Btn, Panel, Verdict, Voice, decisionColor, reasonText } from './bits';
@@ -143,7 +144,7 @@ export default function LiveScan({ sessionId, records, policy, cloud, patches, m
   board?: BoardMapT | null; goldenUrl?: string | null;
 }) {
   const [labels, setLabels] = useState<'faults' | 'all'>('faults');
-  const [mode, setMode] = useState<'tray' | 'camera'>('tray');
+  const [mode, setMode] = useState<'tray' | 'upload' | 'camera'>('tray');
   const { notify } = useStore();
   const [lot, setLot] = useState<LotPart[]>([]);
   const [scanned, setScanned] = useState<Record<string, InspectionRecord>>({});
@@ -231,13 +232,19 @@ export default function LiveScan({ sessionId, records, policy, cloud, patches, m
     <Panel title="Live scan" tone={rec && ph === 'done' ? (rec.decision === 'PASS' ? 'pass' : rec.decision === 'FAIL' ? 'fail' : 'doubt') : undefined} aside={
       <div className="flex items-center gap-2 flex-wrap justify-end">
         <div className="flex rounded-lg border border-line overflow-hidden text-[12px]">
-          {(['tray', 'camera'] as const).map(m => <button key={m} onClick={() => setMode(m)} className={`px-3 py-1.5 ${mode === m ? 'bg-accent text-ink font-semibold' : 'text-mist hover:text-bone'}`}>{m === 'tray' ? 'Tray' : 'Camera'}</button>)}
+          {(['tray', 'upload', 'camera'] as const).map(m => <button key={m} onClick={() => setMode(m)} className={`px-3 py-1.5 ${mode === m ? 'bg-accent text-ink font-semibold' : 'text-mist hover:text-bone'}`}>{m === 'tray' ? 'Tray' : m === 'upload' ? 'Upload' : 'Camera'}</button>)}
         </div>
         <span className="text-mist text-sm num">{remaining} unscanned on the tray</span>
         <Btn tone="doubt" disabled={!!busy || !remaining} onClick={() => { const p = next(); if (p) scan(p.token); }}>Scan next part</Btn>
         {auto ? <Btn onClick={stopAuto}>Stop</Btn> : <Btn disabled={!!busy || !remaining} onClick={runAll}>Scan the whole tray</Btn>}
         <Btn tone="ghost" disabled={!!busy} onClick={freshLot}>{isUpload ? 'Next uploaded photos' : 'New tray from the line'}</Btn>
       </div>}>
+      {mode === 'upload' && (
+        <div className="mb-4">
+          <UploadScan sessionId={sessionId} onError={setErr} onOpen={rid => { setActive(null); onShow(rid); }}
+            onResult={async r => { setLive(r); onShow(r.id); onRecord?.(r); setActive(null); await play(true); }} />
+        </div>
+      )}
       {mode === 'camera' && (
         <div className="mb-4">
           <CameraScan sessionId={sessionId} onError={setErr} onResult={async r => { setLive(r); onShow(r.id); onRecord?.(r); setActive(null); await play(false); }} />

@@ -34,3 +34,4 @@ Thumbs.db
 
 # live-demo photo kit (rebuild with: python backend/scripts/make_demo_kit.py)
 demo_kit/
+data/sessions_archive/

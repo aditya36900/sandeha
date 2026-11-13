@@ -218,6 +218,8 @@ def rework_list(s) -> list[dict]:
     for r in s.records:
         if r.board is None or r.ghost or not (r.decision == "FAIL" or r.review.get("final") == "DEFECT"):
             continue
+        if str(r.synthetic or "").startswith("sentinel"):  # self-test boards never need rework
+            continue
         e = enrich(s, r)
         faults = [f for f in e["faults"] if f["level"] == "fault"]
         if not faults:

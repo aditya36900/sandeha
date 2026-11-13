@@ -109,6 +109,9 @@ class Record:
         return d
 
 
+_BOARD_BUILDS = threading.Semaphore(1)
+
+
 class Session:
     def __init__(self, source: str, name: str, n_refs: int = 30, seed: int = 0, plant: str = "Plant A"):
         self.id = f"S{next(_ids)}-{uuid.uuid4().hex[:4]}"
@@ -699,8 +702,13 @@ class Session:
         recent = np.array(recent)
         budget = getattr(self, "budget", 0.10)
         fail_frac = float(np.mean(recent > pol.tau_fail))
+        if fail_frac > 0.05:
+            # A defect-heavy batch (a demo tray, a bad reel): the doubt band is full of real defects. Widening the
+            # pass zone now would let them through, so safety wins over the review budget.
+            return pol.tau_pass
         q = float(np.clip(1 - 0.9 * budget - fail_frac, 0.0, 1.0))
-        return float(min(max(pol.tau_pass, np.quantile(recent, q)), pol.tau_fail))
+        cap = pol.tau_pass + 0.5 * (pol.tau_fail - pol.tau_pass)  # never more than halfway into the doubt band
+        return float(min(max(pol.tau_pass, np.quantile(recent, q)), cap))
 
     def _explain(self, decision, reason, score, pol, novelty_p, h, hive, pass_line=None, hold_reason=None) -> str:
         tp = pass_line if pass_line is not None else pol.tau_pass
@@ -761,6 +769,12 @@ class Session:
     def ensure_board(self, wait: bool = False) -> None:
         """Build the component map (golden board, components, per-component normal ranges) in the background."""
         bm0 = getattr(self, "board", None)
+        from .board import MAP_VERSION
+
+        if (bm0 is not None and getattr(bm0, "version", 1) < MAP_VERSION and not getattr(self, "_board_building", False)
+                and getattr(self, "ref_images", None) and getattr(self, "loo_maps", None) is not None):
+            self.board = bm0 = None  # mapped under older naming rules: map it again
+            self.audits = []         # self-test history pointed at the old part names
         if bm0 is not None and getattr(self, "golden", None) is None and getattr(self, "ref_images", None):
             try:  # golden statistics are cheap to rebuild and never saved
                 from .golden import GoldenStats
@@ -790,6 +804,7 @@ class Session:
         def run():
             from .board import BoardMap
 
+            _BOARD_BUILDS.acquire()  # one map at a time: several at once exhaust memory on a laptop
             try:
                 self.emit("board.building", message="Finding every component on the golden board...")
                 calib = []
@@ -824,6 +839,7 @@ class Session:
                 self.emit("board.error", message=f"Component map failed: {e}")
             finally:
                 self._board_building = False
+                _BOARD_BUILDS.release()
 
         if wait:
             run()
@@ -894,7 +910,7 @@ class Session:
             m = r["measured"]
             heat_ok = float(m.get("heat", 0)) > 0.8 * tp  # the patch memory also sees something here
             overwhelming = (r["status"] == "MISSING" and float(m.get("bodyFrac", 1)) < 0.08) or \
-                           (r["status"] == "BURNT" and float(m.get("dL", 0)) < -35)
+                           (r["status"] == "BURNT" and float(m.get("dL", 0)) < -35 and m.get("burntStrong"))
             strength = float(m.get("heat", 0)) / max(tp, 1e-9) + (1.0 if overwhelming else 0.0)
             faults.append({**r, "kind": kinds[r["id"]], "_corroborated": heat_ok or overwhelming, "_overwhelming": overwhelming, "_strength": strength})
         faults += [{**e, "kind": "-"} for e in d["extra"]]

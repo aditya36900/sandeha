@@ -123,12 +123,24 @@ def _extra_why(a: np.ndarray, reg: np.ndarray, bm) -> str:
     return f"{look} (lightness {dl:+.0f}, colour shift {dab:.0f}) where the golden board has no component"
 
 
-def _dark_centre(golden: np.ndarray, x: int, y: int, w: int, h: int) -> bool:
+def _hole_ratio(golden: np.ndarray, x: int, y: int, w: int, h: int) -> float:
+    """Brightness of the centre of a square footprint over the whole footprint (a drilled hole reads ~0.2-0.35,
+    a part body 0.7 or more). Works on dim photos where absolute 'metal' brightness does not."""
+    if abs(w - h) > 0.2 * max(w, h):
+        return 1.0
     cy, cx = y + h // 2, x + w // 2
-    r = max(1, min(w, h) // 6)
+    r = max(1, min(w, h) // 8)
     c = golden[cy - r:cy + r + 1, cx - r:cx + r + 1].astype(np.float32).mean()
     ring = golden[y:y + h, x:x + w].astype(np.float32).mean()
-    return abs(w - h) < 0.35 * max(w, h) and c < 0.55 * ring
+    return float(c / max(ring, 1e-6))
+
+
+def _dark_centre(golden: np.ndarray, x: int, y: int, w: int, h: int) -> bool:
+    cy, cx = y + h // 2, x + w // 2
+    r = max(1, min(w, h) // 8)
+    c = golden[cy - r:cy + r + 1, cx - r:cx + r + 1].astype(np.float32).mean()
+    ring = golden[y:y + h, x:x + w].astype(np.float32).mean()
+    return abs(w - h) < 0.35 * max(w, h) and c < 0.6 * ring
 
 
 # ------------------------------------------------------------------ synthetic component faults (known truth)
@@ -285,6 +297,9 @@ def classify(crops: list[Image.Image]) -> list[tuple[str, float]]:
 
 
 # ------------------------------------------------------------------ the board map
+MAP_VERSION = 3  # 2: bare solder pads are pads; 3: drilled pads found by their dark hole, also on dim photos
+
+
 @dataclass
 class Component:
     id: str
@@ -312,6 +327,7 @@ class BoardMap:
     components: list[Component]
     occupied: np.ndarray  # union of (dilated) component masks
     px_per_mm: float | None = None
+    version: int = 1  # maps saved before a naming-rule change are rebuilt on load (see MAP_VERSION)
 
     @property
     def shape(self):
@@ -382,10 +398,14 @@ class BoardMap:
             named = "component classifier"
             if a > 0.04 * barea and metal > 0.35:
                 kind, conf, named = "connector", 0.6, "geometry (large metal part)"
-            elif metal > 0.25 and a < 0.02 * barea and _dark_centre(golden, x, y, w, h):
+            elif a < 0.03 * barea and fill > 0.7 and _hole_ratio(golden, x, y, w, h) < 0.45:
+                kind, conf, named = "hole / pad", 0.75, "geometry (square pad with a drilled hole)"
+            elif metal > 0.25 and a < 0.05 * barea and _dark_centre(golden, x, y, w, h):
                 kind, conf, named = "hole / pad", 0.7, "geometry (metal ring around a hole)"
             elif circ > 0.75 and a < 0.01 * barea and metal > 0.3:
                 kind, conf, named = "hole / pad", 0.6, "geometry (round metal ring)"
+            elif metal > 0.7 and fill > 0.8 and abs(w - h) < 0.25 * max(w, h) and a < 0.05 * barea:
+                kind, conf, named = "hole / pad", 0.6, "geometry (bare square solder pad)"
             elif conf < 0.45:
                 kind, named = ("metal part" if metal > 0.5 else "other"), "low classifier confidence"
             comps.append(Component(id="", kind=kind, kind_conf=conf, named_by=named, bbox=(int(x), int(y), int(w), int(h)),
@@ -399,7 +419,8 @@ class BoardMap:
         occ = np.zeros(board.shape, np.uint8)
         for c in comps:
             occ |= cv2.dilate(c.mask.astype(np.uint8), np.ones((11, 11), np.uint8))
-        bm = cls(golden=golden, board=board, mask_lab=mask_lab, mask_tol=tol, components=comps, occupied=occ.astype(bool))
+        bm = cls(golden=golden, board=board, mask_lab=mask_lab, mask_tol=tol, components=comps, occupied=occ.astype(bool),
+                 version=MAP_VERSION)
         bm._learn(aligned, [w.shape for w in works], warps, ref_heats, calib)
         return bm
 
@@ -572,7 +593,11 @@ class BoardMap:
             hot = heat is not None and f.get("heat", 0) > max(s["heatMax"], tau_pass)
             gone = f["substrate"] - s["substrate"] > 0.25 or s["bodyFrac"] - f["bodyFrac"] > 0.35
             polar = c.kind in ("IC", "diode / LED", "transistor", "other")
-            if f["corr"] < s["corrMin"] and gone:
+            if c.kind == "hole / pad":  # a bare pad or hole has no body to burn, turn or solder badly
+                if hot and f["corr"] < s["corrMin"]:
+                    status = "DAMAGED"
+                    why.append(f"this pad / hole looks different from every good board (anomaly {f['heat']:.3f}, good boards up to {s['heatMax']:.3f})")
+            elif f["corr"] < s["corrMin"] and gone:
                 status = "MISSING"
                 why.append(f"its body is gone: {round(100 * f['bodyFrac'])}% of the footprint is still part body (good boards: {round(100 * s['bodyFrac'])}%)")
             elif polar and f.get("rotGain", 0) > s["rotMax"] and f.get("rotCorr", 0) > 0.7 and f.get("corr0", 1) < s["corrMin"] + 0.1:
@@ -584,7 +609,13 @@ class BoardMap:
             elif f["dL"] < s["dLMin"] or f["darkFrac"] > s["darkMax"] or (
                     f.get("termDLmin", 0) < s["termLow"] and f.get("termDLmax", 0) < 0.5 * s["termLow"]):  # both ends charred
                 status = "BURNT"
-                why.append(f"body {-f['dL']:.0f} units darker than the golden part (good boards: at most {-s['dLMin']:.0f})")
+                if f["dL"] < s["dLMin"]:
+                    f["burntStrong"] = 1.0
+                    why.append(f"body {-f['dL']:.0f} units darker than the golden part (good boards: at most {-s['dLMin']:.0f})")
+                elif f["darkFrac"] > s["darkMax"]:
+                    why.append(f"{round(100 * f['darkFrac'])}% of the body is much darker than on the golden part (good boards: at most {round(100 * s['darkMax'])}%)")
+                else:
+                    why.append(f"both ends are {-f['termDLmax']:.0f} to {-f['termDLmin']:.0f} units darker than on good boards")
             elif f.get("termDLmin", 0) < s["termLow"]:
                 status = "SOLDER"
                 why.append(f"{f['termDark']} joint {-f['termDLmin']:.0f} units duller than on good boards: dry or insufficient solder")

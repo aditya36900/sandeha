@@ -20,6 +20,8 @@ def queue(s) -> list[dict]:
     for r in s.records:
         if r.ghost or r.review.get("final") in ("GOOD", "DEFECT", "GHOST_CHECKED"):
             continue
+        if str(r.synthetic or "").startswith("sentinel"):  # the station's own self-test boards are not production
+            continue
         watch = [f for f in (r.board or {}).get("faults", []) if f.get("level") == "watch"]
         if r.decision == "DOUBT":
             why = "I am unsure: a person decides"

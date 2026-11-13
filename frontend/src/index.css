@@ -2,57 +2,111 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ---------- Industrial dark: neutral greys, one quiet blue, no decoration ---------- */
-:root {
-  --ink: #0f1115;        /* page */
-  --surface: #161920;    /* panels */
-  --raised: #1d2129;     /* inputs, inner cards */
-  --line: #272c36;       /* 1px borders */
-  --bone: #e6e8ec;       /* text */
-  --mist: #8b919c;       /* secondary text */
-  --accent: #5b8def;     /* links, primary action, "the system" */
-  --pass: #3fb98a;
-  --fail: #e5574a;
-  --doubt: #e0a43a;
-  --hold: #7f8df0;
+/* ================= Themes: pick in the top bar. Every theme defines the same tokens. ================= */
+
+/* Industrial (default): neutral greys, one quiet blue, no decoration */
+:root, :root[data-theme='industrial'] {
+  --ink: #0f1115; --surface: #161920; --raised: #1d2129; --line: #272c36; --bone: #e6e8ec; --mist: #8b919c;
+  --accent: #5b8def; --pass: #3fb98a; --fail: #e5574a; --doubt: #e0a43a; --hold: #7f8df0;
   --ink-rgb: 15 17 21; --surface-rgb: 22 25 32; --raised-rgb: 29 33 41; --line-rgb: 39 44 54;
   --bone-rgb: 230 232 236; --mist-rgb: 139 145 156; --accent-rgb: 91 141 239;
   --pass-rgb: 63 185 138; --fail-rgb: 229 87 74; --doubt-rgb: 224 164 58; --hold-rgb: 127 141 240;
+  --radius: 8px; --font: 'Inter', system-ui, sans-serif; --font-display: 'Inter', system-ui, sans-serif;
+  --bg: var(--ink);
 }
-:root[data-theme='light'] {
+
+
+/* Press (default): editorial bento. Paper surfaces, ultra-bold display type, black ink, one pop accent. */
+:root, :root[data-theme='press'] {
+  --ink: #ecebe5; --surface: #f7f6f1; --raised: #e4e2da; --line: #1a1a1a; --bone: #121212; --mist: #5e5e58;
+  --accent: #d6ff3a; --pass: #1f9d55; --fail: #ff5a1f; --doubt: #c98a00; --hold: #8a7bf0;
+  --ink-rgb: 236 235 229; --surface-rgb: 247 246 241; --raised-rgb: 228 226 218; --line-rgb: 26 26 26;
+  --bone-rgb: 18 18 18; --mist-rgb: 94 94 88; --accent-rgb: 214 255 58;
+  --pass-rgb: 31 157 85; --fail-rgb: 255 90 31; --doubt-rgb: 201 138 0; --hold-rgb: 138 123 240;
+  --radius: 22px; --font: 'Inter', system-ui, sans-serif; --font-display: 'Bricolage Grotesque', 'Inter', sans-serif;
+  --bg: var(--ink);
+}
+:root[data-theme='press'] .text-ink, :root:not([data-theme]) .text-ink { color: #121212; }
+:root[data-theme='press'] h1, :root:not([data-theme]) h1 { font-weight: 800; letter-spacing: -0.035em; }
+:root[data-theme='press'] h2, :root:not([data-theme]) h2 { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; font-weight: 500; color: var(--mist); }
+:root[data-theme='press'] .label, :root:not([data-theme]) .label { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; font-weight: 500; }
+:root[data-theme='press'] .panel, :root:not([data-theme]) .panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+:root[data-theme='press'] .btn, :root:not([data-theme]) .btn, :root[data-theme='press'] select, :root:not([data-theme]) select { border-radius: 999px; }
+:root[data-theme='press'] .text-accent, :root:not([data-theme]) .text-accent { color: #4c6300 !important; }
+:root[data-theme='press'] .display, :root:not([data-theme]) .display { font-weight: 800; letter-spacing: -0.03em; }
+:root[data-theme='press'] .voice, :root:not([data-theme]) .voice { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; letter-spacing: -0.02em; }
+:root[data-theme='press'] .bg-accent, :root:not([data-theme]) .bg-accent { color: #121212 !important; }
+:root[data-theme='press'] .bg-doubt, :root:not([data-theme]) .bg-doubt { color: #121212 !important; }
+:root[data-theme='press'] .glow-pass, :root:not([data-theme]) .glow-pass { border-color: var(--pass); border-width: 2px; }
+:root[data-theme='press'] .glow-fail, :root:not([data-theme]) .glow-fail { border-color: var(--fail); border-width: 2px; }
+:root[data-theme='press'] .glow-doubt, :root:not([data-theme]) .glow-doubt { border-color: var(--doubt); border-width: 2px; }
+:root[data-theme='press'] nav, :root:not([data-theme]) nav { background: var(--ink); }
+
+/* Lab bench: graphite, electric cyan, scan effects */
+:root[data-theme='lab'] {
+  --ink: #0a0c12; --surface: #11141c; --raised: #181c26; --line: #252a38; --bone: #e8ecf3; --mist: #7d879c;
+  --accent: #22d3ee; --pass: #34d399; --fail: #fb5a4b; --doubt: #f5b544; --hold: #8b9cff;
+  --ink-rgb: 10 12 18; --surface-rgb: 17 20 28; --raised-rgb: 24 28 38; --line-rgb: 37 42 56;
+  --bone-rgb: 232 236 243; --mist-rgb: 125 135 156; --accent-rgb: 34 211 238;
+  --pass-rgb: 52 211 153; --fail-rgb: 251 90 75; --doubt-rgb: 245 181 68; --hold-rgb: 139 156 255;
+  --radius: 14px; --font: 'IBM Plex Sans', 'Inter', system-ui, sans-serif; --font-display: 'Space Grotesk', 'Inter', sans-serif;
+  --bg: radial-gradient(1200px 600px at 20% -10%, rgb(var(--accent-rgb) / 0.07), transparent 60%),
+        linear-gradient(rgb(var(--line-rgb) / 0.35) 1px, transparent 1px) 0 0 / 100% 40px,
+        linear-gradient(90deg, rgb(var(--line-rgb) / 0.35) 1px, transparent 1px) 0 0 / 40px 100%, var(--ink);
+}
+
+/* Midnight: the original navy with amber */
+:root[data-theme='midnight'] {
+  --ink: #10142e; --surface: #1a2045; --raised: #232a57; --line: #2f3769; --bone: #ece7da; --mist: #8f97c2;
+  --accent: #f2a93b; --pass: #5cc8b4; --fail: #f0655a; --doubt: #f2a93b; --hold: #8b9cff;
+  --ink-rgb: 16 20 46; --surface-rgb: 26 32 69; --raised-rgb: 35 42 87; --line-rgb: 47 55 105;
+  --bone-rgb: 236 231 218; --mist-rgb: 143 151 194; --accent-rgb: 242 169 59;
+  --pass-rgb: 92 200 180; --fail-rgb: 240 101 90; --doubt-rgb: 242 169 59; --hold-rgb: 139 156 255;
+  --radius: 16px; --font: 'IBM Plex Sans Condensed', 'Inter', system-ui, sans-serif; --font-display: 'Instrument Serif', Georgia, serif;
+  --bg: var(--ink);
+}
+
+/* Paper: light, for bright rooms */
+:root[data-theme='paper'] {
   --ink: #f3f4f6; --surface: #ffffff; --raised: #eef0f3; --line: #d9dde3; --bone: #15181e; --mist: #5f6672;
   --accent: #2f6fe0; --pass: #1e8f69; --fail: #c9402f; --doubt: #a8720a; --hold: #4d5dcc;
   --ink-rgb: 243 244 246; --surface-rgb: 255 255 255; --raised-rgb: 238 240 243; --line-rgb: 217 221 227;
   --bone-rgb: 21 24 30; --mist-rgb: 95 102 114; --accent-rgb: 47 111 224;
   --pass-rgb: 30 143 105; --fail-rgb: 201 64 47; --doubt-rgb: 168 114 10; --hold-rgb: 77 93 204;
+  --radius: 8px; --font: 'Inter', system-ui, sans-serif; --font-display: 'Inter', system-ui, sans-serif;
+  --bg: var(--ink);
 }
-:root[data-theme='light'] .text-ink { color: #ffffff; }
+:root[data-theme='paper'] .text-ink { color: #ffffff; }
 input, select, textarea { color: var(--bone); }
 
 html, body, #root { height: 100%; }
 body {
-  margin: 0;
-  color: var(--bone);
-  background: var(--ink);
-  font-family: 'Inter', system-ui, sans-serif;
-  font-size: 13.5px;
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
+  margin: 0; color: var(--bone); background: var(--bg);
+  font-family: var(--font); font-size: 13.5px; line-height: 1.5; -webkit-font-smoothing: antialiased;
   font-feature-settings: 'cv11', 'ss01';
 }
-h1, h2, h3 { font-family: 'Inter', system-ui, sans-serif; letter-spacing: -0.01em; }
-.display { font-family: 'Inter', system-ui, sans-serif; letter-spacing: -0.02em; }
+h1, h2, h3, .display { font-family: var(--font-display); letter-spacing: -0.01em; }
 .num, .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; }
-.voice { font-weight: 500; letter-spacing: -0.012em; }
-.label { font-size: 12px; font-weight: 600; color: var(--mist); letter-spacing: 0; text-transform: none; }
+.voice { font-family: var(--font-display); font-weight: 500; letter-spacing: -0.012em; }
+:root[data-theme='midnight'] .voice { font-weight: 400; font-size: 1.15em; }
+.label { font-size: 12px; font-weight: 600; color: var(--mist); }
+:root[data-theme='lab'] .label { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; }
 
-.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+:root[data-theme='midnight'] .panel { border-color: transparent; }
 .glow-pass { border-color: rgb(var(--pass-rgb) / 0.6); }
 .glow-fail { border-color: rgb(var(--fail-rgb) / 0.6); }
 .glow-doubt { border-color: rgb(var(--doubt-rgb) / 0.6); }
 .glow-accent { border-color: rgb(var(--accent-rgb) / 0.6); }
+:root[data-theme='lab'] .glow-pass { box-shadow: 0 0 24px rgb(var(--pass-rgb) / 0.25); }
+:root[data-theme='lab'] .glow-fail { box-shadow: 0 0 24px rgb(var(--fail-rgb) / 0.25); }
+:root[data-theme='lab'] .glow-doubt { box-shadow: 0 0 24px rgb(var(--doubt-rgb) / 0.25); }
 .scanlines::after { content: none; }
+:root[data-theme='lab'] .scanlines::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(0deg, transparent 0 3px, rgb(0 0 0 / 0.12) 3px 4px); }
 .corner::before, .corner::after { content: none; }
+:root[data-theme='lab'] .corner::before, :root[data-theme='lab'] .corner::after { content: ''; position: absolute; width: 18px; height: 18px; border-color: var(--accent); border-style: solid; }
+:root[data-theme='lab'] .corner::before { top: 8px; left: 8px; border-width: 2px 0 0 2px; }
+:root[data-theme='lab'] .corner::after { bottom: 8px; right: 8px; border-width: 0 2px 2px 0; }
 @keyframes sweep { from { top: 0 } to { top: 100% } }
 .sweep { position: absolute; left: 0; right: 0; height: 2px; background: var(--accent); animation: sweep 1.4s linear infinite; }
 .pulse-ring::after { content: none; }

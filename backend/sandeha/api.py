@@ -669,6 +669,80 @@ def edge():
     return json.loads(p.read_text()) if p.exists() else {"measured": False}
 
 
+@app.middleware("http")
+async def _no_cache_html(request, call_next):
+    """Hashed JS/CSS may cache forever; index.html and API responses must not, or a new build never reaches the browser."""
+    resp = await call_next(request)
+    ct = resp.headers.get("content-type", "")
+    if "text/html" in ct or request.url.path.startswith("/api/"):
+        resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    return resp
+
+
+@app.get("/api/version")
+def version():
+    import subprocess
+
+    root = Path(__file__).resolve().parents[2]
+    try:
+        sha = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=root, capture_output=True, text=True, timeout=3).stdout.strip()
+    except Exception:
+        sha = ""
+    idx = root / "frontend" / "dist" / "index.html"
+    built = time.strftime("%Y-%m-%d %H:%M", time.localtime(idx.stat().st_mtime)) if idx.exists() else None
+    return {"commit": sha or "unknown", "uiBuilt": built}
+
+
+@app.post("/api/vlm/warm")
+def vlm_warm():
+    """Load the local vision-language model in the background so the first 'Ask it' does not wait 30 s."""
+    from . import vlm
+
+    if not vlm.available():
+        return {"status": "unavailable"}
+    if vlm._M is not None:
+        return {"status": "ready", "model": vlm.MODEL}
+
+    def run():
+        try:
+            from PIL import Image as _Im
+
+            vlm.generate([_Im.new("RGB", (224, 224))], "Hi", 1)
+        except Exception as e:
+            print(f"[vlm] warm failed: {e}")
+    threading.Thread(target=run, daemon=True).start()
+    return {"status": "loading", "model": vlm.MODEL}
+
+
+@app.get("/api/sessions/{sid}/sentinel")
+async def sentinel_get(sid: str):
+    from . import sentinel
+
+    return await run_in_threadpool(sentinel.report, S(sid))
+
+
+@app.post("/api/sessions/{sid}/sentinel/run")
+async def sentinel_run(sid: str, n: int = 6):
+    """Run a burst of planted-fault audits now (the station also does one by itself every few real boards)."""
+    from . import sentinel
+
+    s = S(sid)
+    out = await run_in_threadpool(lambda: [sentinel.audit(s) for _ in range(max(1, min(n, 24)))])
+    return {"ran": len([x for x in out if x]), "report": sentinel.report(s)}
+
+
+@app.post("/api/sessions/{sid}/sentinel/reset")
+def sentinel_reset(sid: str, x_role: str | None = Header(None)):
+    from .api_station import NAMES, require
+
+    r = require(x_role, "QUALITY_MANAGER", "ADMIN")
+    s = S(sid)
+    n = len(getattr(s, "audits", []))
+    s.audits = []
+    STATION.log(NAMES[r], r, "sentinel.reset", sid, {"cleared": n})
+    return {"cleared": n}
+
+
 @app.get("/api/results")
 def results():
     root = Path(__file__).resolve().parents[2] / "data" / "results"

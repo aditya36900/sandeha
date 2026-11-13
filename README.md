@@ -61,6 +61,37 @@ cd backend; ..\.venv\Scripts\python scripts\seed_demo.py
 - **AI, all local, no cloud and no API key:** DINOv2-S (anomaly memory), CLIP ViT-B/16 (region names when no labelled examples exist), Qwen2-VL-2B-Instruct (describes defect close-ups and answers free questions), Depth Anything V2 Small (3D relief). Nothing leaves the station. Set `SANDEHA_WARM_AI=0` to skip loading them at startup.
 - **Hardware:** a CUDA GPU is used if present. Everything also runs on CPU, just slower.
 
+## Sentinel: the station audits itself (the USP)
+
+Every 5 real boards the station plants one known fault (missing, shifted, rotated, burnt, solder bridge, dry joint)
+on a held-out good board it never learned from, inspects it exactly like a production board, and keeps score. The
+**Sentinel** page shows the live catch rate per fault type, measured on this line as it is now, and raises an alarm
+when a type that used to be caught starts slipping through: a fogged lens or a nudged camera shows up in the planted
+faults before it shows up as escapes. Audited boards are marked synthetic and never touch yield, DPMO, cost or the
+approval queue. Audits target real parts (IC, connector, capacitors, resistors, diodes; weighted by size), not pad specks.
+
+Measured on pcb4 after a reset, 24 audits (4 per type):
+
+| Planted fault | Stopped (not passed) | Located (right part named) |
+|---|---|---|
+| Missing part | 100% | 100% |
+| Shifted part | 100% | 100% |
+| Solder bridge / excess | 100% | 100% |
+| Burnt part | 75% | 75% |
+| Dry joint | 25% | 0% |
+| Rotated / reversed | 0% | 0% |
+
+The last two rows are the point: dry joints need angled light, and the parts here look the same turned round. The
+station says so instead of hiding it. A component finding that is overwhelming (body clearly gone or charred) can
+raise a PASS to DOUBT, never to FAIL.
+
+## Themes
+
+Top bar → theme: **Press** (default: editorial bento, paper, bold type, lime pop), **Lab bench** (graphite, cyan,
+scan effects), **Industrial** (neutral dark), **Midnight** (navy, amber), **Paper** (plain light). `?theme=lab` in the
+URL forces one. `index.html` and `/api/*` are served with no-cache headers so a new build always reaches the browser;
+the commit the UI was built from is shown at the bottom of the sidebar.
+
 ## Two detectors, one map
 
 Every board is judged by two independent detectors that are fused into one map before anything downstream looks at it:

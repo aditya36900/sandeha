@@ -7,7 +7,8 @@ export const reasonText: Record<string, string> = {
   BAD_IMAGE: 'Image unreliable',
   CONDITIONS_CHANGED: 'Conditions changed',
   NEVER_SEEN: 'Never seen anything like it',
-  BORDERLINE: 'Borderline'
+  BORDERLINE: 'Borderline',
+  COMPONENT: 'A component looks wrong'
 };
 
 export function Verdict({ d, size = 'md' }: { d: Decision; size?: 'sm' | 'md' | 'xl' }) {
@@ -47,7 +48,7 @@ export function Btn({ children, onClick, tone = 'plain', disabled, title }: {
   };
   return (
     <button title={title} disabled={disabled} onClick={onClick}
-      className={`h-8 px-3 rounded-md text-[13px] font-medium transition disabled:opacity-40 disabled:cursor-not-allowed ${styles[tone]}`}>
+      className={`btn h-8 px-3 rounded-md text-[13px] font-medium transition disabled:opacity-40 disabled:cursor-not-allowed ${styles[tone]}`}>
       {children}
     </button>
   );

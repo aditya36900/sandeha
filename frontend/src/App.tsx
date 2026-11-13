@@ -28,6 +28,7 @@ import Materials from './line/Materials';
 import Bom from './line/Bom';
 import XRay from './line/XRay';
 import Pulse from './line/Pulse';
+import Sentinel from './line/Sentinel';
 
 // the main journey, in order: what an operator actually does, start to finish
 const ACTS: { id: Act; title: string; sub: string }[] = [
@@ -42,6 +43,7 @@ const ACTS: { id: Act; title: string; sub: string }[] = [
 
 // deeper views of the line and the factory around it
 const FACTORY: { id: Act; title: string }[] = [
+  { id: 'sentinel', title: 'Sentinel' },
   { id: 'pulse', title: 'Line pulse' },
   { id: 'xray', title: 'Board X-ray' },
   { id: 'smt', title: 'Line flow' },
@@ -97,6 +99,12 @@ function Products() {
   );
 }
 
+function Version() {
+  const [v, setV] = useState<{ commit: string; uiBuilt: string | null } | null>(null);
+  useEffect(() => { api.version().then(setV).catch(() => {}); }, []);
+  return v ? <span className="ml-auto mono text-[10px] text-mist" title={`UI built ${v.uiBuilt ?? '?'}`}>{v.commit}</span> : null;
+}
+
 function Rail() {
   const { act, setAct, sessionId, live } = useStore();
   const Item = ({ id, title, sub, n, enabled = true }: { id: Act; title: string; sub?: string; n?: number; enabled?: boolean }) => {
@@ -144,6 +152,7 @@ function Rail() {
       <div className="mt-auto hidden lg:flex label items-center gap-2">
         <span className={`w-1.5 h-1.5 rounded-full ${live ? 'bg-pass' : 'bg-fail'}`} />
         {live ? 'station online' : 'reconnecting'}
+        <Version />
       </div>
     </nav>
   );
@@ -238,7 +247,7 @@ function Shell() {
     choose: Choose, genesis: Genesis, interview: Interview, line: Line, chaos: Chaos, trust: Trust, beyond: Beyond,
     overview: Overview, pipeline: Pipeline, products: ProductsPage, memory: Memory, analytics: Analytics, hardware: Hardware,
     history: History, settings: Settings, approval: Approval, smt: SmtLine, quality: Quality, spc: Spc, rework: Rework,
-    materials: Materials, bom: Bom, xray: XRay, pulse: Pulse
+    materials: Materials, bom: Bom, xray: XRay, pulse: Pulse, sentinel: Sentinel
   }[act];
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">

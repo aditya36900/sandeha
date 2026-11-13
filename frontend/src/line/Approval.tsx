@@ -22,6 +22,9 @@ function Dossier({ sid, rid, onDecided }: { sid: string; rid: string; onDecided:
   const [chips, setChips] = useState<any | null>(null);
   const [cBusy, setCBusy] = useState(false);
   const cloud = views[sid]?.cloud ?? null;
+  const [tick, setTick] = useState(0);
+  useEffect(() => { api.vlmWarm().catch(() => {}); }, []);  // start loading the local model now, not on the click
+  useEffect(() => { if (!vBusy && !cBusy) return; const t = setInterval(() => setTick(x => x + 1), 1000); return () => clearInterval(t); }, [vBusy, cBusy]);
   useEffect(() => {
     setD(null); setV(null); setMsg(null); setHeat3d(null); setChips(null);
     api.dossier(sid, rid).then(setD).catch(e => setError(e.message));
@@ -41,8 +44,8 @@ function Dossier({ sid, rid, onDecided }: { sid: string; rid: string; onDecided:
     } catch (e: any) { setError(e.message); }
   };
   const askVlm = async () => {
-    setVBusy(true);
-    try { setV(await api.dossierVlm(sid, rid)); } catch (e: any) { setError(e.message); } finally { setVBusy(false); }
+    setVBusy(true); setTick(0);
+    try { setV(await api.dossierVlm(sid, rid)); } catch (e: any) { setError(`Local AI: ${e.message}`); } finally { setVBusy(false); }
   };
   const votes = (r.review?.votes ?? []) as { by: string; verdict: string }[];
   return (
@@ -127,7 +130,7 @@ function Dossier({ sid, rid, onDecided }: { sid: string; rid: string; onDecided:
         ) : <p className="text-mist text-sm">Every component matches the good boards.</p>}
       </Panel>
 
-      <Panel title="What the local vision-language model sees" aside={<Btn tone="ghost" disabled={vBusy} onClick={askVlm}>{vBusy ? 'Looking (10-30 s)…' : v ? 'Look again' : 'Ask it'}</Btn>}>
+      <Panel title="What the local vision-language model sees" aside={<Btn tone="ghost" disabled={vBusy} onClick={askVlm}>{vBusy ? `Looking… ${tick}s (first time loads the model, ~30 s)` : v ? 'Look again' : 'Ask it'}</Btn>}>
         {!v && <p className="text-mist text-sm">Qwen2-VL-2B runs on this station. It looks at each flagged close-up and the whole board, and says whether it agrees with the system. It is advisory only.</p>}
         {v && !v.available && <p className="text-mist text-sm">The local model is not downloaded on this station.</p>}
         {v?.available && (
@@ -145,7 +148,7 @@ function Dossier({ sid, rid, onDecided }: { sid: string; rid: string; onDecided:
         )}
       </Panel>
 
-      <Panel title="Chip identity" aside={<Btn tone="ghost" disabled={cBusy} onClick={async () => { setCBusy(true); try { setChips(await api.chips(sid, rid)); } catch (e: any) { setError(e.message); } finally { setCBusy(false); } }}>{cBusy ? 'Reading markings…' : chips ? 'Read again' : 'Read chip markings'}</Btn>}>
+      <Panel title="Chip identity" aside={<Btn tone="ghost" disabled={cBusy} onClick={async () => { setCBusy(true); setTick(0); try { setChips(await api.chips(sid, rid)); } catch (e: any) { setError(`Chip reading: ${e.message}`); } finally { setCBusy(false); } }}>{cBusy ? `Reading… ${tick}s (about 10 s per chip)` : chips ? 'Read again' : 'Read chip markings'}</Btn>}>
         {!chips && <p className="text-mist text-sm">Reads the part number printed on each IC and compares it with the golden board: catches wrong, re-marked, counterfeit or burnt chips.</p>}
         {chips?.available && (
           <ul className="space-y-1 text-sm">

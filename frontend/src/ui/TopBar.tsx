@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { api, Demo, Role } from '../api';
-import { Act, useStore } from '../store';
+import { Act, THEMES, useStore } from '../store';
 import { Btn } from './bits';
 import { Modal, can, roleName } from '../room/common';
 
@@ -103,7 +103,9 @@ export default function TopBar() {
         <select value={role} onChange={e => setRole(e.target.value as Role)} className="bg-raised rounded-xl px-3 py-2 text-sm" aria-label="Acting as">
           {ROLES.map(r => <option key={r} value={r}>as {roleName(r)}</option>)}
         </select>
-        <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className="px-3 py-2 rounded-xl text-sm bg-raised" aria-label="Switch theme">{theme === 'dark' ? 'Light' : 'Dark'}</button>
+        <select value={theme} onChange={e => setTheme(e.target.value as any)} className="bg-raised rounded-md px-2 h-8 text-sm border border-line" aria-label="Theme" title="Theme">
+          {THEMES.map(t => <option key={t.id} value={t.id}>{t.title}</option>)}
+        </select>
         {station?.hold
           ? <Btn tone="pass" onClick={() => hold(false)} disabled={!can(role, 'INSPECTOR', 'QUALITY_MANAGER', 'ADMIN')} title={can(role, 'INSPECTOR', 'QUALITY_MANAGER', 'ADMIN') ? undefined : 'An inspector or above must release a stop'}>Release HOLD</Btn>
           : <button onClick={() => hold(true)} className="px-4 py-2 rounded-xl text-sm font-bold bg-fail text-ink hover:brightness-110 tracking-wide">E-STOP</button>}

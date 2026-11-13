@@ -3,8 +3,17 @@ import { Alert, BackendEvent, Cloud, InspectionRecord, Policy, Question, Role, S
 
 export type Act = 'choose' | 'genesis' | 'interview' | 'line' | 'chaos' | 'trust' | 'beyond'
   | 'overview' | 'pipeline' | 'products' | 'memory' | 'analytics' | 'hardware' | 'history' | 'settings'
-  | 'approval' | 'smt' | 'quality' | 'spc' | 'rework' | 'materials' | 'bom' | 'xray' | 'pulse';
-export type Theme = 'dark' | 'light';
+  | 'approval' | 'smt' | 'quality' | 'spc' | 'rework' | 'materials' | 'bom' | 'xray' | 'pulse' | 'sentinel';
+export type Theme = 'press' | 'lab' | 'industrial' | 'midnight' | 'paper';
+export const THEMES: { id: Theme; title: string; hint: string }[] = [
+  { id: 'press', title: 'Press', hint: 'editorial bento: paper, bold type, lime pop' },
+  { id: 'lab', title: 'Lab bench', hint: 'graphite, cyan, scan effects' },
+  { id: 'industrial', title: 'Industrial', hint: 'neutral dark, quiet blue' },
+  { id: 'midnight', title: 'Midnight', hint: 'navy and amber' },
+  { id: 'paper', title: 'Paper', hint: 'plain light' },
+];
+const THEME_IDS: Theme[] = ['press', 'lab', 'industrial', 'midnight', 'paper'];
+const normTheme = (t: string | null): Theme => (t === 'dark' ? 'lab' : t === 'light' ? 'paper' : THEME_IDS.includes(t as Theme) ? (t as Theme) : 'press');
 
 export interface Narration {
   t: number;
@@ -77,7 +86,7 @@ function upsert(list: InspectionRecord[], r: InspectionRecord) {
 export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // the page lives in the URL hash (#overview, #line …) so a page can be bookmarked or opened directly
   const PAGES: Act[] = ['choose', 'genesis', 'interview', 'line', 'chaos', 'trust', 'beyond', 'overview', 'pipeline', 'products',
-    'memory', 'analytics', 'hardware', 'history', 'settings', 'approval', 'smt', 'quality', 'spc', 'rework', 'materials', 'bom', 'xray', 'pulse'];
+    'memory', 'analytics', 'hardware', 'history', 'settings', 'approval', 'smt', 'quality', 'spc', 'rework', 'materials', 'bom', 'xray', 'pulse', 'sentinel'];
   const fromHash = (): Act => { const h = window.location.hash.slice(1) as Act; return PAGES.includes(h) ? h : 'choose'; };
   const [act, setActState] = useState<Act>(fromHash);
   const setAct = useCallback((a: Act) => {
@@ -104,8 +113,8 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, []);
   const [theme, setThemeState] = useState<Theme>(() => {
     const q = new URLSearchParams(window.location.search).get('theme');
-    if (q === 'light' || q === 'dark') return q;
-    try { return (localStorage.getItem('sandeha.theme') as Theme) || 'dark'; } catch { return 'dark'; }
+    if (q) return normTheme(q);
+    try { return normTheme(localStorage.getItem('sandeha.theme')); } catch { return 'press'; }
   });
   const setTheme = useCallback((t: Theme) => {
     setThemeState(t);

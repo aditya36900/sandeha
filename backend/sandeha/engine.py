@@ -521,7 +521,9 @@ class Session:
             raise KeyError(token)
         smp = v[0]
         known = smp.label >= 0
-        return self.inspect(smp.image(), truth=smp.label if known else None, defect_type=smp.defect_type if known else None)
+        rec = self.inspect(smp.image(), truth=smp.label if known else None, defect_type=smp.defect_type if known else None)
+        self._sentinel_maybe()
+        return rec
 
     def inspect(self, image: Image.Image, truth: int | None = None, defect_type: str | None = None,
                 ghost: bool = False) -> Record:
@@ -894,15 +896,24 @@ class Session:
             overwhelming = (r["status"] == "MISSING" and float(m.get("bodyFrac", 1)) < 0.08) or \
                            (r["status"] == "BURNT" and float(m.get("dL", 0)) < -35)
             strength = float(m.get("heat", 0)) / max(tp, 1e-9) + (1.0 if overwhelming else 0.0)
-            faults.append({**r, "kind": kinds[r["id"]], "_corroborated": heat_ok or overwhelming, "_strength": strength})
+            faults.append({**r, "kind": kinds[r["id"]], "_corroborated": heat_ok or overwhelming, "_overwhelming": overwhelming, "_strength": strength})
         faults += [{**e, "kind": "-"} for e in d["extra"]]
         # A component is called faulty only when two independent measurements agree (its own geometry/colour check AND
         # the patch-memory heatmap), or the geometric evidence is overwhelming. Uncorroborated flags, flags on a passed
         # board, and anything beyond the 4 strongest become 'watch' notes: the calibrated board verdict decides.
         faults.sort(key=lambda f: -f.get("_strength", 0))
+        # Component evidence can raise a PASS to DOUBT (never to FAIL): a part whose body is clearly gone or clearly
+        # charred is overwhelming geometric evidence even when the whole-board score stays under the pass line.
+        esc = [f for f in faults if f.get("_overwhelming") and f["status"] in ("MISSING", "BURNT")]
+        if rec.decision == "PASS" and esc:
+            rec.decision, rec.doubt_reason, rec.routing = "DOUBT", "COMPONENT", ROUTING["DOUBT"]
+            rec.uncertainty = max(rec.uncertainty, 0.7)
+            rec.explanation += " The component check disagrees with the overall score: " + ", ".join(
+                f"{f['id']} looks {f['status'].lower()}" for f in esc[:3]) + ". A person decides."
         n_fault = 0
         for f in faults:
             strong = f.pop("_corroborated", True)
+            f.pop("_overwhelming", None)
             f.pop("_strength", None)
             if rec.decision == "PASS" or not strong or n_fault >= 4:
                 f["level"] = "watch"
@@ -944,6 +955,25 @@ class Session:
         return {"checked": len(d["components"]), "ok": d["summary"].get("OK", 0), "faults": faults, "m": m, "chipCrops": chip_crops,
                 "aligned": photo,
                 "summary": d["summary"]}
+
+    def _sentinel_maybe(self) -> None:
+        """Every few real boards, plant one known fault on a held-out good board and inspect it (in the background)
+        so the live catch rate per fault type is always measured on this line as it is now."""
+        n_real = sum(1 for r in self.records if not r.synthetic and not r.ghost)
+        if getattr(self, "board", None) is None or n_real % 5 != 0 or getattr(self, "_sentinel_busy", False):
+            return
+        from . import sentinel
+
+        self._sentinel_busy = True
+
+        def run():
+            try:
+                sentinel.audit(self)
+            except Exception as e:
+                self.emit("sentinel.error", message=f"Sentinel audit failed: {e}")
+            finally:
+                self._sentinel_busy = False
+        threading.Thread(target=run, daemon=True, name=f"sentinel-{self.id}").start()
 
     def fault_lab(self, comp_id: str, kind: str) -> "Record":
         """Rehearsal: plant a known fault on one component of a held-out good board and inspect it for real.

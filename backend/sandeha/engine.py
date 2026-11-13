@@ -98,6 +98,7 @@ class Record:
     board: dict | None = None  # electronics: per-component verdicts (only the non-OK ones travel)
     synthetic: str | None = None  # fault-lab parts: what was planted, so they never pollute real metrics
     signals: dict | None = None  # the two detectors: patch-memory score, golden-board deviation, fused score
+    foreign: str | None = None  # NOT_A_BOARD / NOT_THIS_BOARD: the photo is not what this line learned
     diff_url: str | None = None  # golden-board deviation painted over this board (blink comparator)
 
     def to_dict(self, heat: bool = False) -> dict:
@@ -551,7 +552,16 @@ class Session:
                        "gain": GOLDEN_GAIN, "detectors": 2 if getattr(self, "golden", None) is not None and GOLDEN_GAIN > 0 else 1}
             nov = float(global_nonconformity(g.cls, self.gref.cls)[0])
             novelty_p = p_value(nov, self.global_calib)
-            h = self.guard.update(nov, score)
+            # Is this even the right thing in front of the camera? Measured on VisA (scripts/foreign_check.py):
+            # this board's good and defective photos stay under ~0.06 (a few pcb1 defects with a whole part gone
+            # reach 0.27), another PCB type is 0.07-0.44, anything that is not a circuit board (a person, a hand,
+            # food, a blank or noisy frame) is 0.88 or more.
+            unlike_line = max(0.06, 3 * float(np.max(self.global_calib))) if len(self.global_calib) else 0.06
+            foreign = "NOT_A_BOARD" if nov > 0.6 else "NOT_THIS_BOARD" if (self.electronics and nov > unlike_line) else None
+            if foreign:  # a photo of something else is not evidence that the lighting or camera changed
+                h = dict(self.guard.history[-1]) if self.guard.history else {"p": 1.0, "martingale": 1.0, "alarm": self.guard.alarmed}
+            else:
+                h = self.guard.update(nov, score)
             pol = self.cal.policy
             pass_line = self._live_pass_line()
             decision, unc = self.cal.decide(score, pass_line)
@@ -574,8 +584,15 @@ class Session:
                 hold_reason = "Image too blurred to judge (motion or focus)"
             elif "conveyor" in st.faults:
                 hold_reason = "Conveyor tracking lost: the part cannot be routed safely"
+            if foreign == "NOT_A_BOARD" and not hold_reason:  # a camera / lighting fault is the more useful message
+                hold_reason = (f"This is not a {self.product.name} circuit board (it looks like nothing I learned: similarity "
+                               f"{1 - nov:.2f}, a real board scores above 0.94). Put a board in front of the camera")
             if hold_reason:
                 decision, reason, unc = "HOLD", None, 1.0
+            elif foreign == "NOT_THIS_BOARD":
+                # Either another board type (this line's part map does not apply to it) or a defect so large the
+                # whole board looks different. Never auto-pass, never name parts from the wrong map: a person checks.
+                decision, reason, unc = "DOUBT", "NOT_THIS_BOARD", max(unc, 0.9)
             elif self.guard.alarmed and (decision == "PASS" or (decision == "FAIL" and score < 1.5 * pol.tau_fail)):
                 # under a detected shift neither direction is trustworthy: no auto-pass, no auto-reject
                 decision, reason, unc = "DOUBT", "CONDITIONS_CHANGED", max(unc, 0.85)
@@ -625,14 +642,17 @@ class Session:
                 rec.twin_heat = [round(min(1.0, max(0.0, v / max(tp * 2, 1e-9))), 3)
                                  for v in sample_heat(hm, self.twin_cloud["grid"])]
             t35 = time.perf_counter()
-            if decision in ("FAIL", "DOUBT"):
+            rec.foreign = foreign
+            if foreign == "NOT_A_BOARD":  # no heat map, no 3D heat and no golden-board diff on a photo of something else
+                rec.heat_url, rec.twin_heat, rec.diff_url = rec.image_url, None, None
+            if decision in ("FAIL", "DOUBT") and not foreign:
                 try:
                     rec.regions = self.analyse_regions(g, dist, hm, shown, rid)
                 except Exception as e:  # never let naming break an inspection
                     rec.regions = []
                     self.emit("regions.error", message=f"Region analysis failed: {e}")
             bm = getattr(self, "board", None)
-            if bm is not None and decision != "HOLD":
+            if bm is not None and decision != "HOLD" and not foreign:
                 try:
                     rec.board = self._board_check(bm, shown, hm, rec)
                 except Exception as e:  # never let the component check break an inspection
@@ -648,7 +668,8 @@ class Session:
             if decision == "DOUBT":
                 st.send("telegram", {"text": f"Part {rid} ({self.product.name}) needs a person: {reason or 'unsure'}"})
             self._feat_cache = getattr(self, "_feat_cache", {})
-            self._feat_cache[rid] = (g.feats[0][g.fg[0]].detach(), dist[0][g.fg[0]].detach(), g.cls[0].detach())
+            if foreign != "NOT_A_BOARD":  # a non-board photo is never learned from
+                self._feat_cache[rid] = (g.feats[0][g.fg[0]].detach(), dist[0][g.fg[0]].detach(), g.cls[0].detach())
             self._trim_cache()
             self._update_forecast()
             self.emit("line.record", record=rec.to_dict())
@@ -730,6 +751,9 @@ class Session:
                                    f"x{h['martingale']:.0f}). I won't auto-pass until I see 5 confirmed good parts."),
             "NEVER_SEEN": (f"DOUBT: this part is unlike anything I've seen (novelty p={novelty_p:.3f}). "
                            f"I'm asking rather than guessing."),
+            "NOT_THIS_BOARD": (f"DOUBT: this does not look like a {self.product.name} board: it may be a different board type, or a defect "
+                               "so large the whole board looks different. I do not name parts from the wrong map and I will not pass it; "
+                               "a person checks it."),
             "BORDERLINE": (f"DOUBT: score {score:.3f} sits between my pass line {tp:.3f} and fail line "
                            f"{pol.tau_fail:.3f}. A human decides; I'll learn from it."),
         }.get(reason, "DOUBT")

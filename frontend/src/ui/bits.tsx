@@ -8,7 +8,8 @@ export const reasonText: Record<string, string> = {
   CONDITIONS_CHANGED: 'Conditions changed',
   NEVER_SEEN: 'Never seen anything like it',
   BORDERLINE: 'Borderline',
-  COMPONENT: 'A component looks wrong'
+  COMPONENT: 'A component looks wrong',
+  NOT_THIS_BOARD: 'Not this board type'
 };
 
 export function Verdict({ d, size = 'md' }: { d: Decision; size?: 'sm' | 'md' | 'xl' }) {

@@ -732,6 +732,23 @@ async def sentinel_run(sid: str, n: int = 6):
     return {"ran": len([x for x in out if x]), "report": sentinel.report(s)}
 
 
+@app.post("/api/sessions/{sid}/guard/reset")
+def guard_reset(sid: str, x_role: str | None = Header(None)):
+    """A supervisor checked the camera and lighting and found nothing wrong: clear the drift alarm (logged)."""
+    from .api_station import NAMES, require
+
+    r = require(x_role, "QUALITY_MANAGER", "ADMIN")
+    s = S(sid)
+    with s.lock:
+        was = bool(s.guard.alarmed)
+        s.guard.reset(s.global_calib, s.loo)
+        s._alarm_announced = False
+    STATION.resolve_category("SHIFT", s.id)
+    STATION.log(NAMES[r], r, "guard.reset", sid, {"wasAlarmed": was})
+    persist.save_async(s)
+    return {"cleared": was}
+
+
 @app.post("/api/sessions/{sid}/sentinel/reset")
 def sentinel_reset(sid: str, x_role: str | None = Header(None)):
     from .api_station import NAMES, require
